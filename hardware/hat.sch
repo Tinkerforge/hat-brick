@@ -51,29 +51,23 @@ F0 "Power Supply" 60
 F1 "power_supply.sch" 60
 $EndSheet
 Text GLabel 3250 5050 2    39   Output ~ 0
-CHG-ACIN
+CHG-EN1
 Text GLabel 3250 5150 2    39   Output ~ 0
 CHG-EN
 Text GLabel 3250 5250 2    39   Output ~ 0
-CHG-CHGLEV
+CHG-EN2
 Text GLabel 3250 4700 2    39   Input ~ 0
 BATTERY-ALRT
 Text GLabel 3250 4800 2    39   BiDi ~ 0
 BATTERY-SDA
 Text GLabel 3250 4900 2    39   Output ~ 0
 BATTERY-SCL
-Text GLabel 3250 5350 2    39   Input ~ 0
-CHG-BLV1
+Text GLabel 3250 5350 2    39   Output ~ 0
+CHG-SYSOFF
 Text GLabel 3250 5450 2    39   Input ~ 0
-CHG-BLV2
+CHG-nCHG
 Text GLabel 3250 5550 2    39   Input ~ 0
-CHG-ACOK
-Text GLabel 3250 5650 2    39   Input ~ 0
-CHG-STAT3
-Text GLabel 3250 5750 2    39   Input ~ 0
-CHG-STAT2
-Text GLabel 3250 5850 2    39   Input ~ 0
-CHG-STAT1
+CHG-nPGOOD
 Text GLabel 3250 5950 2    39   Output ~ 0
 BOOST-EN
 Text GLabel 3250 6050 2    39   Input ~ 0
@@ -152,28 +146,26 @@ U 5B352770
 F0 "Bricklets" 60
 F1 "bricklets.sch" 60
 $EndSheet
-Text GLabel 10550 4200 2    39   Output ~ 0
-B0-CS3
-Text GLabel 10550 4300 2    39   Output ~ 0
-B0-CS2
-Text GLabel 10550 4400 2    39   Output ~ 0
-B0-CS1
-Text GLabel 7300 4150 0    39   Output ~ 0
-B1-CS0
-Text GLabel 7250 3950 0    39   Output ~ 0
-B1-CS1
-Text GLabel 7250 3750 0    39   Output ~ 0
-B1-CS2
-Text GLabel 7250 3650 0    39   Output ~ 0
-B1-CS3
-Text GLabel 7250 3850 0    39   Output ~ 0
-B1-CS4
+Text GLabel 10550 4150 2    39   Output ~ 0
+B-CS2
+Text GLabel 10550 4250 2    39   Output ~ 0
+B-CS1
+Text GLabel 7000 4350 0    39   Output ~ 0
+B-CS4
+Text GLabel 7000 4250 0    39   Output ~ 0
+B-CS5
+Text GLabel 7000 3950 0    39   Output ~ 0
+B-CS7
+Text GLabel 7000 3850 0    39   Output ~ 0
+B-CS8
+Text GLabel 7000 4150 0    39   Output ~ 0
+B-CS6
 Text GLabel 10550 4850 2    39   Output ~ 0
-B0-CLK
+B-CLK
 Text GLabel 10550 4750 2    39   Output ~ 0
-B0-MOSI
+B-MOSI
 Text GLabel 10550 4650 2    39   Input ~ 0
-B0-MISO
+B-MISO
 Text GLabel 8300 750  1    39   Output ~ 0
 B-5V
 Text GLabel 10150 900  2    39   Output ~ 0
@@ -209,17 +201,6 @@ Wire Wire Line
 Connection ~ 7350 5450
 NoConn ~ 7150 5300
 NoConn ~ 7250 5300
-$Comp
-L R_PACK4 RP105
-U 1 1 5B36D7D0
-P 10200 4500
-F 0 "RP105" H 10200 4950 50  0000 C CNN
-F 1 "82" H 10200 4700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 10200 4500 50  0001 C CNN
-F 3 "" H 10200 4500 50  0000 C CNN
-	1    10200 4500
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	9850 4850 10000 4850
 Wire Wire Line
@@ -233,13 +214,13 @@ Wire Wire Line
 Wire Wire Line
 	10400 4850 10550 4850
 Text GLabel 3400 7150 2    39   Input ~ 0
-B1-CLK
+B-CLK
 Text GLabel 3400 7050 2    39   Input ~ 0
-B1-MOSI
+B-MOSI
 Text GLabel 3400 6950 2    39   Output ~ 0
-B1-MISO
-Text GLabel 10550 4550 2    39   Output ~ 0
-B0-CS0
+B-MISO
+Text GLabel 7000 4450 0    39   Output ~ 0
+B-CS3
 NoConn ~ 9850 5350
 NoConn ~ 9850 5450
 $Comp
@@ -267,124 +248,19 @@ Wire Wire Line
 	7150 4900 7150 4850
 Connection ~ 7150 4850
 Text GLabel 3400 7400 2    39   Input ~ 0
-B1-CS4
-Text GLabel 3400 7600 2    39   Input ~ 0
-B0-CLK
-Text GLabel 7300 4450 0    39   Output ~ 0
-B1-CLK
-Text GLabel 7300 4350 0    39   Output ~ 0
-B1-MOSI
-Text GLabel 7300 4250 0    39   Input ~ 0
-B1-MISO
-$Comp
-L R_PACK4 RP103
-U 1 1 5B37482D
-P 7650 4100
-F 0 "RP103" H 7650 4550 50  0000 C CNN
-F 1 "82" H 7650 4300 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 7650 4100 50  0001 C CNN
-F 3 "" H 7650 4100 50  0000 C CNN
-	1    7650 4100
-	-1   0    0    1   
-$EndComp
+B-CS8
 Wire Wire Line
-	7300 4250 7450 4250
+	10550 4250 10400 4250
 Wire Wire Line
-	7300 4350 7450 4350
+	9850 4250 10000 4250
 Wire Wire Line
-	7450 4450 7300 4450
+	9850 4150 10000 4150
 Wire Wire Line
-	7850 4450 8050 4450
+	10400 4150 10550 4150
 Wire Wire Line
-	8050 4350 7850 4350
+	7000 3950 7200 3950
 Wire Wire Line
-	7850 4250 8050 4250
-$Comp
-L R_PACK4 RP104
-U 1 1 5B375023
-P 10200 4050
-F 0 "RP104" H 10200 4000 50  0000 C CNN
-F 1 "82" H 10200 4250 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 10200 4050 50  0001 C CNN
-F 3 "" H 10200 4050 50  0000 C CNN
-	1    10200 4050
-	-1   0    0    1   
-$EndComp
-$Comp
-L R_PACK4 RP102
-U 1 1 5B3750A9
-P 7650 3600
-F 0 "RP102" H 7650 4050 50  0000 C CNN
-F 1 "82" H 7650 3800 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 7650 3600 50  0001 C CNN
-F 3 "" H 7650 3600 50  0000 C CNN
-	1    7650 3600
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	10550 4550 10400 4550
-Wire Wire Line
-	9850 4550 10000 4550
-Wire Wire Line
-	9850 4450 9950 4450
-Wire Wire Line
-	9950 4450 9950 4400
-Wire Wire Line
-	9950 4400 10000 4400
-Wire Wire Line
-	10400 4400 10550 4400
-Wire Wire Line
-	10550 4300 10400 4300
-Wire Wire Line
-	9850 4250 9950 4250
-Wire Wire Line
-	9950 4250 9950 4300
-Wire Wire Line
-	9950 4300 10000 4300
-Wire Wire Line
-	9850 4150 9950 4150
-Wire Wire Line
-	9950 4150 9950 4200
-Wire Wire Line
-	9950 4200 10000 4200
-Wire Wire Line
-	10400 4200 10550 4200
-Wire Wire Line
-	7850 4150 8050 4150
-Wire Wire Line
-	7450 4150 7300 4150
-Wire Wire Line
-	7250 3950 7450 3950
-Wire Wire Line
-	7250 3850 7450 3850
-Wire Wire Line
-	7850 3950 7850 4050
-Wire Wire Line
-	7850 4050 8050 4050
-Wire Wire Line
-	7850 3850 7900 3850
-Wire Wire Line
-	7900 3850 7900 3950
-Wire Wire Line
-	7900 3950 8050 3950
-Wire Wire Line
-	7850 3750 7950 3750
-Wire Wire Line
-	7950 3750 7950 4550
-Wire Wire Line
-	7950 4550 8050 4550
-Wire Wire Line
-	7850 3650 8000 3650
-Wire Wire Line
-	8000 3650 8000 4650
-Wire Wire Line
-	8000 4650 8050 4650
-Wire Wire Line
-	7450 3750 7250 3750
-Wire Wire Line
-	7250 3650 7450 3650
-NoConn ~ 10000 4100
-NoConn ~ 10400 4100
+	7000 3850 7200 3850
 $Comp
 L GND #PWR02
 U 1 1 5B375DA1
@@ -789,14 +665,8 @@ Text GLabel 3550 6550 0    39   Output ~ 0
 RASP-EN
 Text GLabel 3550 6450 0    39   Output ~ 0
 RASP-GP
-Text GLabel 7300 4600 0    39   Output ~ 0
+Text GLabel 10550 5050 2    39   Output ~ 0
 RASP-GP
-Wire Wire Line
-	8050 4750 7750 4750
-Wire Wire Line
-	7750 4750 7750 4600
-Wire Wire Line
-	7750 4600 7300 4600
 $Comp
 L Rs R102
 U 1 1 5B385E8D
@@ -1075,4 +945,212 @@ F 3 "" H 4300 4050 50  0000 C CNN
 	1    4300 4050
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	8050 5050 7650 5050
+Wire Wire Line
+	7650 5050 7650 4450
+Wire Wire Line
+	7650 4450 7600 4450
+Wire Wire Line
+	7600 4350 7700 4350
+Wire Wire Line
+	7700 4350 7700 4950
+Wire Wire Line
+	7700 4950 8050 4950
+Wire Wire Line
+	8050 4850 7750 4850
+Wire Wire Line
+	7750 4850 7750 4250
+Wire Wire Line
+	7750 4250 7600 4250
+Wire Wire Line
+	8050 4750 7800 4750
+Wire Wire Line
+	7800 4750 7800 4150
+Wire Wire Line
+	7800 4150 7600 4150
+Wire Wire Line
+	8050 4650 7850 4650
+Wire Wire Line
+	7850 4650 7850 3950
+Wire Wire Line
+	7850 3950 7600 3950
+Wire Wire Line
+	8050 4550 7900 4550
+Wire Wire Line
+	7900 4550 7900 3850
+Wire Wire Line
+	7900 3850 7600 3850
+NoConn ~ 9850 4550
+NoConn ~ 8050 4450
+NoConn ~ 8050 4350
+NoConn ~ 8050 4250
+Text GLabel 10550 4450 2    39   Output ~ 0
+B-CS0
+Wire Wire Line
+	7000 4450 7200 4450
+Wire Wire Line
+	7200 4350 7000 4350
+Wire Wire Line
+	7000 4250 7200 4250
+Wire Wire Line
+	7000 4150 7200 4150
+$Comp
+L R_PACK_SINGLE RP102
+U 1 1 5B3CDC72
+P 7400 3850
+F 0 "RP102" H 7215 3885 20  0000 C CNN
+F 1 "82" H 7400 3850 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 3850 60  0001 C CNN
+F 3 "" H 7400 3850 60  0000 C CNN
+	1    7400 3850
+	1    0    0    -1  
+$EndComp
+NoConn ~ 8050 4150
+NoConn ~ 8050 4050
+NoConn ~ 8050 3950
+NoConn ~ 9850 5150
+NoConn ~ 9850 3950
+NoConn ~ 9850 3850
+NoConn ~ 9850 3750
+$Comp
+L R_PACK_SINGLE RP102
+U 2 1 5B3CFA38
+P 7400 3950
+F 0 "RP102" H 7215 3985 20  0000 C CNN
+F 1 "82" H 7400 3950 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 3950 60  0001 C CNN
+F 3 "" H 7400 3950 60  0000 C CNN
+	2    7400 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP102
+U 3 1 5B3CFAB5
+P 7400 4150
+F 0 "RP102" H 7215 4185 20  0000 C CNN
+F 1 "82" H 7400 4150 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 4150 60  0001 C CNN
+F 3 "" H 7400 4150 60  0000 C CNN
+	3    7400 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP102
+U 4 1 5B3CFB39
+P 7400 4250
+F 0 "RP102" H 7215 4285 20  0000 C CNN
+F 1 "82" H 7400 4250 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 4250 60  0001 C CNN
+F 3 "" H 7400 4250 60  0000 C CNN
+	4    7400 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP103
+U 1 1 5B3CFC33
+P 7400 4350
+F 0 "RP103" H 7215 4385 20  0000 C CNN
+F 1 "82" H 7400 4350 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 4350 60  0001 C CNN
+F 3 "" H 7400 4350 60  0000 C CNN
+	1    7400 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP103
+U 2 1 5B3CFCB5
+P 7400 4450
+F 0 "RP103" H 7215 4485 20  0000 C CNN
+F 1 "82" H 7400 4450 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 7400 4450 60  0001 C CNN
+F 3 "" H 7400 4450 60  0000 C CNN
+	2    7400 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP103
+U 3 1 5B3CFD3A
+P 10200 4150
+F 0 "RP103" H 10015 4185 20  0000 C CNN
+F 1 "82" H 10200 4150 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4150 60  0001 C CNN
+F 3 "" H 10200 4150 60  0000 C CNN
+	3    10200 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP103
+U 4 1 5B3D0098
+P 10200 4250
+F 0 "RP103" H 10015 4285 20  0000 C CNN
+F 1 "82" H 10200 4250 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4250 60  0001 C CNN
+F 3 "" H 10200 4250 60  0000 C CNN
+	4    10200 4250
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP104
+U 2 1 5B3D0831
+P 10200 4650
+F 0 "RP104" H 10015 4685 20  0000 C CNN
+F 1 "82" H 10200 4650 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4650 60  0001 C CNN
+F 3 "" H 10200 4650 60  0000 C CNN
+	2    10200 4650
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP104
+U 3 1 5B3D08CF
+P 10200 4750
+F 0 "RP104" H 10015 4785 20  0000 C CNN
+F 1 "82" H 10200 4750 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4750 60  0001 C CNN
+F 3 "" H 10200 4750 60  0000 C CNN
+	3    10200 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP104
+U 4 1 5B3D0964
+P 10200 4850
+F 0 "RP104" H 10015 4885 20  0000 C CNN
+F 1 "82" H 10200 4850 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4850 60  0001 C CNN
+F 3 "" H 10200 4850 60  0000 C CNN
+	4    10200 4850
+	1    0    0    -1  
+$EndComp
+$Comp
+L R_PACK_SINGLE RP104
+U 1 1 5B3D09F8
+P 10200 4450
+F 0 "RP104" H 10015 4485 20  0000 C CNN
+F 1 "82" H 10200 4450 20  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 10200 4450 60  0001 C CNN
+F 3 "" H 10200 4450 60  0000 C CNN
+	1    10200 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R103
+U 1 1 5B3D0F81
+P 10200 5050
+F 0 "R103" V 10280 5050 50  0000 C CNN
+F 1 "1k" V 10200 5050 50  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 10200 5050 60  0001 C CNN
+F 3 "" H 10200 5050 60  0000 C CNN
+	1    10200 5050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10550 5050 10450 5050
+Wire Wire Line
+	9950 5050 9850 5050
+Wire Wire Line
+	9850 4450 10000 4450
+Wire Wire Line
+	10400 4450 10550 4450
 $EndSCHEMATC
