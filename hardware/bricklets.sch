@@ -157,26 +157,26 @@ $EndComp
 $Comp
 L C_PACK4 CP306
 U 1 1 5B35ABF9
-P 8150 3050
-F 0 "CP306" H 8150 3500 50  0000 C CNN
-F 1 "220pF" H 8150 3000 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 8150 3050 50  0001 C CNN
-F 3 "" H 8150 3050 50  0000 C CNN
-	1    8150 3050
-	0    1    1    0   
+P 8550 3050
+F 0 "CP306" H 8550 3500 50  0000 C CNN
+F 1 "220pF" H 8550 3000 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 8550 3050 50  0001 C CNN
+F 3 "" H 8550 3050 50  0000 C CNN
+	1    8550 3050
+	0    -1   1    0   
 $EndComp
 Text Notes 8700 3150 0    39   ~ 0
 W2A45A221KAT2A
 $Comp
 L C_PACK4 CP305
 U 1 1 5B35AC00
-P 8150 1750
-F 0 "CP305" H 8150 2200 50  0000 C CNN
-F 1 "220pF" H 8150 1700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 8150 1750 50  0001 C CNN
-F 3 "" H 8150 1750 50  0000 C CNN
-	1    8150 1750
-	0    1    1    0   
+P 8550 1750
+F 0 "CP305" H 8550 2200 50  0000 C CNN
+F 1 "220pF" H 8550 1700 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 8550 1750 50  0001 C CNN
+F 3 "" H 8550 1750 50  0000 C CNN
+	1    8550 1750
+	0    -1   1    0   
 $EndComp
 $Comp
 L GND #PWR071
@@ -516,26 +516,26 @@ $EndComp
 $Comp
 L C_PACK4 CP308
 U 1 1 5B35ACC5
-P 8150 6050
-F 0 "CP308" H 8150 6500 50  0000 C CNN
-F 1 "220pF" H 8150 6000 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 8150 6050 50  0001 C CNN
-F 3 "" H 8150 6050 50  0000 C CNN
-	1    8150 6050
-	0    1    1    0   
+P 8550 6050
+F 0 "CP308" H 8550 6500 50  0000 C CNN
+F 1 "220pF" H 8550 6000 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 8550 6050 50  0001 C CNN
+F 3 "" H 8550 6050 50  0000 C CNN
+	1    8550 6050
+	0    -1   1    0   
 $EndComp
 Text Notes 8700 6150 0    39   ~ 0
 W2A45A221KAT2A
 $Comp
 L C_PACK4 CP307
 U 1 1 5B35ACCC
-P 8150 4750
-F 0 "CP307" H 8150 5200 50  0000 C CNN
-F 1 "220pF" H 8150 4700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 8150 4750 50  0001 C CNN
-F 3 "" H 8150 4750 50  0000 C CNN
-	1    8150 4750
-	0    1    1    0   
+P 8550 4750
+F 0 "CP307" H 8550 5200 50  0000 C CNN
+F 1 "220pF" H 8550 4700 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 8550 4750 50  0001 C CNN
+F 3 "" H 8550 4750 50  0000 C CNN
+	1    8550 4750
+	0    -1   1    0   
 $EndComp
 $Comp
 L GND #PWR081
@@ -859,7 +859,7 @@ F 1 "82" H 3350 1450 50  0000 C CNN
 F 2 "kicad-libraries:4X0402" H 3350 1500 50  0001 C CNN
 F 3 "" H 3350 1500 50  0000 C CNN
 	1    3350 1500
-	-1   0    0    -1  
+	1    0    0    -1  
 $EndComp
 $Comp
 L R_PACK4 RP302
@@ -875,26 +875,26 @@ $EndComp
 $Comp
 L C_PACK4 CP302
 U 1 1 5B35B691
-P 2750 3050
-F 0 "CP302" H 2750 3500 50  0000 C CNN
-F 1 "220pF" H 2750 3000 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 2750 3050 50  0001 C CNN
-F 3 "" H 2750 3050 50  0000 C CNN
-	1    2750 3050
-	0    1    1    0   
+P 3150 3050
+F 0 "CP302" H 3150 3500 50  0000 C CNN
+F 1 "220pF" H 3150 3000 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 3150 3050 50  0001 C CNN
+F 3 "" H 3150 3050 50  0000 C CNN
+	1    3150 3050
+	0    -1   1    0   
 $EndComp
 Text Notes 3300 3150 0    39   ~ 0
 W2A45A221KAT2A
 $Comp
 L C_PACK4 CP301
 U 1 1 5B35B698
-P 2750 1750
-F 0 "CP301" H 2750 2200 50  0000 C CNN
-F 1 "220pF" H 2750 1700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 2750 1750 50  0001 C CNN
-F 3 "" H 2750 1750 50  0000 C CNN
-	1    2750 1750
-	0    1    1    0   
+P 3150 1750
+F 0 "CP301" H 3150 2200 50  0000 C CNN
+F 1 "220pF" H 3150 1700 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 3150 1750 50  0001 C CNN
+F 3 "" H 3150 1750 50  0000 C CNN
+	1    3150 1750
+	0    -1   1    0   
 $EndComp
 $Comp
 L GND #PWR091
@@ -1234,26 +1234,26 @@ $EndComp
 $Comp
 L C_PACK4 CP304
 U 1 1 5B35B75D
-P 2750 6050
-F 0 "CP304" H 2750 6500 50  0000 C CNN
-F 1 "220pF" H 2750 6000 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 2750 6050 50  0001 C CNN
-F 3 "" H 2750 6050 50  0000 C CNN
-	1    2750 6050
-	0    1    1    0   
+P 3150 6050
+F 0 "CP304" H 3150 6500 50  0000 C CNN
+F 1 "220pF" H 3150 6000 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 3150 6050 50  0001 C CNN
+F 3 "" H 3150 6050 50  0000 C CNN
+	1    3150 6050
+	0    -1   1    0   
 $EndComp
 Text Notes 3300 6150 0    39   ~ 0
 W2A45A221KAT2A
 $Comp
 L C_PACK4 CP303
 U 1 1 5B35B764
-P 2750 4750
-F 0 "CP303" H 2750 5200 50  0000 C CNN
-F 1 "220pF" H 2750 4700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 2750 4750 50  0001 C CNN
-F 3 "" H 2750 4750 50  0000 C CNN
-	1    2750 4750
-	0    1    1    0   
+P 3150 4750
+F 0 "CP303" H 3150 5200 50  0000 C CNN
+F 1 "220pF" H 3150 4700 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 3150 4750 50  0001 C CNN
+F 3 "" H 3150 4750 50  0000 C CNN
+	1    3150 4750
+	0    -1   1    0   
 $EndComp
 $Comp
 L GND #PWR0101
@@ -1544,10 +1544,6 @@ Wire Wire Line
 	7700 800  7700 850 
 Connection ~ 7700 850 
 Connection ~ 7800 1050
-Text Notes 3050 800  0    118  ~ 0
-Group B0
-Text Notes 8450 800  0    118  ~ 0
-Group B1
 Text GLabel 9750 3900 1    39   Input ~ 0
 B-3V3
 Text GLabel 9750 900  1    39   Input ~ 0
@@ -1558,4 +1554,16 @@ Text GLabel 4350 3900 1    39   Input ~ 0
 B-3V3
 Text Notes 4500 7700 0    39   ~ 0
 Copyright Tinkerforge GmbH 2018.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions
+Text Notes 1400 1150 0    118  ~ 0
+A
+Text Notes 1400 2500 0    118  ~ 0
+E
+Text Notes 1450 4200 0    118  ~ 0
+B
+Text Notes 1450 5500 0    118  ~ 0
+F
+Text Notes 6850 1200 0    118  ~ 0
+C
+Text Notes 6850 2550 0    118  ~ 0
+G
 $EndSCHEMATC
