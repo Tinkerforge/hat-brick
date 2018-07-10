@@ -146,19 +146,19 @@ U 5B352770
 F0 "Bricklets" 60
 F1 "bricklets.sch" 60
 $EndSheet
-Text GLabel 10550 4150 2    39   Output ~ 0
+Text GLabel 7000 4150 0    39   Output ~ 0
 B-CS2
 Text GLabel 7000 4450 0    39   Output ~ 0
 B-CS1
-Text GLabel 7000 4350 0    39   Output ~ 0
-B-CS4
 Text GLabel 7000 4250 0    39   Output ~ 0
-B-CS5
+B-CS4
 Text GLabel 10550 4450 2    39   Output ~ 0
+B-CS5
+Text GLabel 10550 4250 2    39   Output ~ 0
 B-CS7
-Text GLabel 7000 3850 0    39   Output ~ 0
+Text GLabel 10550 4150 2    39   Output ~ 0
 B-CS8
-Text GLabel 7000 4150 0    39   Output ~ 0
+Text GLabel 7000 4350 0    39   Output ~ 0
 B-CS6
 Text GLabel 10550 4850 2    39   Output ~ 0
 B-CLK
@@ -219,7 +219,7 @@ Text GLabel 1700 4600 2    39   Input ~ 0
 B-MOSI
 Text GLabel 4000 700  2    39   Output ~ 0
 B-MISO
-Text GLabel 10550 4250 2    39   Output ~ 0
+Text GLabel 7000 3850 0    39   Output ~ 0
 B-CS3
 NoConn ~ 9850 5350
 NoConn ~ 9850 5450
