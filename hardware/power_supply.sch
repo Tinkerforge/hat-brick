@@ -976,13 +976,13 @@ BATTERY-SCL
 $Comp
 L R_PACK4 RP201
 U 1 1 5B344B9D
-P 3200 6250
-F 0 "RP201" H 3200 6700 50  0000 C CNN
-F 1 "10k" H 3200 6450 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 3200 6250 50  0001 C CNN
-F 3 "" H 3200 6250 50  0000 C CNN
-	1    3200 6250
-	0    1    -1   0   
+P 3600 6250
+F 0 "RP201" H 3600 6200 50  0000 C CNN
+F 1 "10k" H 3600 6450 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 3600 6250 50  0001 C CNN
+F 3 "" H 3600 6250 50  0000 C CNN
+	1    3600 6250
+	0    -1   -1   0   
 $EndComp
 NoConn ~ 3350 6450
 $Comp
@@ -1316,7 +1316,7 @@ Wire Wire Line
 	4100 1850 4250 1850
 Connection ~ 3050 1750
 Wire Wire Line
-	3400 1750 3400 2050
+	3400 1650 3400 2050
 Wire Wire Line
 	3700 3050 3700 2450
 Wire Wire Line
@@ -1395,7 +1395,7 @@ Wire Wire Line
 	10500 4850 10500 4750
 Connection ~ 10050 4350
 Wire Wire Line
-	7250 1850 7250 3400
+	7250 1750 7250 3400
 Wire Wire Line
 	7250 3400 1150 3400
 Wire Wire Line
@@ -1440,13 +1440,13 @@ Connection ~ 7000 4350
 Wire Wire Line
 	7700 4800 7700 4700
 Wire Wire Line
-	7600 4700 7900 4700
+	7900 4700 7600 4700
 Wire Wire Line
-	7900 4700 7900 4350
+	7900 4250 7900 4700
 Wire Wire Line
 	7750 4350 8050 4350
 Wire Wire Line
-	7600 4800 7600 4700
+	7600 4700 7600 4800
 Connection ~ 7700 4700
 Connection ~ 7900 4350
 Wire Wire Line
@@ -1468,7 +1468,7 @@ Wire Wire Line
 	8950 5150 8950 4950
 Connection ~ 8750 5150
 Wire Wire Line
-	8950 4350 8950 4550
+	8950 4250 8950 4550
 Connection ~ 8750 4350
 Wire Wire Line
 	10500 1850 10500 4350
@@ -1735,4 +1735,17 @@ Text GLabel 3000 4300 1    39   Input ~ 0
 PWR-IN
 Wire Wire Line
 	3000 4350 3000 4300
+Text GLabel 7900 4250 1    39   Input ~ 0
+BOOST-L
+Text GLabel 8950 4250 1    39   Input ~ 0
+BOOST-OUT
+Text GLabel 3400 1650 1    39   Input ~ 0
+STEP-IN
+Text GLabel 5550 1600 2    39   Input ~ 0
+STEP-SW
+Wire Wire Line
+	5450 1600 5550 1600
+Connection ~ 5450 1600
+Text GLabel 7250 1750 1    39   Input ~ 0
+STEP-OUT
 $EndSCHEMATC
