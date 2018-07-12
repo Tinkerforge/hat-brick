@@ -1360,4 +1360,14 @@ Wire Wire Line
 Text GLabel 8900 2100 2    39   Output ~ 0
 RASP-PWR
 Connection ~ 8850 2100
+NoConn ~ 1550 3100
+NoConn ~ 1550 3200
+NoConn ~ 1550 3500
+NoConn ~ 1550 3600
+NoConn ~ 1550 3700
+NoConn ~ 3900 1000
+NoConn ~ 3900 1100
+NoConn ~ 3900 1200
+NoConn ~ 3900 1300
+NoConn ~ 3900 1800
 $EndSCHEMATC
