@@ -628,7 +628,7 @@ Wire Wire Line
 Wire Wire Line
 	7700 2100 7750 2100
 Wire Wire Line
-	8150 2100 8850 2100
+	8150 2100 8900 2100
 Connection ~ 8850 2950
 Wire Wire Line
 	8750 3150 8850 3150
@@ -1357,4 +1357,7 @@ Wire Wire Line
 	4750 1550 4750 1500
 Wire Wire Line
 	4750 1400 3900 1400
+Text GLabel 8900 2100 2    39   Output ~ 0
+RASP-PWR
+Connection ~ 8850 2100
 $EndSCHEMATC
