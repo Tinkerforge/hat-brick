@@ -1,9 +1,9 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.7-e2-6376~61~ubuntu18.04.1)
 
   (general
     (links 478)
     (no_connects 0)
-    (area 166.150469 25.950469 231.249531 82.049531)
+    (area 165.999999 25.799999 231.400001 83.625001)
     (thickness 1.6)
     (drawings 50)
     (tracks 3102)
@@ -73,7 +73,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 166.2 26)
     (grid_origin 166.2 26)
-    (visible_elements FFFF5F7F)
+    (visible_elements FFFF9F7F)
     (pcbplotparams
       (layerselection 0x00020_00000000)
       (usegerberextensions false)
@@ -2057,14 +2057,14 @@
     )
   )
 
-  (module kicad-libraries:SOD-128 (layer B.Cu) (tedit 58F7735C) (tstamp 5B3744FE)
+  (module kicad-libraries:SOD-128 (layer B.Cu) (tedit 5B4DC175) (tstamp 5B3744FE)
     (at 181.2 67.05 90)
     (path /5B31E6A8/5B324F83)
     (attr smd)
     (fp_text reference D201 (at 0.44 -0.29 90) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
-    (fp_text value D (at 0.52 0.49 90) (layer B.Fab)
+    (fp_text value RB058LAM150TR (at 0.52 0.49 90) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
     (fp_line (start -0.50038 -1.39954) (end -0.50038 1.39954) (layer B.Fab) (width 0.001))
