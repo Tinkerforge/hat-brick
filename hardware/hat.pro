@@ -1,4 +1,4 @@
-update=Do 26 Jul 2018 10:52:42 CEST
+update=Mo 30 Jul 2018 11:37:31 CEST
 version=1
 last_client=kicad
 [cvpcb]
@@ -47,41 +47,6 @@ LibName10=led
 LibName11=dip_sockets
 LibName12=Logo
 LibName13=standard
-[eeschema]
-version=1
-LibDir=kicad-libraries
-[eeschema/libraries]
-LibName1=tinkerforge
-LibName2=power
-LibName3=device
-LibName4=transistors
-LibName5=conn
-LibName6=linear
-LibName7=regul
-LibName8=74xx
-LibName9=cmos4000
-LibName10=adc-dac
-LibName11=memory
-LibName12=xilinx
-LibName13=special
-LibName14=microcontrollers
-LibName15=dsp
-LibName16=microchip
-LibName17=analog_switches
-LibName18=motorola
-LibName19=texas
-LibName20=intel
-LibName21=audio
-LibName22=interface
-LibName23=digital-audio
-LibName24=philips
-LibName25=display
-LibName26=cypress
-LibName27=siliconi
-LibName28=opto
-LibName29=atmel
-LibName30=contrib
-LibName31=valves
 [schematic_editor]
 version=1
 PageLayoutDescrFile=
@@ -92,3 +57,6 @@ NetFmtName=
 SpiceForceRefPrefix=0
 SpiceUseNetNumbers=0
 LabSize=39
+[eeschema]
+version=1
+LibDir=
