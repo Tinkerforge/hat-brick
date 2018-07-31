@@ -1,5 +1,5 @@
-(Raspberry Pi) HAT Bricklet
-===========================
+HAT Bricklet
+============
 
 **This Bricklet is currently in development.**
 
