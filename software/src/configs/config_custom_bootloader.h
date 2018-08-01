@@ -37,6 +37,13 @@
 #define BOOTLOADER_FLASH_EEPROM_SIZE   (4*256)
 #define BOOTLOADER_FLASH_SIZE          (64*1024 - BOOTLOADER_FLASH_EEPROM_SIZE)
 
+
+// --- Oscilater defines ---
+#define OSCHP_FREQUENCY 16000000
+#define DCLK_CLOCK_SRC  1
+#define DCO1_CAL_SRC    1
+
+
 // --- SPITFP ---
 #define SPITFP_USIC_CHANNEL         USIC0_CH0
 #define SPITFP_USIC                 XMC_SPI0_CH0
