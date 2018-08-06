@@ -1,7 +1,7 @@
 /* hat-bricklet
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for HAT Bricklet
+ * bq24075.c: Driver for BQ24075 power management IC
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,34 +19,29 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
-#include <stdbool.h>
-
-#include "configs/config.h"
-
-#include "bricklib2/bootloader/bootloader.h"
-#include "bricklib2/hal/system_timer/system_timer.h"
-#include "bricklib2/logging/logging.h"
-#include "communication.h"
-
-#include "max17260.h"
 #include "bq24075.h"
-#include "rpi.h"
 
-int main(void) {
-	logging_init();
-	logd("Start HAT Bricklet\n\r");
+#include "configs/config_bq24075.h"
+#include "configs/config_rpi.h"
 
-	communication_init();
-	bq24075_init();
-	max17260_init();
-	rpi_init();
+void bq24075_init(void) {
+    XMC_GPIO_CONFIG_t output_low = {
+	    .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+        .output_level = XMC_GPIO_OUTPUT_LEVEL_LOW
+    };
 
-	while(true) {
-		bootloader_tick();
-		communication_tick();
-		bq24075_tick();
-		max17260_tick();
-		rpi_tick();
-	}
+    XMC_GPIO_CONFIG_t output_high = {
+	    .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
+        .output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH
+    };
+
+	XMC_GPIO_Init(BQ24075_NSYSOFF_PIN, &output_low);
+    XMC_GPIO_Init(BQ24075_NEN_PIN, &output_low);
+    XMC_GPIO_Init(BQ24075_EN1_PIN, &output_low);
+    XMC_GPIO_Init(BQ24075_EN2_PIN, &output_high);
+
+}
+
+void bq24075_tick(void) {
+
 }

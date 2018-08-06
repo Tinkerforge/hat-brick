@@ -1,7 +1,7 @@
 /* hat-bricklet
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for HAT Bricklet
+ * bq24075.h: Config for BQ24075 power management IC
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,34 +19,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
-#include <stdbool.h>
 
-#include "configs/config.h"
+#ifndef CONFIG_BQ24075_H
+#define CONFIG_BQ24075_H
 
-#include "bricklib2/bootloader/bootloader.h"
-#include "bricklib2/hal/system_timer/system_timer.h"
-#include "bricklib2/logging/logging.h"
-#include "communication.h"
+#include "xmc_gpio.h"
 
-#include "max17260.h"
-#include "bq24075.h"
-#include "rpi.h"
 
-int main(void) {
-	logging_init();
-	logd("Start HAT Bricklet\n\r");
 
-	communication_init();
-	bq24075_init();
-	max17260_init();
-	rpi_init();
+#define BQ24075_NPGOOD_PIN   P1_0 // Input voltage high enough
+#define BQ24075_NCHG_PIN     P1_1 // Is charging
+#define BQ24075_EN1_PIN      P1_2 // config v
+#define BQ24075_EN2_PIN      P1_3 // config ^
+#define BQ24075_NEN_PIN      P1_4 // Charging enable/disable
+#define BQ24075_NSYSOFF_PIN  P1_5 // Output of BQ24075 enable/disable
 
-	while(true) {
-		bootloader_tick();
-		communication_tick();
-		bq24075_tick();
-		max17260_tick();
-		rpi_tick();
-	}
-}
+
+#endif

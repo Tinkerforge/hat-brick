@@ -1,7 +1,7 @@
 /* hat-bricklet
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for HAT Bricklet
+ * rpi.h: Driver for Raspberry PI eeprom simulation and IO
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,34 +19,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
-#include <stdbool.h>
+#ifndef RPI_H
+#define RPI_H
 
-#include "configs/config.h"
+#include "bricklib2/utility/led_flicker.h"
 
-#include "bricklib2/bootloader/bootloader.h"
-#include "bricklib2/hal/system_timer/system_timer.h"
-#include "bricklib2/logging/logging.h"
-#include "communication.h"
+#define RPI_LED_LOW  0
+#define RPI_LED_MID  1
+#define RPI_LED_HIGH 2
+#define RPI_NUM_LEDS 3
 
-#include "max17260.h"
-#include "bq24075.h"
-#include "rpi.h"
+typedef struct {
+    LEDFlickerState leds[RPI_NUM_LEDS];
+} RPI;
 
-int main(void) {
-	logging_init();
-	logd("Start HAT Bricklet\n\r");
+extern RPI rpi;
 
-	communication_init();
-	bq24075_init();
-	max17260_init();
-	rpi_init();
+void rpi_init(void);
+void rpi_tick(void);
 
-	while(true) {
-		bootloader_tick();
-		communication_tick();
-		bq24075_tick();
-		max17260_tick();
-		rpi_tick();
-	}
-}
+#endif
