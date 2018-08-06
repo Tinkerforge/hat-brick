@@ -908,7 +908,7 @@ L tinkerforge:LED D101
 U 1 1 5B38EE2F
 P 4900 800
 F 0 "D101" H 4900 900 50  0000 C CNN
-F 1 "blue" H 4900 700 50  0000 C CNN
+F 1 "green" H 4900 700 50  0000 C CNN
 F 2 "kicad-libraries:D0603F" H 4900 800 50  0001 C CNN
 F 3 "" H 4900 800 50  0000 C CNN
 	1    4900 800 
@@ -1205,7 +1205,7 @@ L tinkerforge:LED D102
 U 1 1 5B476059
 P 4900 2700
 F 0 "D102" H 4900 2800 50  0000 C CNN
-F 1 "green" H 4900 2600 50  0000 C CNN
+F 1 "blue" H 4900 2600 50  0000 C CNN
 F 2 "kicad-libraries:D0603F" H 4900 2700 50  0001 C CNN
 F 3 "" H 4900 2700 50  0000 C CNN
 	1    4900 2700
@@ -1403,4 +1403,12 @@ Wire Wire Line
 	5100 2700 5100 2950
 Wire Wire Line
 	8850 2100 8900 2100
+Text Notes 5350 750  0    39   ~ 0
+"high led"
+Text Notes 5150 2700 0    39   ~ 0
+"status led"
+Text Notes 5150 2950 0    39   ~ 0
+"mid led"
+Text Notes 4750 4300 0    39   ~ 0
+"low led"
 $EndSCHEMATC
