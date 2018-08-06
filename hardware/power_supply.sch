@@ -616,7 +616,7 @@ $Comp
 L tinkerforge:C C219
 U 1 1 5B32BEC5
 P 8550 5650
-F 0 "C219" H 8600 5750 50  0000 L CNN
+F 0 "C219" H 8300 5750 50  0000 L CNN
 F 1 "10nF" H 8550 5550 50  0000 L CNN
 F 2 "kicad-libraries:C0603F" H 8550 5650 60  0001 C CNN
 F 3 "" H 8550 5650 60  0001 C CNN
@@ -1460,7 +1460,7 @@ Wire Wire Line
 Connection ~ 9500 4350
 Connection ~ 9250 4350
 Wire Wire Line
-	6850 5050 7000 5050
+	6850 5050 6900 5050
 Wire Wire Line
 	2250 3850 2750 3850
 Wire Wire Line
@@ -1620,7 +1620,7 @@ Wire Wire Line
 Wire Wire Line
 	3650 4950 3650 5100
 Wire Wire Line
-	3650 5100 3150 5100
+	3650 5100 3400 5100
 Wire Wire Line
 	3700 5250 2750 5250
 Wire Wire Line
@@ -1903,4 +1903,68 @@ Wire Wire Line
 	1150 1650 1150 3050
 Wire Wire Line
 	1450 850  2100 850 
+$Comp
+L tinkerforge:Rs R219
+U 1 1 5B6A6560
+P 3400 5550
+F 0 "R219" V 3450 5550 31  0000 C CNN
+F 1 "10k" V 3400 5550 31  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 3400 5550 60  0001 C CNN
+F 3 "" H 3400 5550 60  0000 C CNN
+	1    3400 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R220
+U 1 1 5B6A6B71
+P 6650 5550
+F 0 "R220" V 6700 5550 31  0000 C CNN
+F 1 "10k" V 6650 5550 31  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 6650 5550 60  0001 C CNN
+F 3 "" H 6650 5550 60  0000 C CNN
+	1    6650 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:GND #PWR0114
+U 1 1 5B6A6EB5
+P 6650 5950
+F 0 "#PWR0114" H 6650 5950 30  0001 C CNN
+F 1 "GND" H 6650 5880 30  0001 C CNN
+F 2 "" H 6650 5950 60  0001 C CNN
+F 3 "" H 6650 5950 60  0001 C CNN
+	1    6650 5950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6650 5950 6650 5650
+Wire Wire Line
+	6900 5050 6900 5200
+Wire Wire Line
+	6900 5200 6650 5200
+Wire Wire Line
+	6650 5200 6650 5450
+Connection ~ 6900 5050
+Wire Wire Line
+	6900 5050 7000 5050
+Text Notes 6750 5650 3    39   ~ 0
+Default disabled
+$Comp
+L tinkerforge:GND #PWR0115
+U 1 1 5B6CB753
+P 3400 5700
+F 0 "#PWR0115" H 3400 5700 30  0001 C CNN
+F 1 "GND" H 3400 5630 30  0001 C CNN
+F 2 "" H 3400 5700 60  0001 C CNN
+F 3 "" H 3400 5700 60  0001 C CNN
+	1    3400 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 5700 3400 5650
+Wire Wire Line
+	3400 5450 3400 5100
+Connection ~ 3400 5100
+Wire Wire Line
+	3400 5100 3150 5100
 $EndSCHEMATC

@@ -116,7 +116,7 @@ U 5B352770
 F0 "Bricklets" 60
 F1 "bricklets.sch" 60
 $EndSheet
-Text GLabel 7000 4150 0    39   Output ~ 0
+Text GLabel 7000 3850 0    39   Output ~ 0
 B-CS2
 Text GLabel 7000 4450 0    39   Output ~ 0
 B-CS1
@@ -189,7 +189,7 @@ Text GLabel 1700 4600 2    39   Input ~ 0
 B-MOSI
 Text GLabel 4000 700  2    39   Output ~ 0
 B-MISO
-Text GLabel 7000 3850 0    39   Output ~ 0
+Text GLabel 7000 4150 0    39   Output ~ 0
 B-CS3
 NoConn ~ 9850 5350
 NoConn ~ 9850 5450
@@ -1411,4 +1411,6 @@ Text Notes 5150 2950 0    39   ~ 0
 "mid led"
 Text Notes 4750 4300 0    39   ~ 0
 "low led"
+Text Notes 6700 3700 0    39   ~ 0
+CS2 und CS3 getauscht
 $EndSCHEMATC
