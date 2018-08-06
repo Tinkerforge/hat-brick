@@ -20,20 +20,14 @@ U 5B31E6A8
 F0 "Power Supply" 60
 F1 "power_supply.sch" 60
 $EndSheet
-Text GLabel 1700 5800 2    39   Output ~ 0
-CHG-EN1
 Text GLabel 1700 6000 2    39   Output ~ 0
 CHG-EN
-Text GLabel 1700 5900 2    39   Output ~ 0
-CHG-EN2
 Text GLabel 4000 1700 2    39   Input ~ 0
 BATTERY-ALRT
 Text GLabel 4000 2000 2    39   BiDi ~ 0
 BATTERY-SDA
 Text GLabel 4000 1900 2    39   Output ~ 0
 BATTERY-SCL
-Text GLabel 1700 6100 2    39   Output ~ 0
-CHG-SYSOFF
 Text GLabel 1700 5700 2    39   Input ~ 0
 CHG-nCHG
 Text GLabel 1700 5600 2    39   Input ~ 0
@@ -140,9 +134,9 @@ Text GLabel 8300 750  1    39   Output ~ 0
 B-5V
 Text GLabel 10150 900  2    39   Output ~ 0
 B-3V3
-Text GLabel 6900 5350 0    39   Output ~ 0
+Text GLabel 6900 5450 0    39   Output ~ 0
 RASP-SC
-Text GLabel 6900 5450 0    39   BiDi ~ 0
+Text GLabel 6900 5350 0    39   BiDi ~ 0
 RASP-SD
 Text GLabel 1700 3300 2    39   Input ~ 0
 RASP-SC
@@ -1155,13 +1149,7 @@ Wire Wire Line
 Wire Wire Line
 	1700 5700 1550 5700
 Wire Wire Line
-	1550 5800 1700 5800
-Wire Wire Line
-	1700 5900 1550 5900
-Wire Wire Line
 	1550 6000 1700 6000
-Wire Wire Line
-	1700 6100 1550 6100
 Wire Wire Line
 	3900 1500 4000 1500
 Wire Wire Line
@@ -1413,4 +1401,7 @@ Text Notes 4750 4300 0    39   ~ 0
 "low led"
 Text Notes 6700 3700 0    39   ~ 0
 CS2 und CS3 getauscht
+NoConn ~ 1550 5800
+NoConn ~ 1550 5900
+NoConn ~ 1550 6100
 $EndSCHEMATC

@@ -817,8 +817,6 @@ F 3 "" H 3200 5550 60  0000 C CNN
 	1    3200 5550
 	1    0    0    -1  
 $EndComp
-Text GLabel 3150 4900 0    39   Input ~ 0
-CHG-EN1
 $Comp
 L tinkerforge:GND #PWR051
 U 1 1 5B3381D2
@@ -1124,10 +1122,6 @@ F 3 "" H 5350 5050 60  0001 C CNN
 	1    5350 5050
 	1    0    0    -1  
 $EndComp
-Text GLabel 3150 5000 0    39   Input ~ 0
-CHG-EN2
-Text GLabel 3150 5100 0    39   Input ~ 0
-CHG-SYSOFF
 Text GLabel 2100 5350 0    39   Output ~ 0
 CHG-nCHG
 Text GLabel 2100 5450 0    39   Output ~ 0
@@ -1596,25 +1590,11 @@ Wire Wire Line
 Wire Wire Line
 	5150 5050 5150 5000
 Wire Wire Line
-	3700 4350 3000 4350
-Wire Wire Line
 	3150 4800 3200 4800
 Wire Wire Line
 	3350 4800 3350 4650
 Wire Wire Line
 	3350 4650 3700 4650
-Wire Wire Line
-	3700 4750 3450 4750
-Wire Wire Line
-	3450 4750 3450 4900
-Wire Wire Line
-	3450 4900 3150 4900
-Wire Wire Line
-	3150 5000 3550 5000
-Wire Wire Line
-	3550 5000 3550 4850
-Wire Wire Line
-	3550 4850 3700 4850
 Wire Wire Line
 	3700 4950 3650 4950
 Wire Wire Line
@@ -1964,7 +1944,25 @@ Wire Wire Line
 	3400 5700 3400 5650
 Wire Wire Line
 	3400 5450 3400 5100
-Connection ~ 3400 5100
+$Comp
+L tinkerforge:GND #PWR?
+U 1 1 5B6A0F14
+P 3650 4750
+F 0 "#PWR?" H 3650 4750 30  0001 C CNN
+F 1 "GND" H 3650 4680 30  0001 C CNN
+F 2 "" H 3650 4750 60  0001 C CNN
+F 3 "" H 3650 4750 60  0001 C CNN
+	1    3650 4750
+	0    1    1    0   
+$EndComp
 Wire Wire Line
-	3400 5100 3150 5100
+	3650 4750 3700 4750
+Text Notes 4350 4850 2    39   ~ 0
+Current set\nby resistor
+Wire Wire Line
+	3000 4350 3700 4350
+Text GLabel 3650 4850 0    39   Input ~ 0
+BOOST-IN
+Wire Wire Line
+	3650 4850 3700 4850
 $EndSCHEMATC

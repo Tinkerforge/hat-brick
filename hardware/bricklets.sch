@@ -829,7 +829,7 @@ F 1 "82" H 3350 1450 50  0000 C CNN
 F 2 "kicad-libraries:4X0402" H 3350 1500 50  0001 C CNN
 F 3 "" H 3350 1500 50  0000 C CNN
 	1    3350 1500
-	1    0    0    -1  
+	-1   0    0    -1  
 $EndComp
 $Comp
 L tinkerforge:R_PACK4 RP302
@@ -858,13 +858,13 @@ W2A45A221KAT2A
 $Comp
 L tinkerforge:C_PACK4 CP301
 U 1 1 5B35B698
-P 3150 1750
-F 0 "CP301" H 3150 2200 50  0000 C CNN
-F 1 "220pF" H 3150 1700 50  0000 C CNN
-F 2 "kicad-libraries:4X0402" H 3150 1750 50  0001 C CNN
-F 3 "" H 3150 1750 50  0000 C CNN
-	1    3150 1750
-	0    -1   1    0   
+P 2750 1750
+F 0 "CP301" H 2750 2200 50  0000 C CNN
+F 1 "220pF" H 2750 1700 50  0000 C CNN
+F 2 "kicad-libraries:4X0402" H 2750 1750 50  0001 C CNN
+F 3 "" H 2750 1750 50  0000 C CNN
+	1    2750 1750
+	0    1    1    0   
 $EndComp
 $Comp
 L tinkerforge:GND #PWR098
@@ -920,8 +920,6 @@ Connection ~ 3000 3250
 Wire Wire Line
 	2950 3300 2950 3250
 Connection ~ 2950 3250
-Wire Wire Line
-	2800 1950 2900 1950
 Connection ~ 3000 1950
 Connection ~ 2900 1950
 Wire Wire Line
@@ -1604,8 +1602,6 @@ Wire Wire Line
 	3000 3250 3100 3250
 Wire Wire Line
 	2950 3250 3000 3250
-Wire Wire Line
-	3000 1950 3100 1950
 Wire Wire Line
 	2900 1950 2950 1950
 Wire Wire Line
