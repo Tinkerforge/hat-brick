@@ -21,6 +21,8 @@
 
 #include "rpi.h"
 
+#include "eeprom.h"
+
 #include "configs/config_rpi.h"
 
 #include "bricklib2/logging/logging.h"
@@ -42,62 +44,8 @@ typedef enum XMC_I2C_CH_TDF {
 
 RPI rpi;
 
-void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) i2c_slave_tx_handler(void) {
-}
-
-void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) i2c_slave_protocol_handler(void) {
-}
-
-void rpi_init_i2c(void) {
-	XMC_I2C_CH_Stop(RPI_I2C);
-	const XMC_GPIO_CONFIG_t input_config =  {
-		.mode         = XMC_GPIO_MODE_INPUT_TRISTATE,
-		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH,
-	};
-
-	XMC_GPIO_Init(RPI_SCL_PIN, &input_config);
-	XMC_GPIO_Init(RPI_SDA_PIN, &input_config);
-
-
-	const XMC_I2C_CH_CONFIG_t i2c_slave_config = {
-		.baudrate = RPI_I2C_BAUDRATE,
-		.address  = RPI_I2C_ADDRESS
-	};
-
-	const XMC_GPIO_CONFIG_t scl_pin_config = { 
-		.mode = RPI_SCL_PIN_MODE,
-		.output_level   = XMC_GPIO_OUTPUT_LEVEL_HIGH,
-	}; 
-
-	const XMC_GPIO_CONFIG_t sda_pin_config = { 
-		.mode = RPI_SDA_PIN_MODE,
-		.output_level   = XMC_GPIO_OUTPUT_LEVEL_HIGH,
-    };
-
-	XMC_I2C_CH_Init(RPI_I2C, &i2c_slave_config);
-
-	XMC_I2C_CH_SetInputSource(RPI_I2C, XMC_I2C_CH_INPUT_SDA, RPI_SDA_INPUT);
-	XMC_I2C_CH_SetInputSource(RPI_I2C, XMC_I2C_CH_INPUT_SCL, RPI_SCL_INPUT);
-
-	XMC_USIC_CH_TXFIFO_Configure(RPI_I2C, RPI_TX_FIFO_POINTER, RPI_TX_FIFO_SIZE, 8);
-	XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(RPI_I2C, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, 3);
-
-	XMC_USIC_CH_RXFIFO_Configure(RPI_I2C, RPI_RX_FIFO_POINTER, RPI_RX_FIFO_SIZE, 8);
-
-	XMC_USIC_CH_SetInterruptNodePointer(RPI_I2C, XMC_USIC_CH_INTERRUPT_NODE_POINTER_PROTOCOL, 2);
-	XMC_I2C_CH_Start(RPI_I2C);
-
-	XMC_GPIO_Init(RPI_SCL_PIN, &scl_pin_config);
-	XMC_GPIO_Init(RPI_SDA_PIN, &sda_pin_config);
-
-	NVIC_SetPriority(12, 1); // tx
-	NVIC_EnableIRQ(12);
-	NVIC_SetPriority(11, 0); // protocol
-	NVIC_EnableIRQ(11);
-	XMC_I2C_CH_EnableEvent(RPI_I2C, XMC_I2C_CH_EVENT_SLAVE_READ_REQUEST | XMC_I2C_CH_EVENT_ERROR);
-}
-
 void rpi_init(void) {
+    logd("RPi init\n\r");
     memset(&rpi, 0, sizeof(RPI));
     XMC_GPIO_CONFIG_t output_high = {
 	    .mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
@@ -120,7 +68,7 @@ void rpi_init(void) {
     rpi.leds[1].config = LED_FLICKER_CONFIG_EXTERNAL;
     rpi.leds[2].config = LED_FLICKER_CONFIG_EXTERNAL;
 
-    rpi_init_i2c();
+    eeprom_init();
 }
 
 void rpi_tick(void) {

@@ -32,6 +32,8 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/max17260.c"
 	"${PROJECT_SOURCE_DIR}/src/bq24075.c"
 	"${PROJECT_SOURCE_DIR}/src/rpi.c"
+	"${PROJECT_SOURCE_DIR}/src/eeprom.c"
+	"${PROJECT_SOURCE_DIR}/src/eeprom_data.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"
