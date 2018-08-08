@@ -10,12 +10,15 @@
         __overlay__
         {
             status = "okay";
+            pinctrl-0 = <&spi0_pins>;
   
             spidev@0
             {
-                status = "disabled";
+                status = "okay";
+                compatible = "spidev";
+                spi-max-frequency = <1400000>;
             };
- 
+
             spidev@1
             {
                 status = "disabled";

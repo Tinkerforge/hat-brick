@@ -1,0 +1,164 @@
+/* hat-bricklet
+ * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+ *
+ * eeprom.c: EEPROM Emulation
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include "eeprom.h"
+
+#include "bricklib2/logging/logging.h"
+#include "configs/config_eeprom.h"
+
+#include "xmc_scu.h"
+
+typedef enum XMC_I2C_CH_TDF {
+	XMC_I2C_CH_TDF_MASTER_SEND         = 0,
+	XMC_I2C_CH_TDF_SLAVE_SEND          = 1 << 8,
+	XMC_I2C_CH_TDF_MASTER_RECEIVE_ACK  = 2 << 8,
+	XMC_I2C_CH_TDF_MASTER_RECEIVE_NACK = 3 << 8,
+	XMC_I2C_CH_TDF_MASTER_START        = 4 << 8,
+	XMC_I2C_CH_TDF_MASTER_RESTART      = 5 << 8,
+	XMC_I2C_CH_TDF_MASTER_STOP         = 6 << 8
+} XMC_I2C_CH_TDF_t;
+
+#define EEPROM_REGISTER_MASK 8191
+
+#define eeprom_tx_handler       IRQ_Hdlr_12
+#define eeprom_protocol_handler IRQ_Hdlr_11
+
+#define EEPROM_DATA_LENGTH sizeof(eeprom_data)
+extern const uint8_t eeprom_data[];
+
+static volatile uint32_t eeprom_register = 0;
+
+static uint8_t eeprom_register_high_byte = 0;
+static bool eeprom_register_high_byte_received = false;
+
+void eeprom_init(void) {
+    logd("EEPROM init\n\r");
+
+	XMC_I2C_CH_Stop(EEPROM_I2C);
+	const XMC_GPIO_CONFIG_t input_config =  {
+		.mode         = XMC_GPIO_MODE_INPUT_TRISTATE,
+		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+	};
+
+	XMC_GPIO_Init(EEPROM_SCL_PIN, &input_config);
+	XMC_GPIO_Init(EEPROM_SDA_PIN, &input_config);
+
+	const XMC_I2C_CH_CONFIG_t i2c_slave_config = {
+		.baudrate = EEPROM_I2C_BAUDRATE,
+		.address  = EEPROM_I2C_ADDRESS
+	};
+
+	const XMC_GPIO_CONFIG_t scl_pin_config = {
+		.mode         = EEPROM_SCL_PIN_MODE,
+		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+	};
+
+	const XMC_GPIO_CONFIG_t sda_pin_config = {
+		.mode         = EEPROM_SDA_PIN_MODE,
+		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+    };
+
+	XMC_I2C_CH_Init(EEPROM_I2C, &i2c_slave_config);
+
+	XMC_I2C_CH_SetInputSource(EEPROM_I2C, EEPROM_SDA_INPUT, EEPROM_SDA_SOURCE);
+	XMC_I2C_CH_SetInputSource(EEPROM_I2C, EEPROM_SCL_INPUT, EEPROM_SCL_SOURCE);
+
+	XMC_USIC_CH_TXFIFO_Configure(EEPROM_I2C, EEPROM_TX_FIFO_POINTER, EEPROM_TX_FIFO_SIZE, 8);
+	XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(EEPROM_I2C, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, 3);
+
+	XMC_USIC_CH_RXFIFO_Configure(EEPROM_I2C, EEPROM_RX_FIFO_POINTER, EEPROM_RX_FIFO_SIZE, 8);
+
+	XMC_USIC_CH_SetInterruptNodePointer(EEPROM_I2C, XMC_USIC_CH_INTERRUPT_NODE_POINTER_PROTOCOL, 2);
+	XMC_I2C_CH_Start(EEPROM_I2C);
+
+	XMC_GPIO_Init(EEPROM_SCL_PIN, &scl_pin_config);
+	XMC_GPIO_Init(EEPROM_SDA_PIN, &sda_pin_config);
+
+	NVIC_SetPriority(12, 1); // tx
+	XMC_SCU_SetInterruptControl(12, XMC_SCU_IRQCTRL_USIC1_SR3_IRQ12);
+	NVIC_EnableIRQ(12);
+	NVIC_SetPriority(11, 0); // protocol
+	XMC_SCU_SetInterruptControl(11, XMC_SCU_IRQCTRL_USIC1_SR2_IRQ11);
+	NVIC_EnableIRQ(11);
+	XMC_I2C_CH_EnableEvent(EEPROM_I2C, XMC_I2C_CH_EVENT_SLAVE_READ_REQUEST | XMC_I2C_CH_EVENT_ERROR);
+}
+
+
+void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) eeprom_tx_handler(void) {
+	// Fill fifo (if the read transfer stops we flush the fifo again)
+	while(!XMC_USIC_CH_TXFIFO_IsFull(EEPROM_I2C)) {
+		EEPROM_I2C->IN[0] = XMC_I2C_CH_TDF_SLAVE_SEND | eeprom_data[eeprom_register];
+		eeprom_register = (eeprom_register + 1) & EEPROM_REGISTER_MASK;
+	}
+}
+
+void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) eeprom_protocol_handler(void) {
+    uint32_t status = XMC_I2C_CH_GetStatusFlag(EEPROM_I2C);
+
+	// In case of stop condition or error we reset the tx fifo and i2c state machine
+	if(status & (XMC_I2C_CH_STATUS_FLAG_ERROR | XMC_I2C_CH_STATUS_FLAG_STOP_CONDITION_RECEIVED)) {
+		XMC_USIC_CH_TXFIFO_DisableEvent(EEPROM_I2C, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+		XMC_USIC_CH_TXFIFO_ClearEvent(EEPROM_I2C, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+		XMC_USIC_CH_TXFIFO_Flush(EEPROM_I2C);
+		XMC_USIC_CH_SetTransmitBufferStatus(EEPROM_I2C, 0b10); // Clear bits TDV and TE
+
+		// In case of error we re-initialize the whole thing.
+		if(status & XMC_I2C_CH_STATUS_FLAG_ERROR) {
+			eeprom_init();
+		}
+
+		XMC_I2C_CH_ClearStatusFlag(XMC_I2C0_CH1, XMC_I2C_CH_STATUS_FLAG_ERROR | XMC_I2C_CH_STATUS_FLAG_STOP_CONDITION_RECEIVED);
+	}
+
+	if(status & XMC_I2C_CH_STATUS_FLAG_SLAVE_READ_REQUESTED) {
+		while(!XMC_USIC_CH_RXFIFO_IsEmpty(EEPROM_I2C)) {
+			// In case of a read request we set the register variable to the
+			// desired register.
+            if(!eeprom_register_high_byte_received) {
+                eeprom_register_high_byte = XMC_I2C_CH_GetReceivedData(EEPROM_I2C);
+                eeprom_register_high_byte_received = true;
+            } else {
+			    eeprom_register = ((eeprom_register_high_byte << 8) | XMC_I2C_CH_GetReceivedData(EEPROM_I2C)) & EEPROM_REGISTER_MASK;
+                eeprom_register_high_byte_received = false;
+                eeprom_register_high_byte = 0;
+
+                // Fill buffer with data starting from address.
+				XMC_USIC_CH_TXFIFO_Flush(EEPROM_I2C);
+                eeprom_tx_handler();
+                XMC_USIC_CH_TXFIFO_ClearEvent(EEPROM_I2C, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+                XMC_USIC_CH_TXFIFO_EnableEvent(EEPROM_I2C, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+            }
+
+		}
+
+		XMC_I2C_CH_ClearStatusFlag(EEPROM_I2C, XMC_I2C_CH_STATUS_FLAG_SLAVE_READ_REQUESTED);
+	}
+
+	// If we receive bytes after the register number we read the data
+	// and throw it away (we don't have any writable registers).
+	if(status & XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION) {
+		while(!XMC_USIC_CH_RXFIFO_IsEmpty(EEPROM_I2C)) {
+			uint32_t __attribute__((unused)) _ = XMC_I2C_CH_GetReceivedData(EEPROM_I2C);
+		}
+
+		XMC_I2C_CH_ClearStatusFlag(EEPROM_I2C, XMC_I2C_CH_STATUS_FLAG_RECEIVE_INDICATION);
+	}
+}
