@@ -1246,10 +1246,8 @@ F 3 "" H 4450 2700 60  0000 C CNN
 	4    4450 2700
 	1    0    0    -1  
 $EndComp
-Text GLabel 4000 900  2    39   Input ~ 0
+Text GLabel 1700 3700 2    39   Input ~ 0
 B-CLK
-Wire Wire Line
-	3900 900  4000 900 
 $Comp
 L tinkerforge:GND #PWR024
 U 1 1 5B481E6B
@@ -1272,7 +1270,6 @@ NoConn ~ 1550 3100
 NoConn ~ 1550 3200
 NoConn ~ 1550 3500
 NoConn ~ 1550 3600
-NoConn ~ 1550 3700
 NoConn ~ 3900 1000
 NoConn ~ 3900 1100
 NoConn ~ 3900 1200
@@ -1376,4 +1373,7 @@ Wire Wire Line
 Connection ~ 2600 4000
 Wire Wire Line
 	2600 4000 2750 4000
+Wire Wire Line
+	1550 3700 1700 3700
+NoConn ~ 3900 900 
 $EndSCHEMATC
