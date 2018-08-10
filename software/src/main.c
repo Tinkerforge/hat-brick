@@ -32,6 +32,7 @@
 #include "max17260.h"
 #include "bq24075.h"
 #include "rpi.h"
+#include "rtc.h"
 
 int main(void) {
 	logging_init();
@@ -41,6 +42,7 @@ int main(void) {
 	bq24075_init();
 	max17260_init();
 	rpi_init();
+	rtc_init();
 
 	while(true) {
 		bootloader_tick();
@@ -48,5 +50,6 @@ int main(void) {
 		bq24075_tick();
 		max17260_tick();
 		rpi_tick();
+		rtc_tick();
 	}
 }
