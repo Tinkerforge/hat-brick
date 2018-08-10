@@ -43,11 +43,15 @@
 #define BOOTLOADER_CUSTOM_PIN1_OUTPUT_LEVEL XMC_GPIO_OUTPUT_LEVEL_HIGH
 #define BOOTLOADER_CUSTOM_PIN2_OUTPUT_LEVEL XMC_GPIO_OUTPUT_LEVEL_HIGH
 
-// --- Oscilater defines ---
-#define OSCHP_FREQUENCY 16000000
-#define DCLK_CLOCK_SRC  1
-#define DCO1_CAL_SRC    1
+// --- Oscillater defines ---
+#define OSCHP_FREQUENCY 48000000
+#define DCLK_CLOCK_SRC  0 // Internal oscillator for 16MHz
+//#define DCO1_CAL_SRC    2 // Use RTC clock for DCO1 calibration
+#define DCO1_CAL_SRC    0 // ^ TODO: CHANGE BACK TO 2 ^
+#define RTC_CLOCK_SRC   5 // External oscillator for 32768Hz (for RTC)
 
+#define EXT_REF_PRESCALER   0x6
+#define EXT_REF_SYN_PRELOAD 0x2256
 
 // --- SPITFP ---
 #define SPITFP_USIC_CHANNEL         USIC0_CH0
