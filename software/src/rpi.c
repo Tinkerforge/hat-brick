@@ -29,19 +29,6 @@
 #include "bricklib2/hal/system_timer/system_timer.h"
 #include "bricklib2/utility/led_flicker.h"
 
-typedef enum XMC_I2C_CH_TDF {
-	XMC_I2C_CH_TDF_MASTER_SEND         = 0,
-	XMC_I2C_CH_TDF_SLAVE_SEND          = 1 << 8,
-	XMC_I2C_CH_TDF_MASTER_RECEIVE_ACK  = 2 << 8,
-	XMC_I2C_CH_TDF_MASTER_RECEIVE_NACK = 3 << 8,
-	XMC_I2C_CH_TDF_MASTER_START        = 4 << 8,
-	XMC_I2C_CH_TDF_MASTER_RESTART      = 5 << 8,
-	XMC_I2C_CH_TDF_MASTER_STOP         = 6 << 8
-} XMC_I2C_CH_TDF_t;
-
-#define i2c_slave_tx_handler  IRQ_Hdlr_12 
-#define i2c_slave_protocol_handler IRQ_Hdlr_11 
-
 RPI rpi;
 
 void rpi_init(void) {
