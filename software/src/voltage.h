@@ -1,7 +1,7 @@
 /* hat-bricklet
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for HAT Bricklet
+ * voltage.h: Driver for measuring input voltages
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,40 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <stdio.h>
-#include <stdbool.h>
+#ifndef VOLTAGE_H
+#define VOLTAGE_H
 
-#include "configs/config.h"
+void voltage_init(void);
+void voltage_tick(void);
 
-#include "bricklib2/bootloader/bootloader.h"
-#include "bricklib2/hal/system_timer/system_timer.h"
-#include "bricklib2/logging/logging.h"
-#include "communication.h"
-
-#include "max17260.h"
-#include "bq24075.h"
-#include "rpi.h"
-#include "rtc.h"
-#include "voltage.h"
-
-int main(void) {
-	logging_init();
-	logd("Start HAT Bricklet\n\r");
-
-	communication_init();
-	bq24075_init();
-	max17260_init();
-	rpi_init();
-	rtc_init();
-	voltage_init();
-
-	while(true) {
-		bootloader_tick();
-		communication_tick();
-		bq24075_tick();
-		max17260_tick();
-		rpi_tick();
-		rtc_tick();
-		voltage_tick();
-	}
-}
+#endif

@@ -35,6 +35,7 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/eeprom.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom_data.c"
 	"${PROJECT_SOURCE_DIR}/src/rtc.c"
+	"${PROJECT_SOURCE_DIR}/src/voltage.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"
@@ -58,6 +59,8 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc1_flash.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_i2c.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_rtc.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc1_rtc.c"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/src/xmc_vadc.c"
 )
 
 MESSAGE(STATUS "\nFound following source files:\n ${SOURCES}\n")
