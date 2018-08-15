@@ -34,6 +34,7 @@
 #define FIRMWARE_VERSION_REVISION 0
 
 #define I2C_FIFO_TIMEOUT 250
+#define I2C_FIFO_COOP_ENABLE
 
 #include "config_custom_bootloader.h"
 

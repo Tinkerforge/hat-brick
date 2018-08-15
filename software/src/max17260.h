@@ -33,7 +33,7 @@ typedef struct {
 
     uint8_t current_read_index;
 
-    uint16_t status;
+    int32_t status;
 
     int32_t capacity_full;
     int32_t capacity_nominal;
@@ -49,6 +49,9 @@ typedef struct {
     int32_t current_flow;
 
     int32_t temperature_battery;
+
+    bool battery_connected;
+    bool fully_qualified;
 } MAX17260;
 
 extern MAX17260 max17260;
@@ -83,7 +86,63 @@ extern MAX17260 max17260;
 #define MAX17260_REG_T_ALRT_TH    0x02
 #define MAX17260_REG_S_ALRT_TH    0x03
 #define MAX17260_REG_L_ALRT_TH    0xB4
+#define MAX17260_REG_FSTAT        0x3D // TODO:This is only in software implementation guide, not in datasheet. Is it OK?
 
+
+// Default configuration
+
+#define MAX17260_CONFIG1_TSEL     1
+#define MAX17260_CONFIG1_SS       0
+#define MAX17260_CONFIG1_TS       0
+#define MAX17260_CONFIG1_VS       0
+#define MAX17260_CONFIG1_IS       0
+#define MAX17260_CONFIG1_THSH     0
+#define MAX17260_CONFIG1_TEN      1
+#define MAX17260_CONFIG1_TEX      0
+#define MAX17260_CONFIG1_SHDN     0
+#define MAX17260_CONFIG1_COMMSH   0
+#define MAX17260_CONFIG1_D5       0
+#define MAX17260_CONFIG1_ETHRM    1
+#define MAX17260_CONFIG1_FTHRM    0
+#define MAX17260_CONFIG1_AEN      0
+#define MAX17260_CONFIG1_BEI      0
+#define MAX17260_CONFIG1_BER      0
+
+#define MAX17260_CONFIG2_D15      0
+#define MAX17260_CONFIG2_D14      0
+#define MAX17260_CONFIG2_ATRATEEN 1
+#define MAX17260_CONFIG2_DPEN     1
+#define MAX17260_CONFIG2_PWR      0b0110
+#define MAX17260_CONFIG2_DSOCEN   0
+#define MAX17260_CONFIG2_TAIRTEN  0
+#define MAX17260_CONFIG2_LDMDI    0
+#define MAX17260_CONFIG2_D4       1
+#define MAX17260_CONFIG2_DRCFG    0b10
+#define MAX17260_CONFIG2_CPMODE   0
+#define MAX17260_CONFIG2_D0       0
+
+#define MAX17260_MODEL_REFRESH    0
+#define MAX17260_MODEL_D14        0
+#define MAX17260_MODEL_R100       1 // TODO: ???
+#define MAX17260_MODEL_D12        0
+#define MAX17260_MODEL_D11        0
+#define MAX17260_MODEL_VCHG       0
+#define MAX17260_MODEL_D9         0
+#define MAX17260_MODEL_D8         0
+#define MAX17260_MODEL_MODELLID   0b0000
+#define MAX17260_MODEL_D3         0
+#define MAX17260_MODEL_CSEL       0
+#define MAX17260_MODEL_D1         0
+#define MAX17260_MODEL_D0         0
+
+#define MAX17260_STATUS_POR       0x0002
+
+#define MAX17260_FSTAT_DNR        0x0001
+#define MAX17260_FSTAT_FQ         0x0080
+
+#define MAX17260_DESIGN_CAP       0x1F40 // 0x0BB8 // TODO: ?
+#define MAX17260_VEMPTY           0xA561 // TODO: ?
+#define MAX17260_ICH_G_TERM       0x0640 // TODO: ?
 
 void max17260_init(void);
 void max17260_tick(void);
