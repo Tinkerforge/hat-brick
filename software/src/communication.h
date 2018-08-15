@@ -34,6 +34,14 @@ void communication_tick(void);
 void communication_init(void);
 
 // Constants
+#define HAT_WEEKDAY_MONDAY 1
+#define HAT_WEEKDAY_TUESDAY 2
+#define HAT_WEEKDAY_WEDNESDAY 3
+#define HAT_WEEKDAY_THURSDAY 4
+#define HAT_WEEKDAY_FRIDAY 5
+#define HAT_WEEKDAY_SATURDAY 6
+#define HAT_WEEKDAY_SUNDAY 7
+
 #define HAT_BOOTLOADER_MODE_BOOTLOADER 0
 #define HAT_BOOTLOADER_MODE_FIRMWARE 1
 #define HAT_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -53,12 +61,86 @@ void communication_init(void);
 #define HAT_STATUS_LED_CONFIG_SHOW_STATUS 3
 
 // Function and callback IDs and structs
+#define FID_GET_BATTERY_STATISTICS 1
+#define FID_SET_POWER_OFF 2
+#define FID_GET_POWER_OFF 3
+#define FID_SET_TIME 4
+#define FID_GET_TIME 5
 
 
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetBatteryStatistics;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool battery_connected;
+	int32_t capacity_full;
+	int32_t capacity_nominal;
+	int32_t capacity_remaining;
+	int32_t percentage_charge;
+	int32_t time_to_empty;
+	int32_t time_to_full;
+	int32_t voltage_battery;
+	int32_t voltage_usb;
+	int32_t voltage_dc;
+	int32_t current_flow;
+	int32_t temperature_battery;
+} __attribute__((__packed__)) GetBatteryStatistics_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t power_off_delay;
+	uint32_t power_off_duration;
+	bool raspberry_pi_off;
+	bool bricklets_off;
+} __attribute__((__packed__)) SetPowerOff;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetPowerOff;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t power_off_delay;
+	uint32_t power_off_duration;
+	bool raspberry_pi_off;
+	bool bricklets_off;
+} __attribute__((__packed__)) GetPowerOff_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t year;
+	uint8_t month;
+	uint8_t day;
+	uint8_t hour;
+	uint8_t minute;
+	uint8_t second;
+	uint8_t weekday;
+} __attribute__((__packed__)) SetTime;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetTime;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t year;
+	uint8_t month;
+	uint8_t day;
+	uint8_t hour;
+	uint8_t minute;
+	uint8_t second;
+	uint8_t weekday;
+} __attribute__((__packed__)) GetTime_Response;
 
 
 // Function prototypes
-
+BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistics *data, GetBatteryStatistics_Response *response);
+BootloaderHandleMessageResponse set_power_off(const SetPowerOff *data);
+BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerOff_Response *response);
+BootloaderHandleMessageResponse set_time(const SetTime *data);
+BootloaderHandleMessageResponse get_time(const GetTime *data, GetTime_Response *response);
 
 // Callbacks
 
