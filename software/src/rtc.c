@@ -57,13 +57,5 @@ void rtc_init(void) {
 	XMC_RTC_Start();
 }
 
-uint32_t tmp = 0;
 void rtc_tick(void) {
-	if(system_timer_is_time_elapsed_ms(tmp, 1000)) {
-		struct tm t;
-		XMC_RTC_GetTimeStdFormat(&t);
-		uartbb_printf("time: %d-%d-%d %d:%d:%d\n\r", t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
-
-		tmp = system_timer_get_ms();
-	}
 }
