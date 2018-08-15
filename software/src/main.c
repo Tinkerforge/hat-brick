@@ -53,6 +53,5 @@ int main(void) {
 		max17260_tick();
 		rpi_tick();
 		rtc_tick();
-		voltage_tick();
 	}
 }

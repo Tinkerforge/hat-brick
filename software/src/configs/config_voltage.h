@@ -1,7 +1,7 @@
 /* hat-bricklet
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
- * voltage.h: Driver for measuring input voltages
+ * config_voltage.h: Config for ADC measurements
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,12 +19,25 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef VOLTAGE_H
-#define VOLTAGE_H
+#ifndef CONFIG_VOLTAGE_H
+#define CONFIG_VOLTAGE_H
 
-#include <stdint.h>
+#include "xmc_vadc.h"
+#include "xmc_gpio.h"
 
-void voltage_init(void);
-uint32_t voltage_get_usb_voltage(void);
-uint32_t voltage_get_dc_voltage(void);
+#define VOLTAGE_USB_ADC_PIN          P2_8
+#define VOLTAGE_USB_ADC_CHANNEL      0
+#define VOLTAGE_USB_ADC_RESULT_REG   7
+#define VOLTAGE_USB_ADC_ALIAS        1
+
+#define VOLTAGE_DC_ADC_PIN           P2_9
+#define VOLTAGE_DC_ADC_CHANNEL       1
+#define VOLTAGE_DC_ADC_RESULT_REG    9
+#define VOLTAGE_DC_ADC_ALIAS         2
+
+#define VOLTAGE_USB_ADC_IRQ          15
+#define VOLTAGE_DC_ADC_IRQ           16
+
+#define VOLTAGE_ADC_IRQ_PRIORITY     3
+
 #endif
