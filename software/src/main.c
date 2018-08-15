@@ -33,7 +33,9 @@
 #include "bq24075.h"
 #include "rpi.h"
 #include "rtc.h"
+#include "eeprom.h"
 #include "voltage.h"
+
 
 int main(void) {
 	logging_init();
@@ -44,6 +46,7 @@ int main(void) {
 	max17260_init();
 	rpi_init();
 	rtc_init();
+	eeprom_init();
 	voltage_init();
 
 	while(true) {

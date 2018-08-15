@@ -54,8 +54,6 @@ void rpi_init(void) {
     rpi.leds[0].config = LED_FLICKER_CONFIG_EXTERNAL;
     rpi.leds[1].config = LED_FLICKER_CONFIG_EXTERNAL;
     rpi.leds[2].config = LED_FLICKER_CONFIG_EXTERNAL;
-
-    eeprom_init();
 }
 
 void rpi_tick(void) {
