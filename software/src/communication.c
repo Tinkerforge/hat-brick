@@ -33,11 +33,11 @@
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
 	switch(tfp_get_fid_from_message(message)) {
 		case FID_GET_BATTERY_STATISTICS: return get_battery_statistics(message, response);
-		case FID_SET_POWER_OFF: return set_power_off(message);
-		case FID_GET_POWER_OFF: return get_power_off(message, response);
-		case FID_SET_TIME: return set_time(message);
-		case FID_GET_TIME: return get_time(message, response);
-		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
+		case FID_SET_POWER_OFF:          return set_power_off(message);
+		case FID_GET_POWER_OFF:          return get_power_off(message, response);
+		case FID_SET_TIME:               return set_time(message);
+		case FID_GET_TIME:               return get_time(message, response);
+		default:                         return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
 
@@ -85,13 +85,13 @@ BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerO
 }
 
 BootloaderHandleMessageResponse set_time(const SetTime *data) {
-	if(data->year < 2000      || data->year > 2099 ||
-	   data->month < 1        || data->month > 12  ||
-	   data->day < 1          || data->day > 31    ||
-	   data->hour > 23        ||
-	   data->minute > 59      ||
-	   data->second > 59      ||
-	   data->weekday < 1      || data->weekday > 7) {
+	if(data->year    < 2000 || data->year    > 2099 ||
+	   data->month   < 1    || data->month   > 12   ||
+	   data->day     < 1    || data->day     > 31   ||
+	                           data->hour    > 23   ||
+	                           data->minute  > 59   ||
+	                           data->second  > 59   ||
+	   data->weekday < 1    || data->weekday > 7) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
