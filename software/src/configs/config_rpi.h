@@ -29,8 +29,13 @@
 #define RPI_BRICKLET_EN_PIN      P4_7
 #define RPI_RPI_EN_PIN           P4_6
 
-#define RPI_LED_LOW_PIN          P0_12
-#define RPI_LED_MID_PIN          P4_5
-#define RPI_LED_HIGH_PIN         P2_1
+#define RPI_LED_LOW_PIN          12
+#define RPI_LED_LOW_PORT         XMC_GPIO_PORT0
+#define RPI_LED_MID_PIN          5
+#define RPI_LED_MID_PORT         XMC_GPIO_PORT4
+#define RPI_LED_HIGH_PIN         1
+#define RPI_LED_HIGH_PORT        XMC_GPIO_PORT2
+
+#define RPI_SLEEP_RTC_IRQ        1
 
 #endif

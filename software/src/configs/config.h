@@ -26,6 +26,7 @@
 
 #define STARTUP_SYSTEM_INIT_ALREADY_DONE
 #define SYSTEM_TIMER_FREQUENCY 1000 // Use 1 kHz system timer
+#define SYSTEM_TIMER_IS_RAMFUNC
 
 #define UARTBB_TX_PIN P3_0
 

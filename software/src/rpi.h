@@ -31,11 +31,25 @@
 
 typedef struct {
     LEDFlickerState leds[RPI_NUM_LEDS];
+
+    uint32_t power_off_delay_start;
+    uint32_t power_off_duration_start;
+    uint32_t power_off_delay;
+	uint32_t power_off_duration;
+	bool raspberry_pi_off;
+	bool bricklets_off;
+	bool enable_sleep_indicator;
+
+    uint32_t last_flicker_time;
+
+    bool led_state_before_turned_off[4];
+    bool irq_state_before_turned_off[32];
 } RPI;
 
 extern RPI rpi;
 
 void rpi_init(void);
 void rpi_tick(void);
+void rpi_tick_sleep(void);
 
 #endif
