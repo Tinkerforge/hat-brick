@@ -22,11 +22,14 @@
 #include "communication.h"
 
 #include "bricklib2/utility/communication_callback.h"
+#include "bricklib2/utility/util_definitions.h"
 #include "bricklib2/protocols/tfp/tfp.h"
+#include "bricklib2/hal/system_timer/system_timer.h"
 
 #include "voltage.h"
 #include "max17260.h"
 #include "rtc.h"
+#include "rpi.h"
 
 #include "xmc_rtc.h"
 
@@ -74,12 +77,32 @@ BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistic
 }
 
 BootloaderHandleMessageResponse set_power_off(const SetPowerOff *data) {
-
+	rpi.power_off_delay_start  = system_timer_get_ms();
+	rpi.power_off_delay        = data->power_off_delay*1000;
+	rpi.power_off_duration     = data->power_off_duration*1000;
+	rpi.raspberry_pi_off       = data->raspberry_pi_off;
+	rpi.bricklets_off          = data->bricklets_off;
+	rpi.enable_sleep_indicator = data->enable_sleep_indicator;
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerOff_Response *response) {
-	response->header.length = sizeof(GetPowerOff_Response);
+	response->header.length          = sizeof(GetPowerOff_Response);
+	response->raspberry_pi_off       = rpi.raspberry_pi_off;
+	response->bricklets_off          = rpi.bricklets_off;
+	response->enable_sleep_indicator = rpi.enable_sleep_indicator;
+
+	if(rpi.power_off_delay_start == 0) {
+		response->power_off_delay = 0;
+		if(rpi.power_off_duration_start == 0) {
+			response->power_off_duration = 0;
+		} else {
+			response->power_off_duration = MAX(rpi.power_off_duration - (system_timer_get_ms() - rpi.power_off_duration_start), 0)/1000;
+		}
+	} else {
+		response->power_off_duration = rpi.power_off_duration/1000;
+		response->power_off_delay    = MAX(rpi.power_off_delay - (system_timer_get_ms() - rpi.power_off_delay_start), 0)/1000;
+	}
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }

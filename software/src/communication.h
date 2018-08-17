@@ -94,6 +94,7 @@ typedef struct {
 	uint32_t power_off_duration;
 	bool raspberry_pi_off;
 	bool bricklets_off;
+	bool enable_sleep_indicator;
 } __attribute__((__packed__)) SetPowerOff;
 
 typedef struct {
@@ -106,6 +107,7 @@ typedef struct {
 	uint32_t power_off_duration;
 	bool raspberry_pi_off;
 	bool bricklets_off;
+	bool enable_sleep_indicator;
 } __attribute__((__packed__)) GetPowerOff_Response;
 
 typedef struct {
