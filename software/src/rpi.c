@@ -64,7 +64,6 @@ void rpi_init(void) {
 	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
 		XMC_GPIO_Init(rpi_led_ports[i], rpi_led_pins[i],  &output_low);
 		rpi.leds[i].config = LED_FLICKER_CONFIG_EXTERNAL;
-
 	}
 
 	// Configure RTC interrupt
@@ -216,10 +215,12 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(void) {
 	// Then we enter sleep mode (all hardware units are turned off, decrease frequency to 125kHz, etc)
 	rpi_sleep_enter();
 
+	// Use deep sleep mode.
+	PPB->SCR |= PPB_SCR_SLEEPDEEP_Msk;
+
 	// Then we disable the flash. From here on everything needs to run in an interrupt, 
 	// including all of the IRQs that are called!
 	// Otherwise the MCU will hang forever.
-	PPB->SCR |= PPB_SCR_SLEEPDEEP_Msk;
 	NVM->NVMCONF &= ~NVM_NVMCONF_NVM_ON_Msk;
 	while(NVM->NVMSTATUS & NVM_NVMSTATUS_BUSY_Msk) { __NOP(); }
 
