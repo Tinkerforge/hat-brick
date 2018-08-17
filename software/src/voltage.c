@@ -206,6 +206,16 @@ void voltage_adc_init(void) {
 	XMC_VADC_GLOBAL_BackgroundTriggerConversion(VADC);
 }
 
+void voltage_disable(void) {
+	NVIC_DisableIRQ(VOLTAGE_USB_ADC_IRQ);
+	NVIC_DisableIRQ(VOLTAGE_DC_ADC_IRQ);
+}
+
+void voltage_enable(void) {
+	NVIC_EnableIRQ(VOLTAGE_USB_ADC_IRQ);
+	NVIC_EnableIRQ(VOLTAGE_DC_ADC_IRQ);
+}
+
 void voltage_init(void) {
     const XMC_GPIO_CONFIG_t voltage_pin_config = {
 		.mode             = XMC_GPIO_MODE_INPUT_TRISTATE,

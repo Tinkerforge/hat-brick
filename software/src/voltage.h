@@ -24,6 +24,8 @@
 
 #include <stdint.h>
 
+void voltage_disable(void);
+void voltage_enable(void);
 void voltage_init(void);
 uint32_t voltage_get_usb_voltage(void);
 uint32_t voltage_get_dc_voltage(void);
