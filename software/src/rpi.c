@@ -218,7 +218,7 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(void) {
 	// Use deep sleep mode.
 	PPB->SCR |= PPB_SCR_SLEEPDEEP_Msk;
 
-	// Then we disable the flash. From here on everything needs to run in an interrupt, 
+	// Then we disable the flash. From here on everything needs to run in RAM,
 	// including all of the IRQs that are called!
 	// Otherwise the MCU will hang forever.
 	NVM->NVMCONF &= ~NVM_NVMCONF_NVM_ON_Msk;
