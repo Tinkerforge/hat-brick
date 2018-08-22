@@ -34,7 +34,7 @@
 #include "xmc_wdt.h"
 #include "xmc_rtc.h"
 
-#define RPI_LED_POWER_LOW_FLICKER_TIME 5000
+#define RPI_LED_POWER_LOW_FLICKER_TIME 500
 #define rpi_sleep_rtc_interrupt IRQ1_Handler
 RPI rpi;
 
@@ -76,12 +76,17 @@ void rpi_handle_battery_leds(void) {
 	switch(max17260.percentage_charge/1600) {
 		default:
 		case 6:
-		case 5: led[2] = 1; led[1] = 1; led[0] = 1; break;
-		case 4: led[2] = 2; led[1] = 1; led[0] = 1; break;
-		case 3: led[2] = 0; led[1] = 1; led[0] = 1; break;
+		case 5: led[2] = 1; led[1] = 0; led[0] = 0; break;
+		case 4: led[2] = 2; led[1] = 1; led[0] = 0; break;
+		case 3: led[2] = 0; led[1] = 1; led[0] = 0; break;
 		case 2: led[2] = 0; led[1] = 2; led[0] = 1; break;
 		case 1: led[2] = 0; led[1] = 0; led[0] = 1; break;
 		case 0: led[2] = 0; led[1] = 0; led[0] = 2; break;
+	}
+
+	// If no battery is connected we overwrite with all LEDs off.
+	if(!max17260.battery_connected) {
+		led[2] = 0; led[1] = 0; led[0] = 0;
 	}
 
 	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
