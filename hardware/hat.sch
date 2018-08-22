@@ -1376,4 +1376,6 @@ Wire Wire Line
 Wire Wire Line
 	1550 3700 1700 3700
 NoConn ~ 3900 900 
+Text Notes 5950 4600 1    118  ~ 0
+RASP-EN/B-EN -> P2.8/P2.9
 $EndSCHEMATC
