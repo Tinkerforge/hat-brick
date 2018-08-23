@@ -44,7 +44,7 @@ int32_t max17260_reg_to_capacity(uint8_t data[2]) { // in mAh
 }
 
 int32_t max17260_reg_to_percentage(uint8_t data[2]) { // in 0.01%
-	return (data[0] | (data[1] << 8))*256/1000;
+	return (data[0] | (data[1] << 8))*100/256;
 }
 
 int32_t max17260_reg_to_voltage(uint8_t data[2]) { // in mV
