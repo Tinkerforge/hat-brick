@@ -25,14 +25,8 @@
 
 #include "xmc_gpio.h"
 
-
-
 #define BQ24075_NPGOOD_PIN   P1_0 // Input voltage high enough
 #define BQ24075_NCHG_PIN     P1_1 // Is charging
-#define BQ24075_EN1_PIN      P1_2 // config v
-#define BQ24075_EN2_PIN      P1_3 // config ^
 #define BQ24075_NEN_PIN      P1_4 // Charging enable/disable
-#define BQ24075_NSYSOFF_PIN  P1_5 // Output of BQ24075 enable/disable
-
 
 #endif
