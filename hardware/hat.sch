@@ -263,17 +263,6 @@ Connection ~ 8650 6050
 Wire Wire Line
 	8900 6100 8900 6050
 Connection ~ 8900 6050
-$Comp
-L power:+5V #PWR03
-U 1 1 5B37899C
-P 7100 800
-F 0 "#PWR03" H 7100 650 50  0001 C CNN
-F 1 "+5V" H 7100 940 50  0000 C CNN
-F 2 "" H 7100 800 50  0001 C CNN
-F 3 "" H 7100 800 50  0001 C CNN
-	1    7100 800 
-	1    0    0    -1  
-$EndComp
 NoConn ~ 9050 3350
 NoConn ~ 9150 3350
 $Comp
@@ -1378,4 +1367,15 @@ Wire Wire Line
 NoConn ~ 3900 900 
 Text Notes 5950 4600 1    118  ~ 0
 RASP-EN/B-EN -> P2.8/P2.9
+$Comp
+L tinkerforge:5V #PWR?
+U 1 1 5B9F9451
+P 7100 800
+F 0 "#PWR?" H 7100 900 40  0001 C CNN
+F 1 "5V" H 7109 956 40  0000 C CNN
+F 2 "" H 7100 800 60  0000 C CNN
+F 3 "" H 7100 800 60  0000 C CNN
+	1    7100 800 
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
