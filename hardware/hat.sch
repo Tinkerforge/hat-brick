@@ -20,7 +20,7 @@ U 5B31E6A8
 F0 "Power Supply" 60
 F1 "power_supply.sch" 60
 $EndSheet
-Text GLabel 1700 6000 2    39   Output ~ 0
+Text GLabel 1700 5900 2    39   Output ~ 0
 CHG-EN
 Text GLabel 4000 1700 2    39   Input ~ 0
 BATTERY-ALRT
@@ -28,15 +28,11 @@ Text GLabel 4000 2000 2    39   BiDi ~ 0
 BATTERY-SDA
 Text GLabel 4000 1900 2    39   Output ~ 0
 BATTERY-SCL
-Text GLabel 1700 5700 2    39   Input ~ 0
-CHG-nCHG
-Text GLabel 1700 5600 2    39   Input ~ 0
-CHG-nPGOOD
 Text GLabel 1700 6200 2    39   Output ~ 0
 BOOST-EN
-Text GLabel 4000 1600 2    39   Input ~ 0
+Text GLabel 4000 1300 2    39   Input ~ 0
 DC-IN-VOLTAGE
-Text GLabel 4000 1500 2    39   Input ~ 0
+Text GLabel 4000 1200 2    39   Input ~ 0
 USB-IN-VOLTAGE
 $Comp
 L tinkerforge:XMC1XXX48 U101
@@ -536,7 +532,7 @@ Wire Wire Line
 Connection ~ 7350 900 
 Text GLabel 7600 1550 0    39   Input ~ 0
 B-EN
-Text GLabel 4000 3150 2    39   Output ~ 0
+Text GLabel 4000 1600 2    39   Output ~ 0
 B-EN
 Wire Wire Line
 	7600 1550 7650 1550
@@ -613,7 +609,7 @@ Text GLabel 7600 2750 0    39   Input ~ 0
 RASP-EN
 Wire Wire Line
 	7600 2750 7650 2750
-Text GLabel 4000 3050 2    39   Output ~ 0
+Text GLabel 4000 1500 2    39   Output ~ 0
 RASP-EN
 Text GLabel 1700 3800 2    39   Output ~ 0
 RASP-GP
@@ -1085,10 +1081,6 @@ Wire Wire Line
 Wire Wire Line
 	1700 3400 1550 3400
 Wire Wire Line
-	1550 5600 1700 5600
-Wire Wire Line
-	1700 5700 1550 5700
-Wire Wire Line
 	1550 6000 1700 6000
 Wire Wire Line
 	3900 1500 4000 1500
@@ -1261,8 +1253,6 @@ NoConn ~ 1550 3500
 NoConn ~ 1550 3600
 NoConn ~ 3900 1000
 NoConn ~ 3900 1100
-NoConn ~ 3900 1200
-NoConn ~ 3900 1300
 NoConn ~ 3900 1800
 Wire Wire Line
 	7050 5350 8050 5350
@@ -1338,9 +1328,6 @@ Text Notes 4750 4300 0    39   ~ 0
 "low led"
 Text Notes 6700 3700 0    39   ~ 0
 CS2 und CS3 getauscht
-NoConn ~ 1550 5800
-NoConn ~ 1550 5900
-NoConn ~ 1550 6100
 $Comp
 L tinkerforge:C C105
 U 1 1 5B38BE3D
@@ -1365,17 +1352,33 @@ Wire Wire Line
 Wire Wire Line
 	1550 3700 1700 3700
 NoConn ~ 3900 900 
-Text Notes 5950 4600 1    118  ~ 0
-RASP-EN/B-EN -> P2.8/P2.9
 $Comp
-L tinkerforge:5V #PWR?
+L tinkerforge:5V #PWR0115
 U 1 1 5B9F9451
 P 7100 800
-F 0 "#PWR?" H 7100 900 40  0001 C CNN
+F 0 "#PWR0115" H 7100 900 40  0001 C CNN
 F 1 "5V" H 7109 956 40  0000 C CNN
 F 2 "" H 7100 800 60  0000 C CNN
 F 3 "" H 7100 800 60  0000 C CNN
 	1    7100 800 
 	1    0    0    -1  
 $EndComp
+Text GLabel 1700 6000 2    39   Output ~ 0
+BATTERY-INT
+Text GLabel 1700 6100 2    39   Output ~ 0
+BATTERY-STAT
+Wire Wire Line
+	3900 1200 4000 1200
+Wire Wire Line
+	4000 1300 3900 1300
+Text GLabel 1700 5800 2    39   Output ~ 0
+BATTERY-EN
+Wire Wire Line
+	1700 5800 1550 5800
+Wire Wire Line
+	1700 6100 1550 6100
+Wire Wire Line
+	1700 5900 1550 5900
+NoConn ~ 1550 5700
+NoConn ~ 1550 5600
 $EndSCHEMATC
