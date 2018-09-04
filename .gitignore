@@ -11,3 +11,5 @@ software/src/brickletlib
 software/src/bricklib
 software/src/bricklib2
 hardware/kicad-libraries
+rpi/*.eep
+rpi/*.dtb
