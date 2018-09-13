@@ -274,5 +274,7 @@ void max17260_init(void) {
 	max17260.i2c_fifo.sda_fifo_size    = MAX17260_SDA_FIFO_SIZE;
 	max17260.i2c_fifo.sda_fifo_pointer = MAX17260_SDA_FIFO_POINTER;
 
+	max17260.i2c_fifo.mutex            = false;
+
 	coop_task_init(&max17260_task, max17260_tick_task);
 }
