@@ -36,6 +36,7 @@
 
 #define I2C_FIFO_TIMEOUT 250
 #define I2C_FIFO_COOP_ENABLE
+#define I2C_FIFO_COOP_USE_MUTEX
 
 #include "config_custom_bootloader.h"
 
