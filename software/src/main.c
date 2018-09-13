@@ -30,7 +30,7 @@
 #include "communication.h"
 
 #include "max17260.h"
-#include "bq24075.h"
+#include "bq24195.h"
 #include "rpi.h"
 #include "rtc.h"
 #include "eeprom.h"
@@ -42,9 +42,9 @@ int main(void) {
 	logd("Start HAT Bricklet\n\r");
 
 	communication_init();
-	bq24075_init();
-	max17260_init();
 	rpi_init();
+	bq24195_init();
+	max17260_init();
 	rtc_init();
 	eeprom_init();
 	voltage_init();
@@ -52,7 +52,7 @@ int main(void) {
 	while(true) {
 		bootloader_tick();
 		communication_tick();
-		bq24075_tick();
+		bq24195_tick();
 		max17260_tick();
 		rpi_tick();
 		rtc_tick();

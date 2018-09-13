@@ -25,12 +25,12 @@
 #include "xmc_vadc.h"
 #include "xmc_gpio.h"
 
-#define VOLTAGE_USB_ADC_PIN          P2_8
+#define VOLTAGE_USB_ADC_PIN          P2_5
 #define VOLTAGE_USB_ADC_CHANNEL      0
 #define VOLTAGE_USB_ADC_RESULT_REG   7
 #define VOLTAGE_USB_ADC_ALIAS        1
 
-#define VOLTAGE_DC_ADC_PIN           P2_9
+#define VOLTAGE_DC_ADC_PIN           P2_6
 #define VOLTAGE_DC_ADC_CHANNEL       1
 #define VOLTAGE_DC_ADC_RESULT_REG    9
 #define VOLTAGE_DC_ADC_ALIAS         2

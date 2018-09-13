@@ -30,7 +30,7 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/main.c"
 	"${PROJECT_SOURCE_DIR}/src/communication.c"
 	"${PROJECT_SOURCE_DIR}/src/max17260.c"
-	"${PROJECT_SOURCE_DIR}/src/bq24075.c"
+	"${PROJECT_SOURCE_DIR}/src/bq24195.c"
 	"${PROJECT_SOURCE_DIR}/src/rpi.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom_data.c"
