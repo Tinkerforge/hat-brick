@@ -22,6 +22,10 @@
 #ifndef BQ24195_H
 #define BQ24195_H
 
+typedef struct {
+
+} BQ24195;
+
 void bq24195_init(void);
 void bq24195_tick(void);
 

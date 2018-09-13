@@ -20,9 +20,33 @@
  */
 
 #include "bq24195.h"
+#include "max17260.h"
 
 #include "configs/config_bq24195.h"
 #include "configs/config_rpi.h"
+
+#include "bricklib2/os/coop_task.h"
+
+#include "bricklib2/logging/logging.h"
+
+extern MAX17260 max17260;
+BQ24195 bq24195;
+CoopTask bq24195_task;
+
+void bq24195_tick_task(void) {
+	while(true) {
+		// Print all 0xA registers for testing
+		for(uint8_t reg = 0; reg <= 0xA; reg++) {
+			uint8_t value = 0;
+			i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 1, &value);
+
+			uartbb_printf("Register %x: %b\n\r", reg, value);
+		}
+		uartbb_printf("\n\r");
+
+		coop_task_sleep_ms(1000);
+	}
+}
 
 void bq24195_init(void) {
 	XMC_GPIO_CONFIG_t output_low = {
@@ -43,7 +67,9 @@ void bq24195_init(void) {
 	XMC_GPIO_Init(BQ24195_NCE_PIN, &output_low);
 	XMC_GPIO_Init(BQ24195_INT_PIN, &input);
 	XMC_GPIO_Init(BQ24195_STAT_PIN, &input);
+	coop_task_init(&bq24195_task, bq24195_tick_task);
 }
 
 void bq24195_tick(void) {
+	coop_task_tick(&bq24195_task);
 }
