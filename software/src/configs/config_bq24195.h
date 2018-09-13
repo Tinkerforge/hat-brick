@@ -26,7 +26,28 @@
 #include "xmc_gpio.h"
 
 #define BQ24195_STAT_PIN   P1_5 // Charging Status Pin
-#define BQ24195_INT_PIN     P1_4 // Interrupt
-#define BQ24195_NCE_PIN     P1_3 // Charging enable/disable
+#define BQ24195_INT_PIN    P1_4 // Interrupt
+#define BQ24195_NCE_PIN    P1_3 // Charging enable/disable
+
+#define BQ24195_I2C_BAUDRATE         100000
+
+#define BQ24195_I2C_ADDRESS          0b1101011 // 0x6b
+#define BQ24195_I2C                  XMC_I2C1_CH1
+
+#define BQ24195_SCL_PORT             XMC_GPIO_PORT2
+#define BQ24195_SCL_PIN              12
+#define BQ24195_SCL_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT4
+#define BQ24195_SCL_INPUT            XMC_USIC_CH_INPUT_DX1
+#define BQ24195_SCL_SOURCE           1
+#define BQ24195_SCL_FIFO_SIZE        XMC_USIC_CH_FIFO_SIZE_16WORDS
+#define BQ24195_SCL_FIFO_POINTER     32
+
+#define BQ24195_SDA_PORT             XMC_GPIO_PORT2
+#define BQ24195_SDA_PIN              13
+#define BQ24195_SDA_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT7
+#define BQ24195_SDA_INPUT            XMC_USIC_CH_INPUT_DX0
+#define BQ24195_SDA_SOURCE           3
+#define BQ24195_SDA_FIFO_SIZE        XMC_USIC_CH_FIFO_SIZE_16WORDS
+#define BQ24195_SDA_FIFO_POINTER     48
 
 #endif
