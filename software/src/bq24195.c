@@ -33,14 +33,28 @@ extern MAX17260 max17260;
 BQ24195 bq24195;
 CoopTask bq24195_task;
 
+uint32_t bq24195_read_register(uint8_t reg, uint8_t *value) {
+	// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
+	uint8_t old_address = max17260.i2c_fifo.address;
+	if(!max17260.i2c_fifo.mutex) {
+		max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
+	}
+	uint32_t error = i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 1, value);
+
+	if(!max17260.i2c_fifo.mutex) {
+		max17260.i2c_fifo.address = old_address;
+	}
+
+	return error;
+}
+
 void bq24195_tick_task(void) {
 	while(true) {
 		// Print all 0xA registers for testing
 		for(uint8_t reg = 0; reg <= 0xA; reg++) {
 			uint8_t value = 0;
-			i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 1, &value);
-
-			uartbb_printf("Register %x: %b\n\r", reg, value);
+			uint32_t error = bq24195_read_register(reg, &value);
+			uartbb_printf("Register %x: %b (err %x)\n\r", reg, value, error);
 		}
 		uartbb_printf("\n\r");
 
