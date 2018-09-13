@@ -26,8 +26,8 @@
 #include "xmc_gpio.h"
 
 #define RPI_BOOST_EN_PIN         P1_6 // MIC2253, powers bricklet and rpi
-#define RPI_BRICKLET_EN_PIN      P4_7
-#define RPI_RPI_EN_PIN           P4_6
+#define RPI_BRICKLET_EN_PIN      P2_9
+#define RPI_RPI_EN_PIN           P2_8
 
 #define RPI_LED_LOW_PIN          12
 #define RPI_LED_LOW_PORT         XMC_GPIO_PORT0
