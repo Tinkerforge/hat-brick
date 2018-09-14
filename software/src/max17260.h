@@ -52,6 +52,8 @@ typedef struct {
 
     bool battery_connected;
     bool fully_qualified;
+
+    bool new_init;
 } MAX17260;
 
 extern MAX17260 max17260;

@@ -208,17 +208,21 @@ int32_t max17260_set_config(bool i2c_init) {
 }
 
 void max17260_tick_task(void) {
-	bool new_init = true;
+	bool new_set_config = true;
+	max17260.new_init = true;
 	while(true) {
-		if(new_init) {
+		if(new_set_config) {
 			// If we land here there was an I2C error. Most likely the battery is disconnected
 			// and the MAX17260 IC is not powered anymore. In this case we try to reconfigure
 			// the I2C state machine as well as the MAX17260 every 250ms
 			max17260.battery_connected = false;
 			coop_task_sleep_ms(250);
-			new_init = false;
-			if(max17260_set_config(true) < 0) {
-				new_init = true;
+			if(max17260_set_config(max17260.new_init) < 0) {
+				new_set_config = true;
+				max17260.new_init = true;
+			} else {
+				new_set_config = false;
+				max17260.new_init = false;
 			}
 		}
 			
@@ -228,20 +232,22 @@ void max17260_tick_task(void) {
 		// We do this by calling set_config with false. It will _not_ reset the i2c_state machine,
 		// but check the status register for POR. If POR is set it will set the config again.
 		if(max17260_set_config(false) < 0) {
-			new_init = true;
+			new_set_config = true;
+			max17260.new_init = true;
 			continue;
 		}
 
 		for(uint8_t i = 0; i < sizeof(max17260_read)/sizeof(MAX17260ReadRegister); i++) {
 			uint16_t data;
 			if(max17260_read_register(max17260_read[i].reg, &data) != 0) {
-				new_init = true; 
+				new_set_config = true; 
+				max17260.new_init = true;
 				break;
 			}
 			(*(max17260_read[i].data)) = max17260_read[i].func((uint8_t*)&data);
 		}
 
-		max17260.battery_connected = true;;
+		max17260.battery_connected = true;
 	}
 }
 

@@ -43,8 +43,8 @@ int main(void) {
 
 	communication_init();
 	rpi_init();
-	bq24195_init();
 	max17260_init();
+	bq24195_init();
 	rtc_init();
 	eeprom_init();
 	voltage_init();
@@ -52,8 +52,8 @@ int main(void) {
 	while(true) {
 		bootloader_tick();
 		communication_tick();
-		bq24195_tick();
 		max17260_tick();
+		bq24195_tick();
 		rpi_tick();
 		rtc_tick();
 	}

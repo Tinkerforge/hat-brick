@@ -48,15 +48,41 @@ uint32_t bq24195_read_register(uint8_t reg, uint8_t *value) {
 	return error;
 }
 
+uint32_t bq24195_write_register(uint8_t reg, uint8_t value) {
+	// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
+	uint8_t old_address = max17260.i2c_fifo.address;
+	if(!max17260.i2c_fifo.mutex) {
+		max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
+	}
+	uint32_t error = i2c_fifo_coop_write_register(&max17260.i2c_fifo, reg, 1, &value, true);
+
+	if(!max17260.i2c_fifo.mutex) {
+		max17260.i2c_fifo.address = old_address;
+	}
+
+	return error;
+}
+
 void bq24195_tick_task(void) {
+	if(max17260.new_init) {
+		i2c_fifo_init(&max17260.i2c_fifo);
+		max17260.new_init = false;
+	}
+	bq24195_write_register(BQ24195_REG_INPUT_SOURCE,   0b00110111); // Input current limit 3A
+	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT, 0b00100000); // Fast charge current limit 512mA
+
 	while(true) {
-		// Print all 0xA registers for testing
-		for(uint8_t reg = 0; reg <= 0xA; reg++) {
-			uint8_t value = 0;
-			uint32_t error = bq24195_read_register(reg, &value);
-			uartbb_printf("Register %x: %b (err %x)\n\r", reg, value, error);
+		if(max17260.new_init) {
+			i2c_fifo_init(&max17260.i2c_fifo);
+			max17260.new_init = false;
 		}
-		uartbb_printf("\n\r");
+
+		uint8_t value;
+		bq24195_read_register(BQ24195_REG_SYSTEM_STATUS, &value);
+		uartbb_printf("Status: %b\n\r", value);
+		bq24195_read_register(BQ24195_REG_FAULT, &value);
+		uartbb_printf("Fault: %b\n\r", value);
+		uartbb_puts("\n\r");
 
 		coop_task_sleep_ms(1000);
 	}
@@ -78,7 +104,7 @@ void bq24195_init(void) {
 		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE
 	};
 
-	XMC_GPIO_Init(BQ24195_NCE_PIN, &output_low);
+	XMC_GPIO_Init(BQ24195_NCE_PIN, &output_high);
 	XMC_GPIO_Init(BQ24195_INT_PIN, &input);
 	XMC_GPIO_Init(BQ24195_STAT_PIN, &input);
 	coop_task_init(&bq24195_task, bq24195_tick_task);
