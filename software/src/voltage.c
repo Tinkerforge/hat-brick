@@ -41,7 +41,7 @@ uint32_t voltage_usb_length   = 0;
 uint32_t voltage_dc_length    = 0;
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) voltage_usb_irq_handler(void) {
-	voltage_usb_sum += XMC_VADC_GROUP_GetDetailedResult(VADC_G0, VOLTAGE_USB_ADC_RESULT_REG) & 0xFFFF;
+	voltage_usb_sum += XMC_VADC_GROUP_GetDetailedResult(VOLTAGE_USB_ADC_GROUP, VOLTAGE_USB_ADC_RESULT_REG) & 0xFFFF;
 
 	voltage_usb_length++;
 	if(voltage_usb_length >= VOLTAGE_MAX_LENGTH) {
@@ -52,7 +52,7 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) vo
 }
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) voltage_dc_irq_handler(void) {
-	voltage_dc_sum += XMC_VADC_GROUP_GetDetailedResult(VADC_G0, VOLTAGE_DC_ADC_RESULT_REG) & 0xFFFF;
+	voltage_dc_sum += XMC_VADC_GROUP_GetDetailedResult(VOLTAGE_DC_ADC_GROUP, VOLTAGE_DC_ADC_RESULT_REG) & 0xFFFF;
 
 	voltage_dc_length++;
 	if(voltage_dc_length >= VOLTAGE_MAX_LENGTH) {
@@ -62,7 +62,7 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) vo
 	}
 }
 
-void voltage_adc_channel_init(uint32_t result_reg, uint32_t channel, uint32_t alias, XMC_VADC_SR_t sr, uint32_t irq) {
+void voltage_adc_channel_init(uint32_t result_reg, uint32_t channel, int32_t alias, XMC_VADC_SR_t sr, uint32_t irq, VADC_G_TypeDef *vadc, int32_t group_index) {
 	XMC_VADC_CHANNEL_CONFIG_t  channel_config = {
 		.input_class                =  XMC_VADC_CHANNEL_CONV_GLOBAL_CLASS0,    // Global ICLASS 0 selected
 		.lower_boundary_select 	    =  XMC_VADC_CHANNEL_BOUNDARY_GROUP_BOUND0,
@@ -89,14 +89,14 @@ void voltage_adc_channel_init(uint32_t result_reg, uint32_t channel, uint32_t al
 	};
 
     // Initialize for configured channels
-    XMC_VADC_GROUP_ChannelInit(VADC_G0, channel, &channel_config);
+    XMC_VADC_GROUP_ChannelInit(vadc, channel, &channel_config);
 
     // Initialize for configured result registers
-    XMC_VADC_GROUP_ResultInit(VADC_G0, result_reg, &channel_result_config);
+    XMC_VADC_GROUP_ResultInit(vadc, result_reg, &channel_result_config);
 
-	XMC_VADC_GLOBAL_BackgroundAddChannelToSequence(VADC, 0, channel);	
+	XMC_VADC_GLOBAL_BackgroundAddChannelToSequence(VADC, group_index, channel);
 
-	XMC_VADC_GROUP_SetResultInterruptNode(VADC_G0, result_reg, sr);
+	XMC_VADC_GROUP_SetResultInterruptNode(vadc, result_reg, sr);
 
     NVIC_SetPriority(irq, VOLTAGE_ADC_IRQ_PRIORITY);
     NVIC_EnableIRQ(irq); 
@@ -117,7 +117,7 @@ void voltage_adc_init(void) {
 		},
 
 		.data_reduction_control       = 0b11, // Accumulate 4 result values
-		.wait_for_read_mode           = 1, // GLOBRES Register will not be overwritten until the previous value is read
+		.wait_for_read_mode           = 0, // GLOBRES Register will not be overwritten until the previous value is read
 		.event_gen_enable             = 0, // Result Event from GLOBRES is disabled
 		.disable_sleep_mode_control   = 0  // Sleep mode is enabled
 	};
@@ -182,10 +182,14 @@ void voltage_adc_init(void) {
     XMC_VADC_GLOBAL_Init(VADC, &adc_global_config);
 
     XMC_VADC_GROUP_Init(VADC_G0, &group_init_handle0);
+    XMC_VADC_GROUP_Init(VADC_G1, &group_init_handle0);
     XMC_VADC_GROUP_SetPowerMode(VADC_G0, XMC_VADC_GROUP_POWERMODE_NORMAL);
+    XMC_VADC_GROUP_SetPowerMode(VADC_G1, XMC_VADC_GROUP_POWERMODE_NORMAL);
 
     XMC_VADC_GLOBAL_DisablePostCalibration(VADC, 0);
+    XMC_VADC_GLOBAL_DisablePostCalibration(VADC, 1);
     XMC_VADC_GLOBAL_SHS_EnableAcceleratedMode(SHS0, XMC_VADC_GROUP_INDEX_0);
+    XMC_VADC_GLOBAL_SHS_EnableAcceleratedMode(SHS0, XMC_VADC_GROUP_INDEX_1);
 	XMC_VADC_GLOBAL_SHS_SetClockDivider(SHS0, 0);
     XMC_VADC_GLOBAL_SHS_SetAnalogReference(SHS0, XMC_VADC_GLOBAL_SHS_AREF_EXTERNAL_VDD_UPPER_RANGE);
 
@@ -200,8 +204,8 @@ void voltage_adc_init(void) {
 	// Initialize the global result register
 	XMC_VADC_GLOBAL_ResultInit(VADC, &adc_global_result_config);
 
-    voltage_adc_channel_init(VOLTAGE_USB_ADC_RESULT_REG, VOLTAGE_USB_ADC_CHANNEL, VOLTAGE_USB_ADC_ALIAS, XMC_VADC_SR_SHARED_SR0, VOLTAGE_USB_ADC_IRQ);
-    voltage_adc_channel_init(VOLTAGE_DC_ADC_RESULT_REG,  VOLTAGE_DC_ADC_CHANNEL,  VOLTAGE_DC_ADC_ALIAS,  XMC_VADC_SR_SHARED_SR1, VOLTAGE_DC_ADC_IRQ);
+    voltage_adc_channel_init(VOLTAGE_USB_ADC_RESULT_REG, VOLTAGE_USB_ADC_CHANNEL, VOLTAGE_USB_ADC_ALIAS, XMC_VADC_SR_SHARED_SR0, VOLTAGE_USB_ADC_IRQ, VOLTAGE_USB_ADC_GROUP, VOLTAGE_USB_ADC_GROUP_INDEX);
+    voltage_adc_channel_init(VOLTAGE_DC_ADC_RESULT_REG,  VOLTAGE_DC_ADC_CHANNEL,  VOLTAGE_DC_ADC_ALIAS,  XMC_VADC_SR_SHARED_SR1, VOLTAGE_DC_ADC_IRQ,  VOLTAGE_DC_ADC_GROUP,  VOLTAGE_DC_ADC_GROUP_INDEX);
 
 	XMC_VADC_GLOBAL_BackgroundTriggerConversion(VADC);
 }
