@@ -68,8 +68,9 @@ void bq24195_tick_task(void) {
 		i2c_fifo_init(&max17260.i2c_fifo);
 		max17260.new_init = false;
 	}
-	bq24195_write_register(BQ24195_REG_INPUT_SOURCE,   0b00110111); // Input current limit 3A
-	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT, 0b00100000); // Fast charge current limit 512mA
+	bq24195_write_register(BQ24195_REG_INPUT_SOURCE,       0b00110111); // Input current limit 3A
+	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT,     0b00100000); // Fast charge current limit 512mA
+	bq24195_write_register(BQ24195_REG_CHARGE_TERMINATION, 0b10001010); // Turn watchdog off
 
 	while(true) {
 		if(max17260.new_init) {
