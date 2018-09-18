@@ -125,7 +125,7 @@ extern MAX17260 max17260;
 
 #define MAX17260_MODEL_REFRESH    0
 #define MAX17260_MODEL_D14        0
-#define MAX17260_MODEL_R100       1 // TODO: ???
+#define MAX17260_MODEL_R100       0
 #define MAX17260_MODEL_D12        0
 #define MAX17260_MODEL_D11        0
 #define MAX17260_MODEL_VCHG       0
