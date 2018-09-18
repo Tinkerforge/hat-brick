@@ -100,7 +100,7 @@ uint32_t max17260_write_and_verify_register(const uint8_t reg, uint16_t data) {
 	uint32_t retr;
 	uint32_t retw;
 
-	// We try with to three attempts
+	// We try with up to three attempts
 	for(uint8_t i = 0; i < 3; i++) {
 		uartbb_printf("write %d\n\r",  i);
 		retw = max17260_write_register(reg, data);
