@@ -38,30 +38,50 @@ BQ24195 bq24195;
 CoopTask bq24195_task;
 
 uint32_t bq24195_read_register(uint8_t reg, uint8_t *value) {
-	// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
-	uint8_t old_address = max17260.i2c_fifo.address;
-	if(!max17260.i2c_fifo.mutex) {
-		max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
-	}
-	uint32_t error = i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 1, value);
+	uint32_t error = 0;
+	while(true) {
+		// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
+		uint8_t old_address = max17260.i2c_fifo.address;
+		if(!max17260.i2c_fifo.mutex) {
+			max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
+		}
+		error = i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 1, value);
 
-	if(!max17260.i2c_fifo.mutex) {
-		max17260.i2c_fifo.address = old_address;
+		if(!max17260.i2c_fifo.mutex) {
+			max17260.i2c_fifo.address = old_address;
+		}
+
+		if(error == I2C_FIFO_STATUS_MUTEX) {
+			coop_task_yield();
+			continue;
+		}
+
+		break;
 	}
 
 	return error;
 }
 
 uint32_t bq24195_write_register(uint8_t reg, uint8_t value) {
-	// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
-	uint8_t old_address = max17260.i2c_fifo.address;
-	if(!max17260.i2c_fifo.mutex) {
-		max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
-	}
-	uint32_t error = i2c_fifo_coop_write_register(&max17260.i2c_fifo, reg, 1, &value, true);
+	uint32_t error = 0;
+	while(true) {
+		// FIXME: Overwrite i2c_fifo struct with correct address. This is a bit of a hack...
+		uint8_t old_address = max17260.i2c_fifo.address;
+		if(!max17260.i2c_fifo.mutex) {
+			max17260.i2c_fifo.address = BQ24195_I2C_ADDRESS;
+		}
+		error = i2c_fifo_coop_write_register(&max17260.i2c_fifo, reg, 1, &value, true);
 
-	if(!max17260.i2c_fifo.mutex) {
-		max17260.i2c_fifo.address = old_address;
+		if(!max17260.i2c_fifo.mutex) {
+			max17260.i2c_fifo.address = old_address;
+		}
+
+		if(error == I2C_FIFO_STATUS_MUTEX) {
+			coop_task_yield();
+			continue;
+		}
+
+		break;
 	}
 
 	return error;
@@ -128,10 +148,10 @@ void bq24195_tick_task(void) {
 		if(system_timer_is_time_elapsed_ms(print_time, 1000)) {
 			print_time = system_timer_get_ms();
 			uint8_t value;
-			bq24195_read_register(BQ24195_REG_SYSTEM_STATUS, &value);
-			uartbb_printf("Status: %b\n\r", value);
-			bq24195_read_register(BQ24195_REG_FAULT, &value);
-			uartbb_printf("Fault: %b\n\r", value);
+			uint32_t err = bq24195_read_register(BQ24195_REG_SYSTEM_STATUS, &value);
+			uartbb_printf("Status: %b (err %d)\n\r", value, err);
+			err = bq24195_read_register(BQ24195_REG_FAULT, &value);
+			uartbb_printf("Fault: %b (err %d)\n\r", value, err);
 			uartbb_puts("\n\r");
 		}
 

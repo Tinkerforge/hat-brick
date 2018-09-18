@@ -88,11 +88,34 @@ const MAX17260ReadRegister max17260_read[] = {
 };
 
 uint32_t max17260_write_register(const uint8_t reg, uint16_t data) {
-	return i2c_fifo_coop_write_register(&max17260.i2c_fifo, reg, 2, (uint8_t*)&data, true);
+	uint32_t error = 0;
+	while(true) {
+		error = i2c_fifo_coop_write_register(&max17260.i2c_fifo, reg, 2, (uint8_t*)&data, true);
+		if(error == I2C_FIFO_STATUS_MUTEX) {
+			coop_task_yield();
+			continue;
+		}
+
+		break;
+	}
+
+	return error;
 }
 
 uint32_t max17260_read_register(const uint8_t reg, uint16_t *data) {
-	return i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 2, (uint8_t*)data);
+	uint32_t error = 0;
+	while(true) {
+		error = i2c_fifo_coop_read_register(&max17260.i2c_fifo, reg, 2, (uint8_t*)data);
+
+		if(error == I2C_FIFO_STATUS_MUTEX) {
+			coop_task_yield();
+			continue;
+		}
+
+		break;
+	}
+
+	return error;
 }
 
 uint32_t max17260_write_and_verify_register(const uint8_t reg, uint16_t data) {
