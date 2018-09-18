@@ -24,9 +24,13 @@
 
 #include <stdint.h>
 
+#define VOLTAGE_MAX_LENGTH 1024 // Results in 1 measurement per ~100ms
+
 void voltage_disable(void);
 void voltage_enable(void);
 void voltage_init(void);
 uint32_t voltage_get_usb_voltage(void);
 uint32_t voltage_get_dc_voltage(void);
+uint32_t voltage_get_usb_voltage_raw(void);
+uint32_t voltage_get_dc_voltage_raw(void);
 #endif
