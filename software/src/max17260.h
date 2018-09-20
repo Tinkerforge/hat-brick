@@ -142,9 +142,10 @@ extern MAX17260 max17260;
 #define MAX17260_FSTAT_DNR        0x0001
 #define MAX17260_FSTAT_FQ         0x0080
 
-#define MAX17260_DESIGN_CAP       0x1F40 // 0x0BB8 // TODO: ?
-#define MAX17260_VEMPTY           0xA561 // TODO: ?
-#define MAX17260_ICH_G_TERM       0x0640 // TODO: ?
+// Settings for KXD 634169PL S2
+#define MAX17260_DESIGN_CAP       0x0FA0 // 2000mAh
+#define MAX17260_VEMPTY           0xA561 // 3.3V / 3.88V
+#define MAX17260_ICH_G_TERM       0x0333 // 128mA
 
 void max17260_init(void);
 void max17260_tick(void);
