@@ -30,8 +30,16 @@
 
 #include "bricklib2/logging/logging.h"
 
+#include "xmc_gpio.h"
+
 #define BQ24195_RAW_USB_VOLTAGE_THRESHOLD (35*VOLTAGE_MAX_LENGTH*4*4095/(33*2))
 #define BQ24195_RAW_DC_VOLTAGE_THRESHOLD  (60*VOLTAGE_MAX_LENGTH*4*4095/(33*11))
+
+#define BQ24195_MAX_BATTERY_TEMPERATURE_OFF 6000 // Turn charging off if battery temperature > 60°
+#define BQ24195_MAX_BATTERY_TEMPERATURE_ON  4500 // Turn charging on again if battery temperature < 45°
+
+#define BQ24195_THRESHOLD_DETECTION_DEBOUNCE 500 // 500ms debounce
+#define BQ24195_STATUS_UPDATE_INTERVAL       500
 
 extern MAX17260 max17260;
 BQ24195 bq24195;
@@ -96,7 +104,7 @@ void bq24195_tick_task(void) {
 	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT,     0b00100000); // Fast charge current limit 512mA
 	bq24195_write_register(BQ24195_REG_CHARGE_TERMINATION, 0b10001010); // Turn watchdog off
 
-	uint32_t print_time = 0;
+	uint32_t status_update_time = 0;
 	bool last_usb_low = true;
 	uint32_t last_usb_time = 0;
 	bool last_dc_low = true;
@@ -108,14 +116,17 @@ void bq24195_tick_task(void) {
 			max17260.new_init = false;
 		}
 
-		if((wait_time == 0) || (system_timer_is_time_elapsed_ms(wait_time, 500))) {
+		// Only test thresholds if we are not currently in an overtemperature event
+		const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
+		const bool temperature_ok = (charge_enabled && (max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_OFF)) || (!charge_enabled && (max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_ON));
+		if(max17260.battery_connected && temperature_ok && ((wait_time == 0) || (system_timer_is_time_elapsed_ms(wait_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)))) {
 			wait_time = 0;
 			uint32_t raw_usb_voltage = voltage_get_usb_voltage_raw();
 			if(last_usb_low && (raw_usb_voltage > BQ24195_RAW_USB_VOLTAGE_THRESHOLD)) {
 				last_usb_low = false;
 				last_usb_time = system_timer_get_ms();
 			} else if(!last_usb_low && (raw_usb_voltage > BQ24195_RAW_USB_VOLTAGE_THRESHOLD) && (last_usb_time != 0)) {
-				if(system_timer_is_time_elapsed_ms(last_usb_time, 500)) {
+				if(system_timer_is_time_elapsed_ms(last_usb_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_usb_time = 0;
 					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
 					coop_task_sleep_ms(2);
@@ -132,7 +143,7 @@ void bq24195_tick_task(void) {
 				last_dc_low = false;
 				last_dc_time = system_timer_get_ms();
 			} else if(!last_dc_low && (raw_dc_voltage > BQ24195_RAW_DC_VOLTAGE_THRESHOLD) && (last_dc_time != 0)) {
-				if(system_timer_is_time_elapsed_ms(last_dc_time, 500)) {
+				if(system_timer_is_time_elapsed_ms(last_dc_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_dc_time = 0;
 					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
 					coop_task_sleep_ms(2);
@@ -145,17 +156,42 @@ void bq24195_tick_task(void) {
 			}
 		}
 
-		if(system_timer_is_time_elapsed_ms(print_time, 1000)) {
-			print_time = system_timer_get_ms();
+		if(system_timer_is_time_elapsed_ms(status_update_time, BQ24195_STATUS_UPDATE_INTERVAL)) {
+			status_update_time = system_timer_get_ms();
 			uint8_t value;
 			uint32_t err = bq24195_read_register(BQ24195_REG_SYSTEM_STATUS, &value);
+			if(err == 0) {
+				bq24195.status = value;
+			}
 			uartbb_printf("Status: %b (err %d)\n\r", value, err);
 			err = bq24195_read_register(BQ24195_REG_FAULT, &value);
+			if(err == 0) {
+				bq24195.fault = value;
+			}
 			uartbb_printf("Fault: %b (err %d)\n\r", value, err);
 			uartbb_puts("\n\r");
 		}
 
 		coop_task_yield();
+	}
+}
+
+// Turn charging off if battery temperature > 60°C
+// If off, turn charging on again if battery temperature < 45°C
+void bq24195_handle_overtemperature(void) {
+	if(!max17260.battery_connected) {
+		return;
+	}
+
+	const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
+	if(charge_enabled) {
+		if(max17260.temperature_battery > BQ24195_MAX_BATTERY_TEMPERATURE_OFF) {
+			XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+		}
+	} else {
+		if(max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_ON) {
+			XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+		}
 	}
 }
 
@@ -182,5 +218,6 @@ void bq24195_init(void) {
 }
 
 void bq24195_tick(void) {
+	bq24195_handle_overtemperature();
 	coop_task_tick(&bq24195_task);
 }

@@ -22,6 +22,8 @@
 #ifndef BQ24195_H
 #define BQ24195_H
 
+#include <stdint.h>
+
 #define BQ24195_REG_INPUT_SOURCE           0x00
 #define BQ24195_REG_POWER_ON               0x01
 #define BQ24195_REG_CHARGE_CURRENT         0x02
@@ -34,10 +36,12 @@
 #define BQ24195_REG_FAULT                  0x09
 #define BQ24195_REG_VENDOR                 0x0A
 
-
 typedef struct {
-
+	uint16_t status;
+	uint16_t fault;
 } BQ24195;
+
+extern BQ24195 bq24195;
 
 void bq24195_init(void);
 void bq24195_tick(void);
