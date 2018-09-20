@@ -20,6 +20,7 @@
  */
 
 #include "max17260.h"
+#include "bq24195.h"
 
 #include "bricklib2/bootloader/bootloader.h"
 #include "bricklib2/logging/logging.h"
@@ -27,8 +28,11 @@
 #include "bricklib2/os/coop_task.h"
 
 #include "configs/config_max17260.h"
+#include "configs/config_bq24195.h"
 
 #define MAX17260_LEARNED_PARAMETER_SAVE_INTERVAL 1000*60*60*8 // Save learned parameters every 8 hours
+#define MAX17260_OFFLINE_RETRY_INTERVAL 250 // Try again in 250ms if max17260 is not reachable
+#define MAX17260_BATTERY_DETECT_INVERVAL 1000 // Find out if battery is still connected very 1000ms
 
 
 MAX17260 max17260;
@@ -328,15 +332,17 @@ void max17260_tick_task(void) {
 	} else {
 		max17260.learned_paramters_valid = false;
 	}
+
 	bool new_set_config = true;
 	max17260.new_init = true;
+	uint32_t battery_detect_time = 0;
 	while(true) {
 		if(new_set_config) {
 			// If we land here there was an I2C error. Most likely the battery is disconnected
 			// and the MAX17260 IC is not powered anymore. In this case we try to reconfigure
 			// the I2C state machine as well as the MAX17260 every 250ms
 			max17260.battery_connected = false;
-			coop_task_sleep_ms(250);
+			coop_task_sleep_ms(MAX17260_OFFLINE_RETRY_INTERVAL);
 			if(max17260_set_config(max17260.new_init) < 0) {
 				new_set_config = true;
 				max17260.new_init = true;
@@ -347,6 +353,27 @@ void max17260_tick_task(void) {
 		}
 			
 		coop_task_sleep_ms(50);
+
+		if(system_timer_is_time_elapsed_ms(battery_detect_time, MAX17260_BATTERY_DETECT_INVERVAL)) {
+			battery_detect_time = system_timer_get_ms();
+
+			const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
+			if(charge_enabled) {
+				if((bq24195.status & 0b00110000) == 0b00110000) { // If charge termination done
+					// Turn charging off
+					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN); 
+					coop_task_sleep_ms(25);
+
+					// Check if MAX17260 is still reachable, if not there is no battery connected 
+					uint16_t tmp;
+					if(max17260_read_register(MAX17260_REG_STATUS, &tmp) == 0) {
+						XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN); 
+					} else {
+						max17260.battery_connected = false;
+					}
+				}
+			}
+		}
 
 		// Before we read new fuel gauge data, we first check if the chip did have a reset.
 		// We do this by calling set_config with false. It will _not_ reset the i2c_state machine,
