@@ -281,7 +281,7 @@ void rpi_handle_power_off(void) {
 }
 
 void rpi_handle_undervoltage(void) {
-	static last_time = 0;
+	static uint32_t last_time = 0;
 	const uint32_t voltage_usb     = voltage_get_usb_voltage_raw();
 	const uint32_t voltage_dc      = voltage_get_dc_voltage_raw();
 	const uint32_t voltage_battery = max17260.voltage_battery;
