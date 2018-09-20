@@ -34,6 +34,12 @@
 #include "xmc_wdt.h"
 #include "xmc_rtc.h"
 
+// Voltages for turning BOOST off: 
+// Battery < 3.3V && USB < 4.4V && DC < 8.0V
+#define VOLTAGE_BATTERY_UNDERVOLTAGE 3300
+#define VOLTAGE_USB_UNDERVOLTAGE     (44*VOLTAGE_MAX_LENGTH*4*4095/(33*2))   // we compare with raw voltage to save CPU time
+#define VOLTAGE_DC_UNDERVOLTAGE      (80*VOLTAGE_MAX_LENGTH*4*4095/(33*11))  // we compare with raw voltage to save CPU time
+
 #define RPI_LED_POWER_LOW_FLICKER_TIME 500
 #define rpi_sleep_rtc_interrupt IRQ1_Handler
 RPI rpi;
@@ -57,9 +63,15 @@ void rpi_init(void) {
 		.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW
 	};
 
+	XMC_GPIO_CONFIG_t input = {
+		.mode = XMC_GPIO_MODE_INPUT_TRISTATE,
+		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE
+	};
+
 	XMC_GPIO_Init(RPI_BOOST_EN_PIN,    &output_high);
 	XMC_GPIO_Init(RPI_BRICKLET_EN_PIN, &output_high);
 	XMC_GPIO_Init(RPI_RPI_EN_PIN,      &output_high);
+	XMC_GPIO_Init(RPI_BATTERY_EN_PIN,  &input);
 
 	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
 		XMC_GPIO_Init(rpi_led_ports[i], rpi_led_pins[i],  &output_low);
@@ -262,7 +274,33 @@ void rpi_handle_power_off(void) {
 	} 
 }
 
+void rpi_handle_undervoltage(void) {
+	static last_time = 0;
+	const uint32_t voltage_usb     = voltage_get_usb_voltage_raw();
+	const uint32_t voltage_dc      = voltage_get_dc_voltage_raw();
+	const uint32_t voltage_battery = max17260.voltage_battery;
+
+	if(!system_timer_is_time_elapsed_ms(last_time, 500)) {
+		return;
+	}
+
+	if((voltage_battery < VOLTAGE_BATTERY_UNDERVOLTAGE) &&
+	   (voltage_usb     < VOLTAGE_USB_UNDERVOLTAGE) &&
+	   (voltage_dc      < VOLTAGE_DC_UNDERVOLTAGE)) {
+		if(XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
+			XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
+			last_time = system_timer_get_ms();
+		}
+	} else {
+		if(!XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
+			XMC_GPIO_SetOutputHigh(RPI_BOOST_EN_PIN);
+			last_time = system_timer_get_ms();
+		}
+	}
+}
+
 void rpi_tick(void) {
 	rpi_handle_battery_leds();
 	rpi_handle_power_off();
+	rpi_handle_undervoltage();
 }
