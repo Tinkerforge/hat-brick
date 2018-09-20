@@ -40,6 +40,10 @@
 #define VOLTAGE_USB_UNDERVOLTAGE     (44*VOLTAGE_MAX_LENGTH*4*4095/(33*2))   // we compare with raw voltage to save CPU time
 #define VOLTAGE_DC_UNDERVOLTAGE      (80*VOLTAGE_MAX_LENGTH*4*4095/(33*11))  // we compare with raw voltage to save CPU time
 
+// Use a define for the switch high check, to be sure that the compiler does not forget to inline a function or similar
+// this query is used durin the sleep polling, so it needs to be as performant as possible.
+#define BATTERY_SWITCH_HIGH() (RPI_BATTERY_EN_PORT->IN & (1 << RPI_BATTERY_EN_PIN))
+
 #define RPI_LED_POWER_LOW_FLICKER_TIME 500
 #define rpi_sleep_rtc_interrupt IRQ1_Handler
 RPI rpi;
@@ -71,7 +75,7 @@ void rpi_init(void) {
 	XMC_GPIO_Init(RPI_BOOST_EN_PIN,    &output_high);
 	XMC_GPIO_Init(RPI_BRICKLET_EN_PIN, &output_high);
 	XMC_GPIO_Init(RPI_RPI_EN_PIN,      &output_high);
-	XMC_GPIO_Init(RPI_BATTERY_EN_PIN,  &input);
+	XMC_GPIO_Init(RPI_BATTERY_EN_PORT, RPI_BATTERY_EN_PIN, &input);
 
 	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
 		XMC_GPIO_Init(rpi_led_ports[i], rpi_led_pins[i],  &output_low);
@@ -222,12 +226,12 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_rtc_interrupt(void) {
 	rpi_sleep_seconds_counter--;
 }
 
-void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(void) {
+void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t power_off_duration) {
 	// First we set the counter to the amount of seconds we want to sleep
 	// We increase the value that the user set by one, since we don't exactly now
 	// how long the first RTC second is. We rather sleep a bit too long then
 	// too short.
-	rpi_sleep_seconds_counter = 1 + (rpi.power_off_duration / 1000);
+	rpi_sleep_seconds_counter = 1 + (power_off_duration / 1000);
 
 	// Then we enter sleep mode (all hardware units are turned off, decrease frequency to 125kHz, etc)
 	rpi_sleep_enter();
@@ -244,7 +248,9 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(void) {
 	// Use ARM wfi command to actually enter sleep state.
 	// We keep going into sleep state until the seconds counter reaches zero.
 	// The seconds counter is decremented once per second by the RTC (see above).
-	while(rpi_sleep_seconds_counter > 0) { __WFI(); }
+
+	// We also sleep as long as the user turns the switch off.
+	while((rpi_sleep_seconds_counter > 0) || (!BATTERY_SWITCH_HIGH())) { __WFI(); }
 
 	// Turn flash on again
 	NVM->NVMCONF |= NVM_NVMCONF_NVM_ON_Msk;
@@ -268,7 +274,7 @@ void rpi_handle_power_off(void) {
 				}
 				XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
 				rpi.power_off_duration_start = system_timer_get_ms();
-				rpi_sleep_for_duration();
+				rpi_sleep_for_duration(rpi.power_off_duration);
 			}
 		}
 	} 
@@ -299,8 +305,21 @@ void rpi_handle_undervoltage(void) {
 	}
 }
 
+void rpi_handle_switch(void) {
+	if(!BATTERY_EN_HIGH()) {
+		rpi.power_off_delay = 0;
+		rpi.power_off_delay_start = 0;
+		XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
+		XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
+		XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
+		rpi.power_off_duration_start = system_timer_get_ms();
+		rpi_sleep_for_duration(0);
+	} 
+}
+
 void rpi_tick(void) {
 	rpi_handle_battery_leds();
 	rpi_handle_power_off();
 	rpi_handle_undervoltage();
+	rpi_handle_switch();
 }

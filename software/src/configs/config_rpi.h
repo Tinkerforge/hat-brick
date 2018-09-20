@@ -25,7 +25,10 @@
 
 #include "xmc_gpio.h"
 
-#define RPI_BATTERY_EN_PIN       P1_2 // Switch contact, if high => on, low => off
+ // Switch pin, if high => on, low => off
+#define RPI_BATTERY_EN_PIN       2
+#define RPI_BATTERY_EN_PORT      PORT1
+
 #define RPI_BOOST_EN_PIN         P1_6 // MIC2253, powers bricklet and rpi
 #define RPI_BRICKLET_EN_PIN      P2_11
 #define RPI_RPI_EN_PIN           P2_10
