@@ -66,6 +66,8 @@ void communication_init(void);
 #define FID_GET_POWER_OFF 3
 #define FID_SET_TIME 4
 #define FID_GET_TIME 5
+#define FID_SET_BATTERY_PARAMETERS 6
+#define FID_GET_BATTERY_PARAMETERS 7
 
 
 typedef struct {
@@ -136,6 +138,26 @@ typedef struct {
 	uint8_t weekday;
 } __attribute__((__packed__)) GetTime_Response;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t nominal_capacity;
+	uint16_t charge_termination_current;
+	uint16_t empty_voltage;
+	uint16_t learned_parameters[5];
+} __attribute__((__packed__)) SetBatteryParameters;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetBatteryParameters;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t nominal_capacity;
+	uint16_t charge_termination_current;
+	uint16_t empty_voltage;
+	uint16_t learned_parameters[5];
+} __attribute__((__packed__)) GetBatteryParameters_Response;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistics *data, GetBatteryStatistics_Response *response);
@@ -143,6 +165,8 @@ BootloaderHandleMessageResponse set_power_off(const SetPowerOff *data);
 BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerOff_Response *response);
 BootloaderHandleMessageResponse set_time(const SetTime *data);
 BootloaderHandleMessageResponse get_time(const GetTime *data, GetTime_Response *response);
+BootloaderHandleMessageResponse set_battery_parameters(const SetBatteryParameters *data);
+BootloaderHandleMessageResponse get_battery_parameters(const GetBatteryParameters *data, GetBatteryParameters_Response *response);
 
 // Callbacks
 

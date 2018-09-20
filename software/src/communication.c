@@ -40,6 +40,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_POWER_OFF:          return get_power_off(message, response);
 		case FID_SET_TIME:               return set_time(message);
 		case FID_GET_TIME:               return get_time(message, response);
+		case FID_SET_BATTERY_PARAMETERS: return set_battery_parameters(message);
+		case FID_GET_BATTERY_PARAMETERS: return get_battery_parameters(message, response);
 		default:                         return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -148,6 +150,35 @@ BootloaderHandleMessageResponse get_time(const GetTime *data, GetTime_Response *
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+BootloaderHandleMessageResponse set_battery_parameters(const SetBatteryParameters *data) {
+	max17260.new_learned_paramters.rcomp0     = data->learned_parameters[0];
+	max17260.new_learned_paramters.tempco     = data->learned_parameters[1];
+	max17260.new_learned_paramters.fullcaprep = data->learned_parameters[2];
+	max17260.new_learned_paramters.cycles     = data->learned_parameters[3];
+	max17260.new_learned_paramters.fullcapnom = data->learned_parameters[4];
+	max17260.new_learned_paramters.designcap  = data->nominal_capacity;
+	max17260.new_learned_paramters.vempty     = data->empty_voltage;
+	max17260.new_learned_paramters.ichgterm   = data->charge_termination_current;
+
+	max17260.new_learned_paramters_valid      = true;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_battery_parameters(const GetBatteryParameters *data, GetBatteryParameters_Response *response) {
+	response->header.length              = sizeof(GetBatteryParameters_Response);
+
+	response->learned_parameters[0]      = max17260.learned_paramters.rcomp0;
+	response->learned_parameters[1]      = max17260.learned_paramters.tempco;
+	response->learned_parameters[2]      = max17260.learned_paramters.fullcaprep;
+	response->learned_parameters[3]      = max17260.learned_paramters.cycles;
+	response->learned_parameters[4]      = max17260.learned_paramters.fullcapnom;
+	response->nominal_capacity           = max17260.learned_paramters.designcap;
+	response->empty_voltage              = max17260.learned_paramters.vempty;
+	response->charge_termination_current = max17260.learned_paramters.ichgterm;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
 
 
 void communication_tick(void) {

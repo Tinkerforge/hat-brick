@@ -21,11 +21,14 @@
 
 #include "max17260.h"
 
+#include "bricklib2/bootloader/bootloader.h"
 #include "bricklib2/logging/logging.h"
 #include "bricklib2/hal/system_timer/system_timer.h"
 #include "bricklib2/os/coop_task.h"
 
 #include "configs/config_max17260.h"
+
+#define MAX17260_LEARNED_PARAMETER_SAVE_INTERVAL 1000*60*60*8 // Save learned parameters every 8 hours
 
 
 MAX17260 max17260;
@@ -125,7 +128,6 @@ uint32_t max17260_write_and_verify_register(const uint8_t reg, uint16_t data) {
 
 	// We try with up to three attempts
 	for(uint8_t i = 0; i < 3; i++) {
-		uartbb_printf("write %d\n\r",  i);
 		retw = max17260_write_register(reg, data);
 		coop_task_sleep_ms(1);
 		if(retw != 0) {
@@ -133,13 +135,99 @@ uint32_t max17260_write_and_verify_register(const uint8_t reg, uint16_t data) {
 		}
 		retr = max17260_read_register(reg, &data_read);
 
-		uartbb_printf("verify %d = %d\n\r", data_read, data);
 		if((retr != 0) || (data_read == data)) {
 			return 0;
 		}
 	}
 
 	return retw != 0 ? retw : retr;
+}
+
+int32_t max17260_read_learned_parameters_from_eeprom(MAX17260LearnedParameters *learned_paramters) {
+	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
+	bootloader_read_eeprom_page(MAX17260_PARAMETER_PAGE, page);
+
+	if(page[MAX17260_PARAMETER_MAGIC_POS] != MAX17260_PARAMETER_MAGIC) {
+		return -1;
+	}
+
+	uint32_t checksum = page[MAX17260_PARAMETER_START_POS + 0] ^
+	                    page[MAX17260_PARAMETER_START_POS + 1] ^
+						page[MAX17260_PARAMETER_START_POS + 2] ^
+						page[MAX17260_PARAMETER_START_POS + 3] ^
+						page[MAX17260_PARAMETER_START_POS + 4] ^
+						page[MAX17260_PARAMETER_START_POS + 5] ^
+						page[MAX17260_PARAMETER_START_POS + 6] ^
+						page[MAX17260_PARAMETER_START_POS + 7];
+
+	if(checksum != page[MAX17260_PARAMETER_CHECKSUM_POS]) {
+		return -2;
+	}
+
+	learned_paramters->rcomp0     = page[MAX17260_PARAMETER_START_POS + 0];
+	learned_paramters->tempco     = page[MAX17260_PARAMETER_START_POS + 1];
+	learned_paramters->fullcaprep = page[MAX17260_PARAMETER_START_POS + 2];
+	learned_paramters->cycles     = page[MAX17260_PARAMETER_START_POS + 3];
+	learned_paramters->fullcapnom = page[MAX17260_PARAMETER_START_POS + 4];
+	learned_paramters->designcap  = page[MAX17260_PARAMETER_START_POS + 5];
+	learned_paramters->vempty     = page[MAX17260_PARAMETER_START_POS + 6];
+	learned_paramters->ichgterm   = page[MAX17260_PARAMETER_START_POS + 7];
+
+	return 0;
+}
+
+int32_t max17260_write_learned_parameters_to_eeprom(MAX17260LearnedParameters *learned_paramters) {
+	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
+
+	page[MAX17260_PARAMETER_MAGIC_POS]     = MAX17260_PARAMETER_MAGIC;
+	page[MAX17260_PARAMETER_START_POS + 0] = learned_paramters->rcomp0;
+	page[MAX17260_PARAMETER_START_POS + 1] = learned_paramters->tempco;
+	page[MAX17260_PARAMETER_START_POS + 2] = learned_paramters->fullcaprep;
+	page[MAX17260_PARAMETER_START_POS + 3] = learned_paramters->cycles;
+	page[MAX17260_PARAMETER_START_POS + 4] = learned_paramters->fullcapnom;
+	page[MAX17260_PARAMETER_START_POS + 5] = learned_paramters->designcap;
+	page[MAX17260_PARAMETER_START_POS + 6] = learned_paramters->vempty;
+	page[MAX17260_PARAMETER_START_POS + 7] = learned_paramters->ichgterm;
+	page[MAX17260_PARAMETER_CHECKSUM_POS]  = page[MAX17260_PARAMETER_START_POS + 0] ^
+	                                         page[MAX17260_PARAMETER_START_POS + 1] ^
+											 page[MAX17260_PARAMETER_START_POS + 2] ^
+											 page[MAX17260_PARAMETER_START_POS + 3] ^
+											 page[MAX17260_PARAMETER_START_POS + 4] ^
+											 page[MAX17260_PARAMETER_START_POS + 5] ^
+											 page[MAX17260_PARAMETER_START_POS + 6] ^
+											 page[MAX17260_PARAMETER_START_POS + 7];
+
+	if(!bootloader_write_eeprom_page(MAX17260_PARAMETER_PAGE, page)) {
+		return -1;
+	}
+
+	return 0;
+}
+
+int32_t max17260_read_learned_parameters_from_chip(MAX17260LearnedParameters *learned_paramters) {
+	if(max17260_read_register(MAX17260_REG_RCOMP0,       &learned_paramters->rcomp0)     != 0) { return -1; }
+	if(max17260_read_register(MAX17260_REG_TEMP_CO,      &learned_paramters->tempco)     != 0) { return -2; }
+	if(max17260_read_register(MAX17260_REG_FULL_CAP_REP, &learned_paramters->fullcaprep) != 0) { return -3; }
+	if(max17260_read_register(MAX17260_REG_CYCLES,       &learned_paramters->cycles)     != 0) { return -4; }
+	if(max17260_read_register(MAX17260_REG_FULL_CAP_NOM, &learned_paramters->fullcapnom) != 0) { return -5; }
+	if(max17260_read_register(MAX17260_REG_DESIGN_CAP,   &learned_paramters->designcap)  != 0) { return -6; }
+	if(max17260_read_register(MAX17260_REG_VEMPTY,       &learned_paramters->vempty)     != 0) { return -7; }
+	if(max17260_read_register(MAX17260_REG_ICH_G_TERM,   &learned_paramters->ichgterm)   != 0) { return -8; }
+
+	return 0;
+}
+
+int32_t max17260_write_learned_parameters_to_chip(MAX17260LearnedParameters *learned_paramters) {
+	if(max17260_write_and_verify_register(MAX17260_REG_DESIGN_CAP,   learned_paramters->designcap)  != 0) { return -1; }
+	if(max17260_write_and_verify_register(MAX17260_REG_VEMPTY,       learned_paramters->vempty)     != 0) { return -2; }
+	if(max17260_write_and_verify_register(MAX17260_REG_ICH_G_TERM,   learned_paramters->ichgterm)   != 0) { return -3; }
+	if(max17260_write_and_verify_register(MAX17260_REG_RCOMP0,       learned_paramters->rcomp0)     != 0) { return -4; }
+	if(max17260_write_and_verify_register(MAX17260_REG_TEMP_CO,      learned_paramters->tempco)     != 0) { return -5; }
+	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_REP, learned_paramters->fullcaprep) != 0) { return -6; }
+	if(max17260_write_and_verify_register(MAX17260_REG_CYCLES,       learned_paramters->cycles)     != 0) { return -7; }
+	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_NOM, learned_paramters->fullcapnom) != 0) { return -8; }
+
+	return 0;
 }
 
 int32_t max17260_set_config(bool i2c_init) {
@@ -208,22 +296,26 @@ int32_t max17260_set_config(bool i2c_init) {
 		max17260.fully_qualified = reg_data & MAX17260_FSTAT_FQ;
 
 		// Write standard configuration
-		if(max17260_write_register(MAX17260_REG_CONFIG1,    config1)             != 0) { return -3; }
-		if(max17260_write_register(MAX17260_REG_CONFIG2,    config2)             != 0) { return -4; }
-		if(max17260_write_register(MAX17260_REG_MODEL_CFG,  model)               != 0) { return -5; }
-		if(max17260_write_register(MAX17260_REG_VEMPTY,     MAX17260_VEMPTY)     != 0) { return -6; }
-		if(max17260_write_register(MAX17260_REG_DESIGN_CAP, MAX17260_DESIGN_CAP) != 0) { return -7; }
-		if(max17260_write_register(MAX17260_REG_ICH_G_TERM, MAX17260_ICH_G_TERM) != 0) { return -8; }
+		if(max17260_write_register(MAX17260_REG_CONFIG1,   config1) != 0) { return -3; }
+		if(max17260_write_register(MAX17260_REG_CONFIG2,   config2) != 0) { return -4; }
+		if(max17260_write_register(MAX17260_REG_MODEL_CFG, model)   != 0) { return -5; }
 
-		// TODO: Restore learned parameters
-		
+		// Write learned parameters
+		if(!max17260.learned_paramters_valid) {
+			if(max17260_write_register(MAX17260_REG_VEMPTY,     MAX17260_VEMPTY)      != 0) { return -6; }
+			if(max17260_write_register(MAX17260_REG_DESIGN_CAP, MAX17260_DESIGN_CAP)  != 0) { return -7; }
+			if(max17260_write_register(MAX17260_REG_ICH_G_TERM, MAX17260_ICH_G_TERM)  != 0) { return -8; }
+		} else {
+			if(max17260_write_learned_parameters_to_chip(&max17260.learned_paramters) != 0) { return -9; }
+		}
+
 		// Read current status
 		if(max17260_read_register(MAX17260_REG_STATUS, &reg_data) != 0) { 
-			return  -9; 
+			return  -10;
 		}
 		// Clear POR bit
 		if(max17260_write_and_verify_register(MAX17260_REG_STATUS, reg_data & 0xFFFD) != 0) {
-			return -10; 
+			return -11;
 		}
 	}
 
@@ -231,6 +323,11 @@ int32_t max17260_set_config(bool i2c_init) {
 }
 
 void max17260_tick_task(void) {
+	if(max17260_read_learned_parameters_from_eeprom(&max17260.learned_paramters) == 0) {
+		max17260.learned_paramters_valid = true;
+	} else {
+		max17260.learned_paramters_valid = false;
+	}
 	bool new_set_config = true;
 	max17260.new_init = true;
 	while(true) {
@@ -271,6 +368,25 @@ void max17260_tick_task(void) {
 		}
 
 		max17260.battery_connected = true;
+
+		if(max17260.new_learned_paramters_valid) {
+			if(max17260_write_learned_parameters_to_chip(&max17260.new_learned_paramters) == 0) {
+				if(max17260_write_learned_parameters_to_eeprom(&max17260.new_learned_paramters) == 0) {
+					max17260.learned_paramters = max17260.new_learned_paramters;
+					max17260.new_learned_paramters_valid = false;
+				}
+			}
+		}
+
+		// Write newly learned parameters to EEPROM every 8 hours
+		if(system_timer_is_time_elapsed_ms(max17260.learned_paramters_time, MAX17260_LEARNED_PARAMETER_SAVE_INTERVAL)) {
+			max17260.learned_paramters_time = system_timer_get_ms();
+			MAX17260LearnedParameters new_parameters;
+			if(max17260_read_learned_parameters_from_chip(&new_parameters) == 0) {
+				max17260.learned_paramters = new_parameters;
+				max17260_write_learned_parameters_to_eeprom(&max17260.learned_paramters);
+			}
+		}
 	}
 }
 

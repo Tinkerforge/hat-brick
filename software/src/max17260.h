@@ -27,6 +27,20 @@
 #include <stdint.h>
 
 typedef struct {
+    uint16_t rcomp0;
+    uint16_t tempco;
+    uint16_t fullcaprep;
+    uint16_t cycles;
+    uint16_t fullcapnom;
+
+    // These three are part of the parameterization, 
+    // but they are given once per LiPo. They don't change.
+    uint16_t designcap;
+    uint16_t vempty;
+    uint16_t ichgterm;
+} MAX17260LearnedParameters;
+
+typedef struct {
     I2CFifo i2c_fifo;
 
     uint32_t last_read;
@@ -54,6 +68,13 @@ typedef struct {
     bool fully_qualified;
 
     bool new_init;
+
+    MAX17260LearnedParameters learned_paramters;
+    bool learned_paramters_valid;
+    uint32_t learned_paramters_time;
+
+    MAX17260LearnedParameters new_learned_paramters;
+    bool new_learned_paramters_valid;
 } MAX17260;
 
 extern MAX17260 max17260;
@@ -88,7 +109,12 @@ extern MAX17260 max17260;
 #define MAX17260_REG_T_ALRT_TH    0x02
 #define MAX17260_REG_S_ALRT_TH    0x03
 #define MAX17260_REG_L_ALRT_TH    0xB4
-#define MAX17260_REG_FSTAT        0x3D // TODO:This is only in software implementation guide, not in datasheet. Is it OK?
+
+// These are only defined in software implementation guide
+#define MAX17260_REG_FSTAT        0x3D 
+#define MAX17260_REG_RCOMP0       0x38
+#define MAX17260_REG_TEMP_CO      0x39
+#define MAX17260_REG_FULL_CAP_NOM 0x23
 
 
 // Default configuration
@@ -146,6 +172,14 @@ extern MAX17260 max17260;
 #define MAX17260_DESIGN_CAP       0x0FA0 // 2000mAh
 #define MAX17260_VEMPTY           0xA561 // 3.3V / 3.88V
 #define MAX17260_ICH_G_TERM       0x0333 // 128mA
+
+
+#define MAX17260_PARAMETER_PAGE 1
+#define MAX17260_PARAMETER_MAGIC 0x12345678
+#define MAX17260_PARAMETER_MAGIC_POS 0
+#define MAX17260_PARAMETER_CHECKSUM_POS 1
+#define MAX17260_PARAMETER_START_POS 2
+#define MAX17260_PARAMETER_END_POS 10
 
 void max17260_init(void);
 void max17260_tick(void);
