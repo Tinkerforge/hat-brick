@@ -313,7 +313,7 @@ void rpi_handle_switch(void) {
 		XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
 		XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
 		rpi.power_off_duration_start = system_timer_get_ms();
-		rpi_sleep_for_duration(0);
+		rpi_sleep_for_duration(1); // sleep for minimum one second, otherwise until the user puts the switch back to on.
 	} 
 }
 
