@@ -306,7 +306,7 @@ void rpi_handle_undervoltage(void) {
 }
 
 void rpi_handle_switch(void) {
-	if(!BATTERY_EN_HIGH()) {
+	if(!BATTERY_SWITCH_HIGH()) {
 		rpi.power_off_delay = 0;
 		rpi.power_off_delay_start = 0;
 		XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
