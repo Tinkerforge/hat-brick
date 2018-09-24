@@ -22,8 +22,6 @@ F1 "power_supply.sch" 60
 $EndSheet
 Text GLabel 1700 5900 2    39   Output ~ 0
 CHG-EN
-Text GLabel 5200 1650 2    39   Input ~ 0
-BATTERY-ALRT
 Text GLabel 4000 2000 2    39   BiDi ~ 0
 BATTERY-SDA
 Text GLabel 4000 1900 2    39   Output ~ 0
@@ -814,12 +812,12 @@ Wire Wire Line
 $Comp
 L tinkerforge:CONN_01X02 J102
 U 1 1 5B38E436
-P 4950 1450
-F 0 "J102" H 4950 1600 50  0000 C CNN
-F 1 "Boot" H 4950 1300 50  0000 C CNN
-F 2 "kicad-libraries:SolderJumper" H 4950 1450 50  0001 C CNN
-F 3 "" H 4950 1450 50  0001 C CNN
-	1    4950 1450
+P 2600 5750
+F 0 "J102" H 2600 5900 50  0000 C CNN
+F 1 "Boot" H 2600 5600 50  0000 C CNN
+F 2 "kicad-libraries:SolderJumper" H 2600 5750 50  0001 C CNN
+F 3 "" H 2600 5750 50  0001 C CNN
+	1    2600 5750
 	1    0    0    1   
 $EndComp
 $Comp
@@ -1081,8 +1079,6 @@ Wire Wire Line
 Wire Wire Line
 	1700 3400 1550 3400
 Wire Wire Line
-	1550 6000 1700 6000
-Wire Wire Line
 	4000 2450 3900 2450
 Wire Wire Line
 	3900 800  4250 800 
@@ -1224,18 +1220,18 @@ B-CLK
 $Comp
 L tinkerforge:GND #PWR024
 U 1 1 5B481E6B
-P 4750 1550
-F 0 "#PWR024" H 4750 1550 30  0001 C CNN
-F 1 "GND" H 4750 1480 30  0001 C CNN
-F 2 "" H 4750 1550 60  0000 C CNN
-F 3 "" H 4750 1550 60  0000 C CNN
-	1    4750 1550
+P 2400 5850
+F 0 "#PWR024" H 2400 5850 30  0001 C CNN
+F 1 "GND" H 2400 5780 30  0001 C CNN
+F 2 "" H 2400 5850 60  0000 C CNN
+F 3 "" H 2400 5850 60  0000 C CNN
+	1    2400 5850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4750 1550 4750 1500
+	2400 5850 2400 5800
 Wire Wire Line
-	4750 1400 3900 1400
+	2400 5700 1550 5700
 Text GLabel 8900 2100 2    39   Output ~ 0
 RASP-PWR
 Connection ~ 8850 2100
@@ -1317,8 +1313,6 @@ Text Notes 5150 2950 0    39   ~ 0
 "mid led"
 Text Notes 4750 4300 0    39   ~ 0
 "low led"
-Text Notes 6700 3700 0    39   ~ 0
-CS2 und CS3 getauscht
 $Comp
 L tinkerforge:C C105
 U 1 1 5B38BE3D
@@ -1354,10 +1348,6 @@ F 3 "" H 7100 800 60  0000 C CNN
 	1    7100 800 
 	1    0    0    -1  
 $EndComp
-Text GLabel 1700 6000 2    39   Output ~ 0
-BATTERY-INT
-Text GLabel 1700 6100 2    39   Output ~ 0
-BATTERY-STAT
 Wire Wire Line
 	3900 1200 4000 1200
 Wire Wire Line
@@ -1367,10 +1357,7 @@ BATTERY-EN
 Wire Wire Line
 	1700 5800 1550 5800
 Wire Wire Line
-	1700 6100 1550 6100
-Wire Wire Line
 	1700 5900 1550 5900
-NoConn ~ 1550 5700
 NoConn ~ 1550 5600
 NoConn ~ 3900 3050
 NoConn ~ 3900 3150
@@ -1378,4 +1365,7 @@ Wire Wire Line
 	3900 1800 4000 1800
 NoConn ~ 3900 1500
 NoConn ~ 3900 1600
+NoConn ~ 1550 6000
+NoConn ~ 1550 6100
+NoConn ~ 3900 1400
 $EndSCHEMATC
