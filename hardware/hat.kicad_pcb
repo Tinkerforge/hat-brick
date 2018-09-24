@@ -70,7 +70,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 166.2 25.4)
     (grid_origin 166.2 25.4)
-    (visible_elements FFFEDFFF)
+    (visible_elements FFFFDFFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -10869,7 +10869,7 @@
   (gr_text off (at 193.7 81.1) (layer B.SilkS)
     (effects (font (size 0.8 0.8) (thickness 0.15)) (justify mirror))
   )
-  (gr_text 6-27V (at 198.4 73.7 270) (layer F.SilkS)
+  (gr_text 8-27V (at 198.4 73.7 270) (layer F.SilkS)
     (effects (font (size 0.8 0.8) (thickness 0.15)))
   )
   (gr_line (start 166.2 44.5) (end 166.2 28.9) (angle 90) (layer Edge.Cuts) (width 0.09906))

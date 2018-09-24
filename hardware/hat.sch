@@ -22,7 +22,7 @@ F1 "power_supply.sch" 60
 $EndSheet
 Text GLabel 1700 5900 2    39   Output ~ 0
 CHG-EN
-Text GLabel 4000 1700 2    39   Input ~ 0
+Text GLabel 5200 1650 2    39   Input ~ 0
 BATTERY-ALRT
 Text GLabel 4000 2000 2    39   BiDi ~ 0
 BATTERY-SDA
@@ -532,7 +532,7 @@ Wire Wire Line
 Connection ~ 7350 900 
 Text GLabel 7600 1550 0    39   Input ~ 0
 B-EN
-Text GLabel 4000 1600 2    39   Output ~ 0
+Text GLabel 4000 1800 2    39   Output ~ 0
 B-EN
 Wire Wire Line
 	7600 1550 7650 1550
@@ -609,7 +609,7 @@ Text GLabel 7600 2750 0    39   Input ~ 0
 RASP-EN
 Wire Wire Line
 	7600 2750 7650 2750
-Text GLabel 4000 1500 2    39   Output ~ 0
+Text GLabel 4000 1700 2    39   Output ~ 0
 RASP-EN
 Text GLabel 1700 3800 2    39   Output ~ 0
 RASP-GP
@@ -1083,14 +1083,6 @@ Wire Wire Line
 Wire Wire Line
 	1550 6000 1700 6000
 Wire Wire Line
-	3900 1500 4000 1500
-Wire Wire Line
-	4000 1600 3900 1600
-Wire Wire Line
-	3900 3050 4000 3050
-Wire Wire Line
-	4000 3150 3900 3150
-Wire Wire Line
 	4000 2450 3900 2450
 Wire Wire Line
 	3900 800  4250 800 
@@ -1253,7 +1245,6 @@ NoConn ~ 1550 3500
 NoConn ~ 1550 3600
 NoConn ~ 3900 1000
 NoConn ~ 3900 1100
-NoConn ~ 3900 1800
 Wire Wire Line
 	7050 5350 8050 5350
 Wire Wire Line
@@ -1381,4 +1372,10 @@ Wire Wire Line
 	1700 5900 1550 5900
 NoConn ~ 1550 5700
 NoConn ~ 1550 5600
+NoConn ~ 3900 3050
+NoConn ~ 3900 3150
+Wire Wire Line
+	3900 1800 4000 1800
+NoConn ~ 3900 1500
+NoConn ~ 3900 1600
 $EndSCHEMATC

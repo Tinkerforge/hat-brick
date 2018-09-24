@@ -863,8 +863,6 @@ F 3 "" H 1150 6350 50  0000 C CNN
 	1    1150 6350
 	1    0    0    -1  
 $EndComp
-Text GLabel 3600 6550 2    39   Output ~ 0
-BATTERY-ALRT
 Text GLabel 3600 6650 2    39   BiDi ~ 0
 BATTERY-SDA
 Text GLabel 3600 6750 2    39   Input ~ 0
@@ -1260,10 +1258,6 @@ Connection ~ 1650 6700
 Wire Wire Line
 	2800 6300 3100 6300
 Wire Wire Line
-	3100 6300 3100 6550
-Wire Wire Line
-	3100 6550 3250 6550
-Wire Wire Line
 	2800 6400 3050 6400
 Wire Wire Line
 	3050 6400 3050 6650
@@ -1275,9 +1269,6 @@ Wire Wire Line
 	3000 6750 3000 6500
 Wire Wire Line
 	3000 6500 2800 6500
-Wire Wire Line
-	3250 6450 3250 6550
-Connection ~ 3250 6550
 Wire Wire Line
 	3450 6450 3450 6650
 Connection ~ 3450 6650
@@ -1502,8 +1493,6 @@ Wire Wire Line
 	1650 6100 1800 6100
 Wire Wire Line
 	1650 6700 2000 6700
-Wire Wire Line
-	3250 6550 3600 6550
 Wire Wire Line
 	3450 6650 3600 6650
 Wire Wire Line
@@ -2149,7 +2138,6 @@ Wire Wire Line
 	4650 6300 4650 6200
 Wire Wire Line
 	4650 6000 4650 5550
-NoConn ~ 3350 6450
 $Comp
 L tinkerforge:INDUCTOR L203
 U 1 1 5C38EE78
@@ -2229,4 +2217,20 @@ Text GLabel 3500 4550 0    39   BiDi ~ 0
 PMID
 Wire Wire Line
 	3500 4650 3500 4550
+Wire Wire Line
+	3100 6300 3100 6550
+Wire Wire Line
+	3100 6550 3250 6550
+NoConn ~ 3350 6450
+Wire Wire Line
+	3250 6450 3250 6550
+Connection ~ 3250 6550
+Wire Wire Line
+	3250 6550 3600 6550
+Text GLabel 3600 6550 2    39   Output ~ 0
+BATTERY-ALRT
+Text Notes 2650 5450 0    39   ~ 0
+Delete
+Text Notes 4100 6550 0    39   ~ 0
+Delete
 $EndSCHEMATC
