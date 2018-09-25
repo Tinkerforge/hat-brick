@@ -36,7 +36,7 @@
   )
 
   (setup
-    (last_trace_width 0.25)
+    (last_trace_width 0.15)
     (user_trace_width 0.15)
     (user_trace_width 0.2)
     (user_trace_width 0.25)
@@ -70,7 +70,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 166.2 25.4)
     (grid_origin 166.2 25.4)
-    (visible_elements FFFFDFFF)
+    (visible_elements FFFEDFFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -10483,7 +10483,7 @@
   )
 
   (module kicad-libraries:C1206 (layer F.Cu) (tedit 58FA4AE5) (tstamp 5B8D10D4)
-    (at 184.65 78.15)
+    (at 184.65 78.6)
     (path /5B31E6A8/5C1368EC)
     (attr smd)
     (fp_text reference C233 (at 0 0.5375) (layer F.Fab)
