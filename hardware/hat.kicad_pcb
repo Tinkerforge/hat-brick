@@ -11,7 +11,7 @@
 
   (page A4)
   (layers
-    (0 F.Cu signal)
+    (0 F.Cu signal hide)
     (1 GND signal hide)
     (2 VCC signal hide)
     (31 B.Cu signal hide)
@@ -70,7 +70,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 166.2 25.4)
     (grid_origin 166.2 25.4)
-    (visible_elements FFFEDFFF)
+    (visible_elements FFFF5FFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions false)
@@ -3099,14 +3099,14 @@
     )
   )
 
-  (module kicad-libraries:R0603F (layer B.Cu) (tedit 58F5DD02) (tstamp 5B37473E)
+  (module kicad-libraries:R0603F (layer B.Cu) (tedit 5BB76281) (tstamp 5B37473E)
     (at 187.65 70.85 180)
     (path /5B31E6A8/5C2216C6)
     (attr smd)
     (fp_text reference R210 (at 0.05 -0.225 180) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
-    (fp_text value 5.23k (at 0.05 0.375 180) (layer B.Fab)
+    (fp_text value 5.1k (at 0.05 0.375 180) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
     (fp_line (start -1.45034 0.65024) (end 1.45034 0.65024) (layer B.Fab) (width 0.001))
