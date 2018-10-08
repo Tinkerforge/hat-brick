@@ -342,6 +342,7 @@ void max17260_tick_task(void) {
 			// and the MAX17260 IC is not powered anymore. In this case we try to reconfigure
 			// the I2C state machine as well as the MAX17260 every 250ms
 			max17260.battery_connected = false;
+			max17260.voltage_battery = 0;
 			coop_task_sleep_ms(MAX17260_OFFLINE_RETRY_INTERVAL);
 			if(max17260_set_config(max17260.new_init) < 0) {
 				new_set_config = true;
@@ -370,6 +371,7 @@ void max17260_tick_task(void) {
 						XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN); 
 					} else {
 						max17260.battery_connected = false;
+						max17260.voltage_battery = 0;
 					}
 				}
 			}
