@@ -284,10 +284,19 @@ void rpi_handle_power_off(void) {
 }
 
 void rpi_handle_undervoltage(void) {
-	static uint32_t last_time = 0;
+	static uint32_t last_time            = 0;
+	static uint32_t bricklet_enable_time = 0;
+
 	const uint32_t voltage_usb     = voltage_get_usb_voltage_raw();
 	const uint32_t voltage_dc      = voltage_get_dc_voltage_raw();
 	const uint32_t voltage_battery = max17260.voltage_battery;
+
+	if(bricklet_enable_time != 0) {
+		if(system_timer_is_time_elapsed_ms(bricklet_enable_time, 1000)) {
+			bricklet_enable_time = 0;
+			XMC_GPIO_SetOutputLevel(RPI_BRICKLET_EN_PIN, rpi.bricklet_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
+		}
+	}
 
 	if(!system_timer_is_time_elapsed_ms(last_time, 500)) {
 		return;
@@ -304,13 +313,15 @@ void rpi_handle_undervoltage(void) {
 			XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
 			XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
 			last_time = system_timer_get_ms();
+			bricklet_enable_time = 0;
 		}
 	} else {
 		if(!XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
 			XMC_GPIO_SetOutputHigh(RPI_BOOST_EN_PIN);
 			XMC_GPIO_SetOutputLevel(RPI_RPI_EN_PIN, rpi.rpi_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
-			XMC_GPIO_SetOutputLevel(RPI_BRICKLET_EN_PIN, rpi.bricklet_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
 			last_time = system_timer_get_ms();
+			// Wait 1s before we enable the Bricklets, so we don't turn everything on at the same time.
+			bricklet_enable_time = last_time;
 		}
 	}
 }
