@@ -44,6 +44,9 @@ typedef struct {
 
     bool led_state_before_turned_off[4];
     bool irq_state_before_turned_off[32];
+
+    bool bricklet_en_before_undervoltage;
+    bool rpi_en_before_undervoltage;
 } RPI;
 
 extern RPI rpi;

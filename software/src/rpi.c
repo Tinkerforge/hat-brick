@@ -85,6 +85,9 @@ void rpi_init(void) {
 	// Configure RTC interrupt
 	NVIC_SetPriority(RPI_SLEEP_RTC_IRQ, 3);
 	XMC_SCU_SetInterruptControl(RPI_SLEEP_RTC_IRQ, XMC_SCU_IRQCTRL_SCU_SR1_IRQ1);
+
+	rpi.rpi_en_before_undervoltage = XMC_GPIO_GetInput(RPI_RPI_EN_PIN);
+	rpi.bricklet_en_before_undervoltage = XMC_GPIO_GetInput(RPI_BRICKLET_EN_PIN);
 }
 
 void rpi_handle_battery_leds(void) {
@@ -294,12 +297,19 @@ void rpi_handle_undervoltage(void) {
 	   (voltage_usb     < VOLTAGE_USB_UNDERVOLTAGE) &&
 	   (voltage_dc      < VOLTAGE_DC_UNDERVOLTAGE)) {
 		if(XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
+			rpi.rpi_en_before_undervoltage = XMC_GPIO_GetInput(RPI_RPI_EN_PIN);
+			rpi.bricklet_en_before_undervoltage = XMC_GPIO_GetInput(RPI_BRICKLET_EN_PIN);
+
 			XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
+			XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
+			XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
 			last_time = system_timer_get_ms();
 		}
 	} else {
 		if(!XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
 			XMC_GPIO_SetOutputHigh(RPI_BOOST_EN_PIN);
+			XMC_GPIO_SetOutputLevel(RPI_RPI_EN_PIN, rpi.rpi_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
+			XMC_GPIO_SetOutputLevel(RPI_BRICKLET_EN_PIN, rpi.bricklet_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
 			last_time = system_timer_get_ms();
 		}
 	}
