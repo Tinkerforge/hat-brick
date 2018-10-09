@@ -94,6 +94,24 @@ uint32_t bq24195_write_register(uint8_t reg, uint8_t value) {
 	return error;
 }
 
+// Turn charging off if battery temperature > 60°C
+// If off, turn charging on again if battery temperature < 45°C
+void bq24195_handle_overtemperature(void) {
+	if(!max17260.battery_connected) {
+		return;
+	}
+
+	const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
+	if(charge_enabled) {
+		if(max17260.temperature_battery > BQ24195_MAX_BATTERY_TEMPERATURE_OFF) {
+			XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+		}
+	} else {
+		if(max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_ON) {
+			XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+		}
+	}
+}
 void bq24195_tick_task(void) {
 	if(max17260.new_init) {
 		i2c_fifo_init(&max17260.i2c_fifo);
@@ -110,6 +128,7 @@ void bq24195_tick_task(void) {
 	uint32_t last_dc_time = 0;
 	uint32_t wait_time = 0;
 	while(true) {
+		bq24195_handle_overtemperature();
 		if(max17260.new_init) {
 			i2c_fifo_init(&max17260.i2c_fifo);
 			max17260.new_init = false;
@@ -175,25 +194,6 @@ void bq24195_tick_task(void) {
 	}
 }
 
-// Turn charging off if battery temperature > 60°C
-// If off, turn charging on again if battery temperature < 45°C
-void bq24195_handle_overtemperature(void) {
-	if(!max17260.battery_connected) {
-		return;
-	}
-
-	const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
-	if(charge_enabled) {
-		if(max17260.temperature_battery > BQ24195_MAX_BATTERY_TEMPERATURE_OFF) {
-			XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
-		}
-	} else {
-		if(max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_ON) {
-			XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
-		}
-	}
-}
-
 void bq24195_init(void) {
 	XMC_GPIO_CONFIG_t output_high = {
 		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
@@ -205,6 +205,5 @@ void bq24195_init(void) {
 }
 
 void bq24195_tick(void) {
-	bq24195_handle_overtemperature();
 	coop_task_tick(&bq24195_task);
 }
