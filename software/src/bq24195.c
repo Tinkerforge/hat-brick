@@ -182,11 +182,18 @@ void bq24195_tick_task(void) {
 				bq24195.status = value;
 			}
 			uartbb_printf("Status: %b (err %d)\n\r", value, err);
+
 			err = bq24195_read_register(BQ24195_REG_FAULT, &value);
 			if(err == 0) {
 				bq24195.fault = value;
 			}
 			uartbb_printf("Fault: %b (err %d)\n\r", value, err);
+
+			err = bq24195_read_register(BQ24195_REG_INPUT_SOURCE, &value);
+			uartbb_printf("Input Source: %b (err %d)\n\r", value, err);
+
+			err = bq24195_read_register(BQ24195_REG_CHARGE_TERMINATION, &value);
+			uartbb_printf("Charge Termination: %b (err %d)\n\r", value, err);
 			uartbb_puts("\n\r");
 		}
 
