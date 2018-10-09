@@ -195,24 +195,12 @@ void bq24195_handle_overtemperature(void) {
 }
 
 void bq24195_init(void) {
-	XMC_GPIO_CONFIG_t output_low = {
-		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
-		.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW
-	};
-
 	XMC_GPIO_CONFIG_t output_high = {
 		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
 		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH
 	};
 
-	XMC_GPIO_CONFIG_t input = {
-		.mode = XMC_GPIO_MODE_INPUT_TRISTATE,
-		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE
-	};
-
 	XMC_GPIO_Init(BQ24195_NCE_PIN, &output_high);
-	XMC_GPIO_Init(BQ24195_INT_PIN, &input);
-	XMC_GPIO_Init(BQ24195_STAT_PIN, &input);
 	coop_task_init(&bq24195_task, bq24195_tick_task);
 }
 
