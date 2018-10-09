@@ -24,6 +24,12 @@
 
 #include "bricklib2/utility/led_flicker.h"
 
+// Voltages for turning BOOST off:
+// Battery < 3.3V && USB < 4.4V && DC < 8.0V
+#define RPI_VOLTAGE_BATTERY_UNDERVOLTAGE 3300
+#define RPI_VOLTAGE_USB_UNDERVOLTAGE     (44*VOLTAGE_MAX_LENGTH*4*4095/(33*2))   // we compare with raw voltage to save CPU time
+#define RPI_VOLTAGE_DC_UNDERVOLTAGE      (80*VOLTAGE_MAX_LENGTH*4*4095/(33*11))  // we compare with raw voltage to save CPU time
+
 #define RPI_LED_LOW  0
 #define RPI_LED_MID  1
 #define RPI_LED_HIGH 2

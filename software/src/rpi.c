@@ -34,15 +34,9 @@
 #include "xmc_wdt.h"
 #include "xmc_rtc.h"
 
-// Voltages for turning BOOST off: 
-// Battery < 3.3V && USB < 4.4V && DC < 8.0V
-#define VOLTAGE_BATTERY_UNDERVOLTAGE 3300
-#define VOLTAGE_USB_UNDERVOLTAGE     (44*VOLTAGE_MAX_LENGTH*4*4095/(33*2))   // we compare with raw voltage to save CPU time
-#define VOLTAGE_DC_UNDERVOLTAGE      (80*VOLTAGE_MAX_LENGTH*4*4095/(33*11))  // we compare with raw voltage to save CPU time
-
 // Use a define for the switch high check, to be sure that the compiler does not forget to inline a function or similar
 // this query is used durin the sleep polling, so it needs to be as performant as possible.
-#define BATTERY_SWITCH_HIGH() (RPI_BATTERY_EN_PORT->IN & (1 << RPI_BATTERY_EN_PIN))
+#define RPI_BATTERY_SWITCH_HIGH() (RPI_BATTERY_EN_PORT->IN & (1 << RPI_BATTERY_EN_PIN))
 
 #define RPI_LED_POWER_LOW_FLICKER_TIME 500
 #define rpi_sleep_rtc_interrupt IRQ1_Handler
@@ -253,7 +247,7 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t pow
 	// The seconds counter is decremented once per second by the RTC (see above).
 
 	// We also sleep as long as the user turns the switch off.
-	while((rpi_sleep_seconds_counter > 0) || (!BATTERY_SWITCH_HIGH())) { __WFI(); }
+	while((rpi_sleep_seconds_counter > 0) || (!RPI_BATTERY_SWITCH_HIGH())) { __WFI(); }
 
 	// Turn flash on again
 	NVM->NVMCONF |= NVM_NVMCONF_NVM_ON_Msk;
@@ -302,9 +296,9 @@ void rpi_handle_undervoltage(void) {
 		return;
 	}
 
-	if((voltage_battery < VOLTAGE_BATTERY_UNDERVOLTAGE) &&
-	   (voltage_usb     < VOLTAGE_USB_UNDERVOLTAGE) &&
-	   (voltage_dc      < VOLTAGE_DC_UNDERVOLTAGE)) {
+	if((voltage_battery < RPI_VOLTAGE_BATTERY_UNDERVOLTAGE) &&
+	   (voltage_usb     < RPI_VOLTAGE_USB_UNDERVOLTAGE) &&
+	   (voltage_dc      < RPI_VOLTAGE_DC_UNDERVOLTAGE)) {
 		if(XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
 			rpi.rpi_en_before_undervoltage = XMC_GPIO_GetInput(RPI_RPI_EN_PIN);
 			rpi.bricklet_en_before_undervoltage = XMC_GPIO_GetInput(RPI_BRICKLET_EN_PIN);
@@ -327,7 +321,7 @@ void rpi_handle_undervoltage(void) {
 }
 
 void rpi_handle_switch(void) {
-	if(!BATTERY_SWITCH_HIGH()) {
+	if(!RPI_BATTERY_SWITCH_HIGH()) {
 		rpi.power_off_delay = 0;
 		rpi.power_off_delay_start = 0;
 		XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);

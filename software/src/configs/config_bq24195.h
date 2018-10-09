@@ -25,9 +25,7 @@
 
 #include "xmc_gpio.h"
 
-#define BQ24195_STAT_PIN   P1_5 // Charging Status Pin
-#define BQ24195_INT_PIN    P1_4 // Interrupt
-#define BQ24195_NCE_PIN    P1_3 // Charging enable/disable
+#define BQ24195_NCE_PIN              P1_3 // Charging enable/disable
 
 #define BQ24195_I2C_BAUDRATE         100000
 
