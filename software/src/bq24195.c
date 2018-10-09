@@ -22,6 +22,7 @@
 #include "bq24195.h"
 #include "max17260.h"
 #include "voltage.h"
+#include "rpi.h"
 
 #include "configs/config_bq24195.h"
 #include "configs/config_rpi.h"
@@ -32,8 +33,6 @@
 
 #include "xmc_gpio.h"
 
-#define BQ24195_RAW_USB_VOLTAGE_THRESHOLD (35*VOLTAGE_MAX_LENGTH*4*4095/(33*2))
-#define BQ24195_RAW_DC_VOLTAGE_THRESHOLD  (60*VOLTAGE_MAX_LENGTH*4*4095/(33*11))
 
 #define BQ24195_MAX_BATTERY_TEMPERATURE_OFF 6000 // Turn charging off if battery temperature > 60°
 #define BQ24195_MAX_BATTERY_TEMPERATURE_ON  4500 // Turn charging on again if battery temperature < 45°
