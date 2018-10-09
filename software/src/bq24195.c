@@ -112,14 +112,56 @@ void bq24195_handle_overtemperature(void) {
 		}
 	}
 }
+
+void bq24195_handle_input_current_limit(void) {
+	static uint32_t last_raw_dc_voltage = 0;
+	const uint32_t raw_dc_voltage       = voltage_get_dc_voltage_raw();
+	const uint32_t raw_usb_voltage      = voltage_get_usb_voltage_raw();
+
+	uint8_t value;
+	uint32_t err = bq24195_read_register(BQ24195_REG_INPUT_SOURCE, &value);
+	if(err != 0) {
+		return;
+	}
+
+	if((last_raw_dc_voltage > RPI_VOLTAGE_DC_UNDERVOLTAGE) &&
+	   (raw_dc_voltage      < RPI_VOLTAGE_DC_UNDERVOLTAGE) &&
+	   (raw_usb_voltage     > RPI_VOLTAGE_USB_UNDERVOLTAGE)) {
+		// If USB is connected and DC was removed, we force a D+/D- detection
+		// to find out what power the USB port can deliver.
+		bq24195_write_register(BQ24195_REG_MISC, 0b11001000);
+	} else if(raw_dc_voltage > RPI_VOLTAGE_DC_UNDERVOLTAGE) {
+		if((value & 0b00000111) != 0b00000111) {
+			// If DC voltage is connected, we always use 3A current limit
+			bq24195_write_register(BQ24195_REG_INPUT_SOURCE, 0b00110111);
+		}
+	} else if(raw_usb_voltage > RPI_VOLTAGE_USB_UNDERVOLTAGE) {
+		if((value & 0b00000111) == 0b00000000) {
+			// If USB is connected and the auto-detection did not detect anything,
+			// the current limit is set to 100mA. We can be 100% sure that the connected
+			// power supply can do more then that, since otherwise the system would not
+			// be running.
+			// In this case we assume that a general purpose power supply is connected
+			// that does not support the USB bc 1.2 protocol and we set it to
+			// the full 3A. If the power supply does not deliver this much, it will
+			// be automatically regulated by the BQ24195 when the voltage starts to drop.
+			bq24195_write_register(BQ24195_REG_INPUT_SOURCE, 0b00110111);
+		}
+	}
+
+	last_raw_dc_voltage = raw_dc_voltage;
+}
+
 void bq24195_tick_task(void) {
 	if(max17260.new_init) {
 		i2c_fifo_init(&max17260.i2c_fifo);
 		max17260.new_init = false;
 	}
-	bq24195_write_register(BQ24195_REG_INPUT_SOURCE,       0b00110111); // Input current limit 3A
-	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT,     0b00100000); // Fast charge current limit 512mA
+
+	bq24195_write_register(BQ24195_REG_INPUT_SOURCE,       0b00110000); // Input current limit 100mA (updated in the loop)
+	bq24195_write_register(BQ24195_REG_CHARGE_CURRENT,     0b00100000); // Fast charge current limit 512mA + 512mA = ~1A
 	bq24195_write_register(BQ24195_REG_CHARGE_TERMINATION, 0b10001010); // Turn watchdog off
+	bq24195_write_register(BQ24195_REG_MISC,               0b11001000); // Force a D+/D- detection
 
 	uint32_t status_update_time = 0;
 	bool last_usb_low = true;
@@ -127,8 +169,16 @@ void bq24195_tick_task(void) {
 	bool last_dc_low = true;
 	uint32_t last_dc_time = 0;
 	uint32_t wait_time = 0;
+	uint32_t input_current_limit_time = 0;
 	while(true) {
 		bq24195_handle_overtemperature();
+
+		// Update input current limit at most every 500ms
+		if(system_timer_is_time_elapsed_ms(input_current_limit_time, 500)) {
+			input_current_limit_time = system_timer_get_ms();
+			bq24195_handle_input_current_limit();
+		}
+
 		if(max17260.new_init) {
 			i2c_fifo_init(&max17260.i2c_fifo);
 			max17260.new_init = false;
@@ -140,34 +190,34 @@ void bq24195_tick_task(void) {
 		if(max17260.battery_connected && temperature_ok && ((wait_time == 0) || (system_timer_is_time_elapsed_ms(wait_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)))) {
 			wait_time = 0;
 			uint32_t raw_usb_voltage = voltage_get_usb_voltage_raw();
-			if(last_usb_low && (raw_usb_voltage > BQ24195_RAW_USB_VOLTAGE_THRESHOLD)) {
+			if(last_usb_low && (raw_usb_voltage > RPI_VOLTAGE_USB_UNDERVOLTAGE)) {
 				last_usb_low = false;
 				last_usb_time = system_timer_get_ms();
-			} else if(!last_usb_low && (raw_usb_voltage > BQ24195_RAW_USB_VOLTAGE_THRESHOLD) && (last_usb_time != 0)) {
+			} else if(!last_usb_low && (raw_usb_voltage > RPI_VOLTAGE_USB_UNDERVOLTAGE) && (last_usb_time != 0)) {
 				if(system_timer_is_time_elapsed_ms(last_usb_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_usb_time = 0;
 					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
 					coop_task_sleep_ms(2);
 					XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
 				}
-			} else if(!last_usb_low && (raw_usb_voltage <= BQ24195_RAW_USB_VOLTAGE_THRESHOLD)) {
+			} else if(!last_usb_low && (raw_usb_voltage <= RPI_VOLTAGE_USB_UNDERVOLTAGE)) {
 				last_usb_low = true;
 				last_usb_time = 0;
 				wait_time = system_timer_get_ms();
 			}
 
 			uint32_t raw_dc_voltage = voltage_get_dc_voltage_raw();
-			if(last_dc_low && (raw_dc_voltage > BQ24195_RAW_DC_VOLTAGE_THRESHOLD)) {
+			if(last_dc_low && (raw_dc_voltage > RPI_VOLTAGE_DC_UNDERVOLTAGE)) {
 				last_dc_low = false;
 				last_dc_time = system_timer_get_ms();
-			} else if(!last_dc_low && (raw_dc_voltage > BQ24195_RAW_DC_VOLTAGE_THRESHOLD) && (last_dc_time != 0)) {
+			} else if(!last_dc_low && (raw_dc_voltage > RPI_VOLTAGE_DC_UNDERVOLTAGE) && (last_dc_time != 0)) {
 				if(system_timer_is_time_elapsed_ms(last_dc_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_dc_time = 0;
 					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
 					coop_task_sleep_ms(2);
 					XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
 				}
-			} else if(!last_dc_low && (raw_dc_voltage <= BQ24195_RAW_DC_VOLTAGE_THRESHOLD)) {
+			} else if(!last_dc_low && (raw_dc_voltage <= RPI_VOLTAGE_DC_UNDERVOLTAGE)) {
 				last_dc_low = true;
 				last_dc_time = 0;
 				wait_time = system_timer_get_ms();
