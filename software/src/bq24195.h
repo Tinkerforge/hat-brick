@@ -23,6 +23,7 @@
 #define BQ24195_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define BQ24195_REG_INPUT_SOURCE           0x00
 #define BQ24195_REG_POWER_ON               0x01
@@ -45,5 +46,6 @@ extern BQ24195 bq24195;
 
 void bq24195_init(void);
 void bq24195_tick(void);
+void bq24195_charge_enable(const bool enable);
 
 #endif

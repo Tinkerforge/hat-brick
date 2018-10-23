@@ -94,6 +94,14 @@ uint32_t bq24195_write_register(uint8_t reg, uint8_t value) {
 	return error;
 }
 
+void bq24195_charge_enable(const bool enable) {
+	if(enable) {
+		XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+	} else {
+		XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+	}
+}
+
 // Turn charging off if battery temperature > 60°C
 // If off, turn charging on again if battery temperature < 45°C
 void bq24195_handle_overtemperature(void) {
@@ -104,11 +112,11 @@ void bq24195_handle_overtemperature(void) {
 	const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
 	if(charge_enabled) {
 		if(max17260.temperature_battery > BQ24195_MAX_BATTERY_TEMPERATURE_OFF) {
-			XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+			bq24195_charge_enable(false);
 		}
 	} else {
 		if(max17260.temperature_battery < BQ24195_MAX_BATTERY_TEMPERATURE_ON) {
-			XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+			bq24195_charge_enable(true);
 		}
 	}
 }
@@ -196,9 +204,9 @@ void bq24195_tick_task(void) {
 			} else if(!last_usb_low && (raw_usb_voltage > RPI_VOLTAGE_USB_UNDERVOLTAGE) && (last_usb_time != 0)) {
 				if(system_timer_is_time_elapsed_ms(last_usb_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_usb_time = 0;
-					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+					bq24195_charge_enable(false);
 					coop_task_sleep_ms(2);
-					XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+					bq24195_charge_enable(true);
 				}
 			} else if(!last_usb_low && (raw_usb_voltage <= RPI_VOLTAGE_USB_UNDERVOLTAGE)) {
 				last_usb_low = true;
@@ -213,9 +221,9 @@ void bq24195_tick_task(void) {
 			} else if(!last_dc_low && (raw_dc_voltage > RPI_VOLTAGE_DC_UNDERVOLTAGE) && (last_dc_time != 0)) {
 				if(system_timer_is_time_elapsed_ms(last_dc_time, BQ24195_THRESHOLD_DETECTION_DEBOUNCE)) {
 					last_dc_time = 0;
-					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN);
+					bq24195_charge_enable(false);
 					coop_task_sleep_ms(2);
-					XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN);
+					bq24195_charge_enable(true);
 				}
 			} else if(!last_dc_low && (raw_dc_voltage <= RPI_VOLTAGE_DC_UNDERVOLTAGE)) {
 				last_dc_low = true;
