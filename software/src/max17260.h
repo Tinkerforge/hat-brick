@@ -183,5 +183,6 @@ extern MAX17260 max17260;
 
 void max17260_init(void);
 void max17260_tick(void);
+int32_t max17260_set_config1(const bool enable_fthrm);
 
 #endif

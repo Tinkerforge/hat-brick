@@ -136,6 +136,9 @@ void rpi_sleep_leave(void) {
 	XMC_RTC_DisableEvent(XMC_RTC_EVENT_PERIODIC_SECONDS);
 	NVIC_DisableIRQ(RPI_SLEEP_RTC_IRQ);
 
+	// Enable FTHRM again
+	max17260_set_config1(true);
+
 	// Enable Bricklets, RPi and boost converter again
 	XMC_GPIO_SetOutputHigh(RPI_BRICKLET_EN_PIN);
 	XMC_GPIO_SetOutputHigh(RPI_RPI_EN_PIN);
@@ -260,6 +263,8 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t pow
 void rpi_handle_power_off(void) {
 	if(rpi.power_off_delay_start != 0) {
 		if(system_timer_is_time_elapsed_ms(rpi.power_off_delay_start, rpi.power_off_delay)) {
+			max17260_set_config1(false); // Disable FTHRM, saves 200uA.
+
 			rpi.power_off_delay = 0;
 			rpi.power_off_delay_start = 0;
 			if(rpi.power_off_duration != 0) {

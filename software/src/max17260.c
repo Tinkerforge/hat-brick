@@ -234,8 +234,30 @@ int32_t max17260_write_learned_parameters_to_chip(MAX17260LearnedParameters *lea
 	return 0;
 }
 
+int32_t max17260_set_config1(const bool enable_fthrm) {
+	uint16_t config1 = (MAX17260_CONFIG1_TSEL     << 15) |
+	                   (MAX17260_CONFIG1_SS       << 14) |
+	                   (MAX17260_CONFIG1_TS       << 13) |
+	                   (MAX17260_CONFIG1_VS       << 12) |
+	                   (MAX17260_CONFIG1_IS       << 11) |
+	                   (MAX17260_CONFIG1_THSH     << 10) |
+	                   (MAX17260_CONFIG1_TEN      <<  9) |
+	                   (MAX17260_CONFIG1_TEX      <<  8) |
+	                   (MAX17260_CONFIG1_SHDN     <<  7) |
+	                   (MAX17260_CONFIG1_COMMSH   <<  6) |
+	                   (MAX17260_CONFIG1_D5       <<  5) |
+	                   (MAX17260_CONFIG1_ETHRM    <<  4) |
+	                   (enable_fthrm              <<  3) |
+	                   (MAX17260_CONFIG1_AEN      <<  2) |
+	                   (MAX17260_CONFIG1_BEI      <<  1) |
+	                   (MAX17260_CONFIG1_BER      <<  0);
+
+	return max17260_write_register(MAX17260_REG_CONFIG1, config1);
+}
+
 int32_t max17260_set_config(bool i2c_init) {
 	uint16_t reg_data;
+	uint16_t reg_config1;
 	if(i2c_init) {
 		i2c_fifo_init(&max17260.i2c_fifo);
 	}
@@ -289,8 +311,15 @@ int32_t max17260_set_config(bool i2c_init) {
 		return -1;
 	}
 
-	// This is taken from software implementation guide, it is not described in the datasheet!
-	if(reg_data & MAX17260_STATUS_POR) {
+	if(max17260_read_register(MAX17260_REG_CONFIG1, &reg_config1) != 0) {
+		return -1;
+	}
+
+	// Check POR status to see if we have to set the config again
+	// (as is done in the implementation guide).
+	// Additionally we do a sanity check of the config1 register,
+	// if it has changed we also set the config again.
+	if((reg_data & MAX17260_STATUS_POR) || (reg_config1 != config1)) {
 		do {
 			coop_task_sleep_ms(10);
 			if(max17260_read_register(MAX17260_REG_FSTAT, &reg_data) != 0) {
@@ -300,7 +329,7 @@ int32_t max17260_set_config(bool i2c_init) {
 		max17260.fully_qualified = reg_data & MAX17260_FSTAT_FQ;
 
 		// Write standard configuration
-		if(max17260_write_register(MAX17260_REG_CONFIG1,   config1) != 0) { return -3; }
+		if(max17260_set_config1(MAX17260_CONFIG1_FTHRM)             != 0) { return -3; }
 		if(max17260_write_register(MAX17260_REG_CONFIG2,   config2) != 0) { return -4; }
 		if(max17260_write_register(MAX17260_REG_MODEL_CFG, model)   != 0) { return -5; }
 
