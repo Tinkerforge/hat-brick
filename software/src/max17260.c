@@ -364,7 +364,6 @@ void max17260_tick_task(void) {
 
 	bool new_set_config = true;
 	max17260.new_init = true;
-	uint32_t battery_detect_time = 0;
 	while(true) {
 		if(new_set_config) {
 			// If we land here there was an I2C error. Most likely the battery is disconnected
@@ -384,36 +383,37 @@ void max17260_tick_task(void) {
 			
 		coop_task_sleep_ms(50);
 
-		if(system_timer_is_time_elapsed_ms(battery_detect_time, MAX17260_BATTERY_DETECT_INVERVAL)) {
-			battery_detect_time = system_timer_get_ms();
-
-			const bool charge_enabled = !XMC_GPIO_GetInput(BQ24195_NCE_PIN);
-			if(charge_enabled) {
-				if((bq24195.status & 0b00110000) == 0b00110000) { // If charge termination done
-					// Turn charging off
-					XMC_GPIO_SetOutputHigh(BQ24195_NCE_PIN); 
-					coop_task_sleep_ms(25);
-
-					// Check if MAX17260 is still reachable, if not there is no battery connected 
-					uint16_t tmp;
-					if(max17260_read_register(MAX17260_REG_STATUS, &tmp) == 0) {
-						XMC_GPIO_SetOutputLow(BQ24195_NCE_PIN); 
-					} else {
-						max17260.battery_connected = false;
-						max17260.voltage_battery = 0;
-					}
-				}
-			}
-		}
-
 		// Before we read new fuel gauge data, we first check if the chip did have a reset.
 		// We do this by calling set_config with false. It will _not_ reset the i2c_state machine,
 		// but check the status register for POR. If POR is set it will set the config again.
 		if(max17260_set_config(false) < 0) {
 			new_set_config = true;
 			max17260.new_init = true;
+
+			// If we can't set the config we assume that there is no battery connected
+			max17260.battery_connected = false;
+			max17260.voltage_battery = 0;
+
 			continue;
 		}
+
+		// Check status register
+		uint16_t status = 0;
+		if(max17260_read_register(MAX17260_REG_STATUS, &status) == 0) {
+			// If we can read the status register and the BST bit is set, we assume that there is
+			// no battery connected.
+			if((status >> 3) & 1) {
+				max17260.battery_connected = false;
+				max17260.voltage_battery = 0;
+				continue;
+			}
+		} else {
+			// If we can't read the status register we assume that there is no battery connected
+			max17260.battery_connected = false;
+			max17260.voltage_battery = 0;
+			continue;
+		}
+
 
 		for(uint8_t i = 0; i < sizeof(max17260_read)/sizeof(MAX17260ReadRegister); i++) {
 			uint16_t data;
