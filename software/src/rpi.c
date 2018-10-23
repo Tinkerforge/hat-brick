@@ -205,15 +205,6 @@ void rpi_sleep_enter(void) {
 
 	// Turn MCLK down to lowest possible frequency
 	XMC_SCU_CLOCK_ScaleMCLKFrequency(255, 0);
-
-	// Use internal RTC
-	// TODO: Remove me? vvvvvvvvvv
-	SCU_GENERAL->PASSWD = 0xC0;
-	while(((SCU_GENERAL->PASSWD)&SCU_GENERAL_PASSWD_PROTS_Msk));
-	SCU_CLK->CLKCR = 0x3ff0FFFF; 
-	while((SCU_CLK->CLKCR) & 0xC0000000);
-	SCU_GENERAL->PASSWD = 0xC3;
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // This is called once per second by RTC when in deep sleep mode. The amount of
