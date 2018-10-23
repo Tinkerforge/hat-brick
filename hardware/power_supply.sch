@@ -1203,8 +1203,6 @@ Wire Wire Line
 	9950 4800 9950 4750
 Connection ~ 9950 4350
 Connection ~ 9700 4350
-Wire Wire Line
-	7300 5050 7350 5050
 Connection ~ 2750 4350
 Wire Wire Line
 	2750 4600 2750 4550
@@ -1505,38 +1503,16 @@ Wire Wire Line
 $Comp
 L tinkerforge:Rs R220
 U 1 1 5B6A6B71
-P 7100 5550
-F 0 "R220" V 7150 5550 31  0000 C CNN
-F 1 "10k" V 7100 5550 31  0000 C CNN
-F 2 "kicad-libraries:R0603F" H 7100 5550 60  0001 C CNN
-F 3 "" H 7100 5550 60  0000 C CNN
-	1    7100 5550
+P 7350 4850
+F 0 "R220" V 7400 4850 31  0000 C CNN
+F 1 "100k" V 7350 4850 31  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 7350 4850 60  0001 C CNN
+F 3 "" H 7350 4850 60  0000 C CNN
+	1    7350 4850
 	1    0    0    -1  
 $EndComp
-$Comp
-L tinkerforge:GND #PWR0114
-U 1 1 5B6A6EB5
-P 7100 5950
-F 0 "#PWR0114" H 7100 5950 30  0001 C CNN
-F 1 "GND" H 7100 5880 30  0001 C CNN
-F 2 "" H 7100 5950 60  0001 C CNN
-F 3 "" H 7100 5950 60  0001 C CNN
-	1    7100 5950
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7100 5950 7100 5650
-Wire Wire Line
-	7350 5050 7350 5200
-Wire Wire Line
-	7350 5200 7100 5200
-Wire Wire Line
-	7100 5200 7100 5450
-Connection ~ 7350 5050
-Wire Wire Line
-	7350 5050 7450 5050
-Text Notes 7200 5650 3    39   ~ 0
-Default disabled
+Text Notes 7050 5150 0    39   ~ 0
+Default enabled
 Wire Wire Line
 	3000 4350 3600 4350
 $Comp
@@ -2170,5 +2146,24 @@ Wire Wire Line
 	6250 4350 6500 4350
 Wire Wire Line
 	6250 5000 6250 4350
-Connection ~ 6250 4350
+Wire Wire Line
+	7300 5050 7350 5050
+$Comp
+L tinkerforge:3V3 #PWR?
+U 1 1 5BD35AF4
+P 7350 4700
+F 0 "#PWR?" H 7350 4800 40  0001 C CNN
+F 1 "3V3" H 7350 4825 40  0000 C CNN
+F 2 "" H 7350 4700 60  0000 C CNN
+F 3 "" H 7350 4700 60  0000 C CNN
+	1    7350 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7350 4750 7350 4700
+Wire Wire Line
+	7350 5050 7350 4950
+Connection ~ 7350 5050
+Wire Wire Line
+	7350 5050 7450 5050
 $EndSCHEMATC
