@@ -344,17 +344,6 @@ $EndComp
 Text Notes 5950 1750 0    39   ~ 0
 Programmed Voltage: 5.53V
 $Comp
-L tinkerforge:DIODESCH D207
-U 1 1 5B3239B4
-P 10200 4350
-F 0 "D207" H 10200 4450 40  0000 C CNN
-F 1 "0" H 10200 4500 40  0000 C CNN
-F 2 "kicad-libraries:SOD-128" H 10200 4350 60  0001 C CNN
-F 3 "" H 10200 4350 60  0001 C CNN
-	1    10200 4350
-	1    0    0    -1  
-$EndComp
-$Comp
 L tinkerforge:CP1 C224
 U 1 1 5B323D27
 P 10950 4550
@@ -848,7 +837,7 @@ F 1 "CONN_3" V 850 6200 40  0000 C CNN
 F 2 "kicad-libraries:JST-PH-3-THT" H 800 6200 60  0001 C CNN
 F 3 "" H 800 6200 60  0000 C CNN
 	1    800  6200
-	-1   0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L tinkerforge:AGND #PWR055
@@ -1112,8 +1101,6 @@ Wire Wire Line
 	2100 2150 2100 3050
 Wire Wire Line
 	3050 850  2800 850 
-Wire Wire Line
-	10400 4350 10500 4350
 Connection ~ 10950 4350
 Wire Wire Line
 	10500 4850 10500 4750
@@ -1181,8 +1168,6 @@ Connection ~ 9000 4350
 Wire Wire Line
 	9400 5150 9400 4950
 Connection ~ 9200 5150
-Wire Wire Line
-	9400 4250 9400 4350
 Connection ~ 9200 4350
 Wire Wire Line
 	10950 1850 10950 4350
@@ -1334,8 +1319,6 @@ Wire Wire Line
 	3000 4350 3000 4300
 Text GLabel 8350 4250 1    39   Input ~ 0
 BOOST-L
-Text GLabel 9400 4250 1    39   Input ~ 0
-BOOST-OUT
 Text GLabel 3400 1650 1    39   Input ~ 0
 STEP-IN
 Text GLabel 5550 1600 2    39   Input ~ 0
@@ -1453,8 +1436,6 @@ Wire Wire Line
 Wire Wire Line
 	9400 4350 9700 4350
 Wire Wire Line
-	9950 4350 10000 4350
-Wire Wire Line
 	9700 4350 9950 4350
 Wire Wire Line
 	3000 4350 2750 4350
@@ -1509,7 +1490,7 @@ F 1 "100k" V 7350 4850 31  0000 C CNN
 F 2 "kicad-libraries:R0603F" H 7350 4850 60  0001 C CNN
 F 3 "" H 7350 4850 60  0000 C CNN
 	1    7350 4850
-	1    0    0    -1  
+	-1   0    0    1   
 $EndComp
 Text Notes 7050 5150 0    39   ~ 0
 Default enabled
@@ -2149,10 +2130,10 @@ Wire Wire Line
 Wire Wire Line
 	7300 5050 7350 5050
 $Comp
-L tinkerforge:3V3 #PWR?
+L tinkerforge:3V3 #PWR0114
 U 1 1 5BD35AF4
 P 7350 4700
-F 0 "#PWR?" H 7350 4800 40  0001 C CNN
+F 0 "#PWR0114" H 7350 4800 40  0001 C CNN
 F 1 "3V3" H 7350 4825 40  0000 C CNN
 F 2 "" H 7350 4700 60  0000 C CNN
 F 3 "" H 7350 4700 60  0000 C CNN
@@ -2166,4 +2147,6 @@ Wire Wire Line
 Connection ~ 7350 5050
 Wire Wire Line
 	7350 5050 7450 5050
+Wire Wire Line
+	9950 4350 10500 4350
 $EndSCHEMATC
