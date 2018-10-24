@@ -6,8 +6,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 3
 Title "HAT Bricklet"
-Date "2018-06-28"
-Rev "1.0"
+Date "2018-10-24"
+Rev "1.2"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
 Comment2 "Copyright (©) 2018, B.Nordmeyer <bastian@tinkerforge.com>"
