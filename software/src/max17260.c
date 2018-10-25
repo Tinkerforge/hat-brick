@@ -86,8 +86,6 @@ const MAX17260ReadRegister max17260_read[] = {
 	{MAX17260_REG_REP_CAP,      &max17260.capacity_remaining,  max17260_reg_to_capacity},
 	{MAX17260_REG_REP_SOC,      &max17260.percentage_charge,   max17260_reg_to_percentage},
 	{MAX17260_REG_FULL_CAP_REP, &max17260.capacity_full,       max17260_reg_to_capacity},
-	{MAX17260_REG_TTE,          &max17260.time_to_emtpy,       max17260_reg_to_time},
-	{MAX17260_REG_TTF,          &max17260.time_to_full,        max17260_reg_to_time},
 	{MAX17260_REG_STATUS,       &max17260.status,              max17260_reg_to_status},
 	{MAX17260_REG_AVG_V_CELL,   &max17260.voltage_battery,     max17260_reg_to_voltage},
 	{MAX17260_REG_AVG_CURRENT,  &max17260.current_flow,        max17260_reg_to_current},

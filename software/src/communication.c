@@ -58,8 +58,6 @@ BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistic
 		response->capacity_nominal     = max17260.capacity_nominal;
 		response->capacity_remaining   = max17260.capacity_remaining;
 		response->percentage_charge    = max17260.percentage_charge;
-		response->time_to_empty        = max17260.time_to_emtpy;
-		response->time_to_full         = max17260.time_to_full;
 		response->voltage_battery      = max17260.voltage_battery;
 		response->current_flow         = max17260.current_flow;
 		response->temperature_battery  = max17260.temperature_battery;
@@ -68,8 +66,6 @@ BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistic
 		response->capacity_nominal     = 0;
 		response->capacity_remaining   = 0;
 		response->percentage_charge    = 0;
-		response->time_to_empty        = 0;
-		response->time_to_full         = 0;
 		response->voltage_battery      = 0;
 		response->current_flow         = 0;
 		response->temperature_battery  = 0;

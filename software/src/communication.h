@@ -81,8 +81,6 @@ typedef struct {
 	int32_t capacity_nominal;
 	int32_t capacity_remaining;
 	int32_t percentage_charge;
-	int32_t time_to_empty;
-	int32_t time_to_full;
 	int32_t voltage_battery;
 	int32_t voltage_usb;
 	int32_t voltage_dc;
