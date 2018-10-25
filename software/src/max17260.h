@@ -69,12 +69,12 @@ typedef struct {
 
     bool new_init;
 
-    MAX17260LearnedParameters learned_paramters;
-    bool learned_paramters_valid;
-    uint32_t learned_paramters_time;
+    MAX17260LearnedParameters learned_parameters;
+    bool learned_parameters_valid;
+    uint32_t learned_parameters_time;
 
-    MAX17260LearnedParameters new_learned_paramters;
-    bool new_learned_paramters_valid;
+    MAX17260LearnedParameters new_learned_parameters;
+    bool new_learned_parameters_valid;
 } MAX17260;
 
 extern MAX17260 max17260;

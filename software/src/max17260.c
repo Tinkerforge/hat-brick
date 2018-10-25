@@ -147,7 +147,7 @@ uint32_t max17260_write_and_verify_register(const uint8_t reg, uint16_t data) {
 	return retw != 0 ? retw : retr;
 }
 
-int32_t max17260_read_learned_parameters_from_eeprom(MAX17260LearnedParameters *learned_paramters) {
+int32_t max17260_read_learned_parameters_from_eeprom(MAX17260LearnedParameters *learned_parameters) {
 	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
 	bootloader_read_eeprom_page(MAX17260_PARAMETER_PAGE, page);
 
@@ -168,30 +168,30 @@ int32_t max17260_read_learned_parameters_from_eeprom(MAX17260LearnedParameters *
 		return -2;
 	}
 
-	learned_paramters->rcomp0     = page[MAX17260_PARAMETER_START_POS + 0];
-	learned_paramters->tempco     = page[MAX17260_PARAMETER_START_POS + 1];
-	learned_paramters->fullcaprep = page[MAX17260_PARAMETER_START_POS + 2];
-	learned_paramters->cycles     = page[MAX17260_PARAMETER_START_POS + 3];
-	learned_paramters->fullcapnom = page[MAX17260_PARAMETER_START_POS + 4];
-	learned_paramters->designcap  = page[MAX17260_PARAMETER_START_POS + 5];
-	learned_paramters->vempty     = page[MAX17260_PARAMETER_START_POS + 6];
-	learned_paramters->ichgterm   = page[MAX17260_PARAMETER_START_POS + 7];
+	learned_parameters->rcomp0     = page[MAX17260_PARAMETER_START_POS + 0];
+	learned_parameters->tempco     = page[MAX17260_PARAMETER_START_POS + 1];
+	learned_parameters->fullcaprep = page[MAX17260_PARAMETER_START_POS + 2];
+	learned_parameters->cycles     = page[MAX17260_PARAMETER_START_POS + 3];
+	learned_parameters->fullcapnom = page[MAX17260_PARAMETER_START_POS + 4];
+	learned_parameters->designcap  = page[MAX17260_PARAMETER_START_POS + 5];
+	learned_parameters->vempty     = page[MAX17260_PARAMETER_START_POS + 6];
+	learned_parameters->ichgterm   = page[MAX17260_PARAMETER_START_POS + 7];
 
 	return 0;
 }
 
-int32_t max17260_write_learned_parameters_to_eeprom(MAX17260LearnedParameters *learned_paramters) {
+int32_t max17260_write_learned_parameters_to_eeprom(MAX17260LearnedParameters *learned_parameters) {
 	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
 
 	page[MAX17260_PARAMETER_MAGIC_POS]     = MAX17260_PARAMETER_MAGIC;
-	page[MAX17260_PARAMETER_START_POS + 0] = learned_paramters->rcomp0;
-	page[MAX17260_PARAMETER_START_POS + 1] = learned_paramters->tempco;
-	page[MAX17260_PARAMETER_START_POS + 2] = learned_paramters->fullcaprep;
-	page[MAX17260_PARAMETER_START_POS + 3] = learned_paramters->cycles;
-	page[MAX17260_PARAMETER_START_POS + 4] = learned_paramters->fullcapnom;
-	page[MAX17260_PARAMETER_START_POS + 5] = learned_paramters->designcap;
-	page[MAX17260_PARAMETER_START_POS + 6] = learned_paramters->vempty;
-	page[MAX17260_PARAMETER_START_POS + 7] = learned_paramters->ichgterm;
+	page[MAX17260_PARAMETER_START_POS + 0] = learned_parameters->rcomp0;
+	page[MAX17260_PARAMETER_START_POS + 1] = learned_parameters->tempco;
+	page[MAX17260_PARAMETER_START_POS + 2] = learned_parameters->fullcaprep;
+	page[MAX17260_PARAMETER_START_POS + 3] = learned_parameters->cycles;
+	page[MAX17260_PARAMETER_START_POS + 4] = learned_parameters->fullcapnom;
+	page[MAX17260_PARAMETER_START_POS + 5] = learned_parameters->designcap;
+	page[MAX17260_PARAMETER_START_POS + 6] = learned_parameters->vempty;
+	page[MAX17260_PARAMETER_START_POS + 7] = learned_parameters->ichgterm;
 	page[MAX17260_PARAMETER_CHECKSUM_POS]  = page[MAX17260_PARAMETER_START_POS + 0] ^
 	                                         page[MAX17260_PARAMETER_START_POS + 1] ^
 											 page[MAX17260_PARAMETER_START_POS + 2] ^
@@ -208,28 +208,28 @@ int32_t max17260_write_learned_parameters_to_eeprom(MAX17260LearnedParameters *l
 	return 0;
 }
 
-int32_t max17260_read_learned_parameters_from_chip(MAX17260LearnedParameters *learned_paramters) {
-	if(max17260_read_register(MAX17260_REG_RCOMP0,       &learned_paramters->rcomp0)     != 0) { return -1; }
-	if(max17260_read_register(MAX17260_REG_TEMP_CO,      &learned_paramters->tempco)     != 0) { return -2; }
-	if(max17260_read_register(MAX17260_REG_FULL_CAP_REP, &learned_paramters->fullcaprep) != 0) { return -3; }
-	if(max17260_read_register(MAX17260_REG_CYCLES,       &learned_paramters->cycles)     != 0) { return -4; }
-	if(max17260_read_register(MAX17260_REG_FULL_CAP_NOM, &learned_paramters->fullcapnom) != 0) { return -5; }
-	if(max17260_read_register(MAX17260_REG_DESIGN_CAP,   &learned_paramters->designcap)  != 0) { return -6; }
-	if(max17260_read_register(MAX17260_REG_VEMPTY,       &learned_paramters->vempty)     != 0) { return -7; }
-	if(max17260_read_register(MAX17260_REG_ICH_G_TERM,   &learned_paramters->ichgterm)   != 0) { return -8; }
+int32_t max17260_read_learned_parameters_from_chip(MAX17260LearnedParameters *learned_parameters) {
+	if(max17260_read_register(MAX17260_REG_RCOMP0,       &learned_parameters->rcomp0)     != 0) { return -1; }
+	if(max17260_read_register(MAX17260_REG_TEMP_CO,      &learned_parameters->tempco)     != 0) { return -2; }
+	if(max17260_read_register(MAX17260_REG_FULL_CAP_REP, &learned_parameters->fullcaprep) != 0) { return -3; }
+	if(max17260_read_register(MAX17260_REG_CYCLES,       &learned_parameters->cycles)     != 0) { return -4; }
+	if(max17260_read_register(MAX17260_REG_FULL_CAP_NOM, &learned_parameters->fullcapnom) != 0) { return -5; }
+	if(max17260_read_register(MAX17260_REG_DESIGN_CAP,   &learned_parameters->designcap)  != 0) { return -6; }
+	if(max17260_read_register(MAX17260_REG_VEMPTY,       &learned_parameters->vempty)     != 0) { return -7; }
+	if(max17260_read_register(MAX17260_REG_ICH_G_TERM,   &learned_parameters->ichgterm)   != 0) { return -8; }
 
 	return 0;
 }
 
-int32_t max17260_write_learned_parameters_to_chip(MAX17260LearnedParameters *learned_paramters) {
-	if(max17260_write_and_verify_register(MAX17260_REG_DESIGN_CAP,   learned_paramters->designcap)  != 0) { return -1; }
-	if(max17260_write_and_verify_register(MAX17260_REG_VEMPTY,       learned_paramters->vempty)     != 0) { return -2; }
-	if(max17260_write_and_verify_register(MAX17260_REG_ICH_G_TERM,   learned_paramters->ichgterm)   != 0) { return -3; }
-	if(max17260_write_and_verify_register(MAX17260_REG_RCOMP0,       learned_paramters->rcomp0)     != 0) { return -4; }
-	if(max17260_write_and_verify_register(MAX17260_REG_TEMP_CO,      learned_paramters->tempco)     != 0) { return -5; }
-	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_REP, learned_paramters->fullcaprep) != 0) { return -6; }
-	if(max17260_write_and_verify_register(MAX17260_REG_CYCLES,       learned_paramters->cycles)     != 0) { return -7; }
-	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_NOM, learned_paramters->fullcapnom) != 0) { return -8; }
+int32_t max17260_write_learned_parameters_to_chip(MAX17260LearnedParameters *learned_parameters) {
+	if(max17260_write_and_verify_register(MAX17260_REG_DESIGN_CAP,   learned_parameters->designcap)  != 0) { return -1; }
+	if(max17260_write_and_verify_register(MAX17260_REG_VEMPTY,       learned_parameters->vempty)     != 0) { return -2; }
+	if(max17260_write_and_verify_register(MAX17260_REG_ICH_G_TERM,   learned_parameters->ichgterm)   != 0) { return -3; }
+	if(max17260_write_and_verify_register(MAX17260_REG_RCOMP0,       learned_parameters->rcomp0)     != 0) { return -4; }
+	if(max17260_write_and_verify_register(MAX17260_REG_TEMP_CO,      learned_parameters->tempco)     != 0) { return -5; }
+	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_REP, learned_parameters->fullcaprep) != 0) { return -6; }
+	if(max17260_write_and_verify_register(MAX17260_REG_CYCLES,       learned_parameters->cycles)     != 0) { return -7; }
+	if(max17260_write_and_verify_register(MAX17260_REG_FULL_CAP_NOM, learned_parameters->fullcapnom) != 0) { return -8; }
 
 	return 0;
 }
@@ -334,12 +334,12 @@ int32_t max17260_set_config(bool i2c_init) {
 		if(max17260_write_register(MAX17260_REG_MODEL_CFG, model)   != 0) { return -5; }
 
 		// Write learned parameters
-		if(!max17260.learned_paramters_valid) {
+		if(!max17260.learned_parameters_valid) {
 			if(max17260_write_register(MAX17260_REG_VEMPTY,     MAX17260_VEMPTY)      != 0) { return -6; }
 			if(max17260_write_register(MAX17260_REG_DESIGN_CAP, MAX17260_DESIGN_CAP)  != 0) { return -7; }
 			if(max17260_write_register(MAX17260_REG_ICH_G_TERM, MAX17260_ICH_G_TERM)  != 0) { return -8; }
 		} else {
-			if(max17260_write_learned_parameters_to_chip(&max17260.learned_paramters) != 0) { return -9; }
+			if(max17260_write_learned_parameters_to_chip(&max17260.learned_parameters) != 0) { return -9; }
 		}
 
 		// Read current status
@@ -356,10 +356,10 @@ int32_t max17260_set_config(bool i2c_init) {
 }
 
 void max17260_tick_task(void) {
-	if(max17260_read_learned_parameters_from_eeprom(&max17260.learned_paramters) == 0) {
-		max17260.learned_paramters_valid = true;
+	if(max17260_read_learned_parameters_from_eeprom(&max17260.learned_parameters) == 0) {
+		max17260.learned_parameters_valid = true;
 	} else {
-		max17260.learned_paramters_valid = false;
+		max17260.learned_parameters_valid = false;
 	}
 
 	bool new_set_config = true;
@@ -427,22 +427,22 @@ void max17260_tick_task(void) {
 
 		max17260.battery_connected = true;
 
-		if(max17260.new_learned_paramters_valid) {
-			if(max17260_write_learned_parameters_to_chip(&max17260.new_learned_paramters) == 0) {
-				if(max17260_write_learned_parameters_to_eeprom(&max17260.new_learned_paramters) == 0) {
-					max17260.learned_paramters = max17260.new_learned_paramters;
-					max17260.new_learned_paramters_valid = false;
+		if(max17260.new_learned_parameters_valid) {
+			if(max17260_write_learned_parameters_to_chip(&max17260.new_learned_parameters) == 0) {
+				if(max17260_write_learned_parameters_to_eeprom(&max17260.new_learned_parameters) == 0) {
+					max17260.learned_parameters = max17260.new_learned_parameters;
+					max17260.new_learned_parameters_valid = false;
 				}
 			}
 		}
 
 		// Write newly learned parameters to EEPROM every 8 hours
-		if(system_timer_is_time_elapsed_ms(max17260.learned_paramters_time, MAX17260_LEARNED_PARAMETER_SAVE_INTERVAL)) {
-			max17260.learned_paramters_time = system_timer_get_ms();
+		if(system_timer_is_time_elapsed_ms(max17260.learned_parameters_time, MAX17260_LEARNED_PARAMETER_SAVE_INTERVAL)) {
+			max17260.learned_parameters_time = system_timer_get_ms();
 			MAX17260LearnedParameters new_parameters;
 			if(max17260_read_learned_parameters_from_chip(&new_parameters) == 0) {
-				max17260.learned_paramters = new_parameters;
-				max17260_write_learned_parameters_to_eeprom(&max17260.learned_paramters);
+				max17260.learned_parameters = new_parameters;
+				max17260_write_learned_parameters_to_eeprom(&max17260.learned_parameters);
 			}
 		}
 	}
