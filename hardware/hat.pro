@@ -1,4 +1,4 @@
-update=Do 20 Sep 2018 13:44:19 CEST
+update=Fr 15 Feb 2019 15:36:13 CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -13,40 +13,6 @@ NetType=0
 EquName1=devcms
 [general]
 version=1
-[pcbnew]
-version=1
-LastNetListRead=
-UseCmpFile=1
-PadDrill="    0,000000"
-PadDrillOvalY="    0,000000"
-PadSizeH="    2,550160"
-PadSizeV="    2,700020"
-PcbTextSizeV="    2,032000"
-PcbTextSizeH="    1,524000"
-PcbTextThickness="    0,304800"
-ModuleTextSizeV="    1,524000"
-ModuleTextSizeH="    1,524000"
-ModuleTextSizeThickness="    0,304800"
-SolderMaskClearance="    0,000000"
-SolderMaskMinWidth="    0,000000"
-DrawSegmentWidth="    0,381000"
-BoardOutlineThickness="    0,099060"
-ModuleOutlineThickness="    0,381000"
-[pcbnew/libraries]
-LibDir=kicad-libraries
-LibName1=tinkerforge
-LibName2=sockets
-LibName3=connect
-LibName4=discret
-LibName5=pin_array
-LibName6=divers
-LibName7=libcms
-LibName8=display
-LibName9=valves
-LibName10=led
-LibName11=dip_sockets
-LibName12=Logo
-LibName13=standard
 [eeschema]
 version=1
 LibDir=
@@ -60,3 +26,22 @@ NetFmtName=
 SpiceAjustPassiveValues=0
 LabSize=39
 ERC_TestSimilarLabels=1
+[pcbnew]
+version=1
+PageLayoutDescrFile=
+LastNetListRead=
+PadDrill=0.6
+PadDrillOvalY=0.6
+PadSizeH=2.55016
+PadSizeV=2.70002
+PcbTextSizeV=2.032
+PcbTextSizeH=1.524
+PcbTextThickness=0.3048
+ModuleTextSizeV=1.524
+ModuleTextSizeH=1.524
+ModuleTextSizeThickness=0.3048
+SolderMaskClearance=0
+SolderMaskMinWidth=0.25
+DrawSegmentWidth=0.2
+BoardOutlineThickness=0.09906
+ModuleOutlineThickness=0.381

@@ -20,14 +20,6 @@ U 5B31E6A8
 F0 "Power Supply" 60
 F1 "power_supply.sch" 60
 $EndSheet
-Text GLabel 1700 5900 2    39   Output ~ 0
-CHG-EN
-Text GLabel 4000 2000 2    39   BiDi ~ 0
-BATTERY-SDA
-Text GLabel 4000 1900 2    39   Output ~ 0
-BATTERY-SCL
-Text GLabel 1700 6200 2    39   Output ~ 0
-BOOST-EN
 Text GLabel 4000 1300 2    39   Input ~ 0
 DC-IN-VOLTAGE
 Text GLabel 4000 1200 2    39   Input ~ 0
@@ -388,32 +380,32 @@ Wire Wire Line
 	8400 1400 8400 1300
 Connection ~ 8300 900 
 Wire Wire Line
-	7100 800  7100 900 
+	6600 800  6600 900 
 $Comp
 L tinkerforge:C C107
 U 1 1 5B37FDC9
-P 7100 1100
-F 0 "C107" H 7150 1200 50  0000 L CNN
-F 1 "10uF" H 7150 1000 50  0000 L CNN
-F 2 "kicad-libraries:C1206" H 7100 1100 60  0001 C CNN
-F 3 "" H 7100 1100 60  0000 C CNN
-	1    7100 1100
+P 6600 1100
+F 0 "C107" H 6400 1200 50  0000 L CNN
+F 1 "10uF" H 6400 1000 50  0000 L CNN
+F 2 "kicad-libraries:C1206" H 6600 1100 60  0001 C CNN
+F 3 "" H 6600 1100 60  0000 C CNN
+	1    6600 1100
 	1    0    0    -1  
 $EndComp
 $Comp
 L tinkerforge:GND #PWR010
 U 1 1 5B37FE55
-P 7100 1400
-F 0 "#PWR010" H 7100 1400 30  0001 C CNN
-F 1 "GND" H 7100 1330 30  0001 C CNN
-F 2 "" H 7100 1400 60  0000 C CNN
-F 3 "" H 7100 1400 60  0000 C CNN
-	1    7100 1400
+P 6600 1400
+F 0 "#PWR010" H 6600 1400 30  0001 C CNN
+F 1 "GND" H 6600 1330 30  0001 C CNN
+F 2 "" H 6600 1400 60  0000 C CNN
+F 3 "" H 6600 1400 60  0000 C CNN
+	1    6600 1400
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7100 1400 7100 1300
-Connection ~ 7100 900 
+	6600 1400 6600 1300
+Connection ~ 6600 900 
 $Comp
 L tinkerforge:MOSFET_P_CH Q103
 U 1 1 5B37FF34
@@ -522,12 +514,11 @@ $EndComp
 Wire Wire Line
 	7750 900  7700 900 
 Wire Wire Line
-	7100 900  7350 900 
+	6600 900  6850 900 
 Wire Wire Line
 	7350 900  7350 2100
 Wire Wire Line
 	7350 2100 7500 2100
-Connection ~ 7350 900 
 Text GLabel 7600 1550 0    39   Input ~ 0
 B-EN
 Text GLabel 4000 1800 2    39   Output ~ 0
@@ -549,8 +540,8 @@ $Comp
 L tinkerforge:MOSFET_N_CH Q102
 U 1 1 5B382E4B
 P 7850 2750
-F 0 "Q102" H 8150 2800 50  0000 R CNN
-F 1 "2N7002P" H 8400 2600 50  0000 R CNN
+F 0 "Q102" H 7800 2900 50  0000 R CNN
+F 1 "2N7002P" H 7900 2550 50  0000 R CNN
 F 2 "kicad-libraries:SOT23GDS" H 8050 2850 50  0001 C CNN
 F 3 "" H 7850 2750 50  0000 C CNN
 	1    7850 2750
@@ -573,8 +564,6 @@ Wire Wire Line
 	7950 2550 7950 2400
 Wire Wire Line
 	7700 2100 7750 2100
-Wire Wire Line
-	8150 2100 8850 2100
 Connection ~ 8850 2950
 Wire Wire Line
 	8750 3150 8850 3150
@@ -831,17 +820,6 @@ F 3 "" H 4200 2450 50  0000 C CNN
 	1    4200 2450
 	1    0    0    -1  
 $EndComp
-$Comp
-L tinkerforge:LED D101
-U 1 1 5B38EE2F
-P 4900 800
-F 0 "D101" H 4900 900 50  0000 C CNN
-F 1 "green" H 4900 700 50  0000 C CNN
-F 2 "kicad-libraries:D0603F" H 4900 800 50  0001 C CNN
-F 3 "" H 4900 800 50  0000 C CNN
-	1    4900 800 
-	-1   0    0    1   
-$EndComp
 Wire Wire Line
 	8050 5050 7650 5050
 Wire Wire Line
@@ -1061,14 +1039,6 @@ Wire Wire Line
 Wire Wire Line
 	1550 3800 1700 3800
 Wire Wire Line
-	1550 6200 1700 6200
-Wire Wire Line
-	3900 1900 4000 1900
-Wire Wire Line
-	4000 2000 3900 2000
-Text Notes 4500 1950 0    39   ~ 0
-USIC1_CH1
-Wire Wire Line
 	3900 1700 4000 1700
 Text Notes 1650 4750 0    39   ~ 0
 USIC0_CH0
@@ -1080,141 +1050,30 @@ Wire Wire Line
 	1700 3400 1550 3400
 Wire Wire Line
 	4000 2450 3900 2450
-Wire Wire Line
-	3900 800  4250 800 
-$Comp
-L tinkerforge:3V3 #PWR021
-U 1 1 5B47153D
-P 5200 800
-F 0 "#PWR021" H 5200 900 40  0001 C CNN
-F 1 "3V3" H 5200 925 40  0000 C CNN
-F 2 "" H 5200 800 60  0000 C CNN
-F 3 "" H 5200 800 60  0000 C CNN
-	1    5200 800 
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5100 800  5200 800 
-Wire Wire Line
-	4700 800  4650 800 
-$Comp
-L tinkerforge:LED D103
-U 1 1 5B4759A1
-P 4900 2950
-F 0 "D103" H 4900 3050 50  0000 C CNN
-F 1 "green" H 4900 2850 50  0000 C CNN
-F 2 "kicad-libraries:D0603F" H 4900 2950 50  0001 C CNN
-F 3 "" H 4900 2950 50  0000 C CNN
-	1    4900 2950
-	-1   0    0    1   
-$EndComp
 $Comp
 L tinkerforge:LED D102
 U 1 1 5B476059
-P 4900 2700
-F 0 "D102" H 4900 2800 50  0000 C CNN
-F 1 "blue" H 4900 2600 50  0000 C CNN
-F 2 "kicad-libraries:D0603F" H 4900 2700 50  0001 C CNN
-F 3 "" H 4900 2700 50  0000 C CNN
-	1    4900 2700
+P 4700 2000
+F 0 "D102" H 4700 2100 50  0000 C CNN
+F 1 "blue" H 4700 1900 50  0000 C CNN
+F 2 "kicad-libraries:D0603F" H 4700 2000 50  0001 C CNN
+F 3 "" H 4700 2000 50  0000 C CNN
+	1    4700 2000
 	-1   0    0    1   
-$EndComp
-$Comp
-L tinkerforge:R_PACK_SINGLE RP105
-U 2 1 5B476840
-P 4450 2950
-F 0 "RP105" H 4265 2985 20  0000 C CNN
-F 1 "1k" H 4450 2950 20  0000 C CNN
-F 2 "kicad-libraries:4X0603" H 4450 2950 60  0001 C CNN
-F 3 "" H 4450 2950 60  0000 C CNN
-	2    4450 2950
-	1    0    0    -1  
-$EndComp
-$Comp
-L tinkerforge:R_PACK_SINGLE RP105
-U 1 1 5B476C13
-P 3900 4300
-F 0 "RP105" H 3715 4335 20  0000 C CNN
-F 1 "1k" H 3900 4300 20  0000 C CNN
-F 2 "kicad-libraries:4X0603" H 3900 4300 60  0001 C CNN
-F 3 "" H 3900 4300 60  0000 C CNN
-	1    3900 4300
-	1    0    0    -1  
-$EndComp
-$Comp
-L tinkerforge:R_PACK_SINGLE RP105
-U 3 1 5B47719B
-P 4450 800
-F 0 "RP105" H 4265 835 20  0000 C CNN
-F 1 "1k" H 4450 800 20  0000 C CNN
-F 2 "kicad-libraries:4X0603" H 4450 800 60  0001 C CNN
-F 3 "" H 4450 800 60  0000 C CNN
-	3    4450 800 
-	1    0    0    -1  
 $EndComp
 $Comp
 L tinkerforge:3V3 #PWR022
 U 1 1 5B47747F
-P 5100 2550
-F 0 "#PWR022" H 5100 2650 40  0001 C CNN
-F 1 "3V3" H 5100 2675 40  0000 C CNN
-F 2 "" H 5100 2550 60  0000 C CNN
-F 3 "" H 5100 2550 60  0000 C CNN
-	1    5100 2550
+P 4900 1850
+F 0 "#PWR022" H 4900 1950 40  0001 C CNN
+F 1 "3V3" H 4900 1975 40  0000 C CNN
+F 2 "" H 4900 1850 60  0000 C CNN
+F 3 "" H 4900 1850 60  0000 C CNN
+	1    4900 1850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5100 2550 5100 2700
-Connection ~ 5100 2700
-Wire Wire Line
-	3900 2950 4250 2950
-Wire Wire Line
-	4250 2700 4250 2850
-Wire Wire Line
-	4250 2850 3900 2850
-Wire Wire Line
-	4650 2950 4700 2950
-Wire Wire Line
-	4700 2700 4650 2700
-$Comp
-L tinkerforge:LED D104
-U 1 1 5B479B35
-P 4450 4300
-F 0 "D104" H 4450 4400 50  0000 C CNN
-F 1 "green" H 4450 4200 50  0000 C CNN
-F 2 "kicad-libraries:D0603F" H 4450 4300 50  0001 C CNN
-F 3 "" H 4450 4300 50  0000 C CNN
-	1    4450 4300
-	-1   0    0    1   
-$EndComp
-$Comp
-L tinkerforge:3V3 #PWR023
-U 1 1 5B479DFF
-P 4650 4200
-F 0 "#PWR023" H 4650 4300 40  0001 C CNN
-F 1 "3V3" H 4650 4325 40  0000 C CNN
-F 2 "" H 4650 4200 60  0000 C CNN
-F 3 "" H 4650 4200 60  0000 C CNN
-	1    4650 4200
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4650 4300 4650 4200
-Wire Wire Line
-	4250 4300 4100 4300
-Wire Wire Line
-	1550 4300 3700 4300
-$Comp
-L tinkerforge:R_PACK_SINGLE RP105
-U 4 1 5B47C531
-P 4450 2700
-F 0 "RP105" H 4265 2735 20  0000 C CNN
-F 1 "1k" H 4450 2700 20  0000 C CNN
-F 2 "kicad-libraries:4X0603" H 4450 2700 60  0001 C CNN
-F 3 "" H 4450 2700 60  0000 C CNN
-	4    4450 2700
-	1    0    0    -1  
-$EndComp
+	4900 1850 4900 2000
 Text GLabel 1700 3700 2    39   Input ~ 0
 B-CLK
 $Comp
@@ -1302,17 +1161,9 @@ Wire Wire Line
 Wire Wire Line
 	1950 1800 1950 1850
 Wire Wire Line
-	5100 2700 5100 2950
-Wire Wire Line
 	8850 2100 8900 2100
-Text Notes 5350 750  0    39   ~ 0
-"high led"
-Text Notes 5150 2700 0    39   ~ 0
+Text Notes 4950 2000 0    39   ~ 0
 "status led"
-Text Notes 5150 2950 0    39   ~ 0
-"mid led"
-Text Notes 4750 4300 0    39   ~ 0
-"low led"
 $Comp
 L tinkerforge:C C105
 U 1 1 5B38BE3D
@@ -1337,27 +1188,10 @@ Wire Wire Line
 Wire Wire Line
 	1550 3700 1700 3700
 NoConn ~ 3900 900 
-$Comp
-L tinkerforge:5V #PWR0115
-U 1 1 5B9F9451
-P 7100 800
-F 0 "#PWR0115" H 7100 900 40  0001 C CNN
-F 1 "5V" H 7109 956 40  0000 C CNN
-F 2 "" H 7100 800 60  0000 C CNN
-F 3 "" H 7100 800 60  0000 C CNN
-	1    7100 800 
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	3900 1200 4000 1200
 Wire Wire Line
 	4000 1300 3900 1300
-Text GLabel 1700 5800 2    39   Output ~ 0
-BATTERY-EN
-Wire Wire Line
-	1700 5800 1550 5800
-Wire Wire Line
-	1700 5900 1550 5900
 NoConn ~ 1550 5600
 NoConn ~ 3900 3050
 NoConn ~ 3900 3150
@@ -1368,4 +1202,67 @@ NoConn ~ 3900 1600
 NoConn ~ 1550 6000
 NoConn ~ 1550 6100
 NoConn ~ 3900 1400
+$Comp
+L tinkerforge:CP1 C113
+U 1 1 5C6F4B4B
+P 6850 1100
+F 0 "C113" H 6850 1200 50  0000 L CNN
+F 1 "470µF/16V" V 6900 600 50  0000 L CNN
+F 2 "kicad-libraries:ELKO_83" H 6850 1100 60  0001 C CNN
+F 3 "" H 6850 1100 60  0000 C CNN
+	1    6850 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:GND #PWR0114
+U 1 1 5C690486
+P 6850 1400
+F 0 "#PWR0114" H 6850 1400 30  0001 C CNN
+F 1 "GND" H 6850 1330 30  0001 C CNN
+F 2 "" H 6850 1400 60  0000 C CNN
+F 3 "" H 6850 1400 60  0000 C CNN
+	1    6850 1400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 1400 6850 1300
+Wire Wire Line
+	8150 2100 8850 2100
+Connection ~ 6850 900 
+Connection ~ 7350 900 
+$Comp
+L tinkerforge:+5V #PWR0115
+U 1 1 5C685556
+P 6600 800
+F 0 "#PWR0115" H 6600 650 50  0001 C CNN
+F 1 "+5V" H 6615 973 50  0000 C CNN
+F 2 "" H 6600 800 50  0000 C CNN
+F 3 "" H 6600 800 50  0000 C CNN
+	1    6600 800 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6850 900  7350 900 
+NoConn ~ 1550 5800
+NoConn ~ 1550 5900
+NoConn ~ 1550 6200
+NoConn ~ 3900 1900
+NoConn ~ 3900 800 
+NoConn ~ 3900 2950
+NoConn ~ 3900 2850
+$Comp
+L tinkerforge:R R104
+U 1 1 5C6D65E1
+P 4200 2000
+F 0 "R104" V 4280 2000 50  0000 C CNN
+F 1 "1k" V 4200 2000 50  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 4200 2000 60  0001 C CNN
+F 3 "" H 4200 2000 60  0000 C CNN
+	1    4200 2000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4500 2000 4450 2000
+Wire Wire Line
+	3950 2000 3900 2000
 $EndSCHEMATC
