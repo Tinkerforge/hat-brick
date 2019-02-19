@@ -1004,4 +1004,8 @@ Wire Wire Line
 	3100 1450 3100 1400
 NoConn ~ 7800 3700
 NoConn ~ 7800 3600
+Text GLabel 8100 3450 1    39   Output ~ 0
+USB-5V-IN
+Wire Wire Line
+	8100 3500 8100 3450
 $EndSCHEMATC
