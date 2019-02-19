@@ -1,4 +1,4 @@
-update=Fr 15 Feb 2019 15:36:13 CET
+update=Di 19 Feb 2019 14:49:16 CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -41,7 +41,7 @@ ModuleTextSizeV=1.524
 ModuleTextSizeH=1.524
 ModuleTextSizeThickness=0.3048
 SolderMaskClearance=0
-SolderMaskMinWidth=0.25
+SolderMaskMinWidth=0
 DrawSegmentWidth=0.2
 BoardOutlineThickness=0.09906
 ModuleOutlineThickness=0.381
