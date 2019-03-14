@@ -25,4 +25,24 @@
             };
         };
 	};
+
+	fragment@1
+	{
+		target = <&i2c1>;
+		__overlay__
+		{
+			#address-cells = <1>; /* needed to avoid dtc warning */
+			#size-cells = <0>; /* needed to avoid dtc warning */
+			pinctrl-names = "default";
+			pinctrl-0 = <&i2c1_pins>;
+			clock-frequency = <100000>;
+			status = "okay";
+
+			pcf8523@68 {
+				compatible = "nxp,pcf8523";
+				reg = <0x68>;
+				status = "okay";
+			};
+		};
+	};
 };
