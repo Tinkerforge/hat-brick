@@ -50,8 +50,6 @@ static uint8_t eeprom_register_high_byte = 0;
 static bool eeprom_register_high_byte_received = false;
 
 void eeprom_init(void) {
-    logd("EEPROM init\n\r");
-
 	XMC_I2C_CH_Stop(EEPROM_I2C);
 	const XMC_GPIO_CONFIG_t input_config =  {
 		.mode         = XMC_GPIO_MODE_INPUT_TRISTATE,
@@ -93,10 +91,8 @@ void eeprom_init(void) {
 	XMC_GPIO_Init(EEPROM_SDA_PIN, &sda_pin_config);
 
 	NVIC_SetPriority(12, 1); // tx
-	XMC_SCU_SetInterruptControl(12, XMC_SCU_IRQCTRL_USIC1_SR3_IRQ12);
 	NVIC_EnableIRQ(12);
 	NVIC_SetPriority(11, 0); // protocol
-	XMC_SCU_SetInterruptControl(11, XMC_SCU_IRQCTRL_USIC1_SR2_IRQ11);
 	NVIC_EnableIRQ(11);
 	XMC_I2C_CH_EnableEvent(EEPROM_I2C, XMC_I2C_CH_EVENT_SLAVE_READ_REQUEST | XMC_I2C_CH_EVENT_ERROR);
 }

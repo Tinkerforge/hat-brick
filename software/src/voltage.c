@@ -28,98 +28,57 @@
 #include "bricklib2/hal/system_timer/system_timer.h"
 #include "bricklib2/logging/logging.h"
 
-#define voltage_usb_irq_handler IRQ_Hdlr_15
-#define voltage_dc_irq_handler  IRQ_Hdlr_16
+Voltage voltage;
 
-static volatile uint32_t voltage_usb = 0;
-static volatile uint32_t voltage_dc  = 0;
-static uint32_t voltage_usb_sum      = 0;
-static uint32_t voltage_dc_sum       = 0;
-static uint32_t voltage_usb_length   = 0;
-static uint32_t voltage_dc_length    = 0;
+#define VOLTAGE_MAX_ADC_VALUE ((1  << 12) - 1)
 
-void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) voltage_usb_irq_handler(void) {
-	voltage_usb_sum += XMC_VADC_GROUP_GetDetailedResult(VOLTAGE_USB_ADC_GROUP, VOLTAGE_USB_ADC_RESULT_REG) & 0xFFFF;
+#define voltage_adc_irq_handler IRQ_Hdlr_15
 
-	voltage_usb_length++;
-	if(voltage_usb_length >= VOLTAGE_MAX_LENGTH) {
-		voltage_usb        = voltage_usb_sum;
-		voltage_usb_sum    = 0;
-		voltage_usb_length = 0;
+
+static volatile uint32_t voltage_adc_value_dc_sum = 0;
+static volatile uint32_t voltage_adc_value_dc_num = 0;
+
+static volatile uint32_t voltage_adc_value_usb_sum = 0;
+static volatile uint32_t voltage_adc_value_usb_num = 0;
+
+void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) voltage_adc_irq_handler(void) {
+	const uint32_t value = VADC->GLOBRES;
+	const uint32_t channel = (value >> 20) & 0b1111;
+	if(channel == VOLTAGE_ADC_DC_CHANNEL) {
+		voltage_adc_value_dc_sum += (value & 0xFFFF);
+		voltage_adc_value_dc_num++;
+	} else {
+		voltage_adc_value_usb_sum += (value & 0xFFFF);
+		voltage_adc_value_usb_num++;
 	}
 }
 
-void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) voltage_dc_irq_handler(void) {
-	voltage_dc_sum += XMC_VADC_GROUP_GetDetailedResult(VOLTAGE_DC_ADC_GROUP, VOLTAGE_DC_ADC_RESULT_REG) & 0xFFFF;
 
-	voltage_dc_length++;
-	if(voltage_dc_length >= VOLTAGE_MAX_LENGTH) {
-		voltage_dc        = voltage_dc_sum;
-		voltage_dc_sum    = 0;
-		voltage_dc_length = 0;
-	}
-}
+void voltage_init(void) {
+	memset(&voltage, 0, sizeof(Voltage));
 
-void voltage_adc_channel_init(uint32_t result_reg, uint32_t channel, int32_t alias, XMC_VADC_SR_t sr, uint32_t irq, XMC_VADC_GROUP_t *vadc, int32_t group_index) {
-	XMC_VADC_CHANNEL_CONFIG_t  channel_config = {
-		.input_class                =  XMC_VADC_CHANNEL_CONV_GLOBAL_CLASS0,    // Global ICLASS 0 selected
-		.lower_boundary_select 	    =  XMC_VADC_CHANNEL_BOUNDARY_GROUP_BOUND0,
-		.upper_boundary_select 	    =  XMC_VADC_CHANNEL_BOUNDARY_GROUP_BOUND0,
-		.event_gen_criteria         =  XMC_VADC_CHANNEL_EVGEN_NEVER,           // Channel Event disabled
-		.sync_conversion  		    =  0,                                      // Sync feature disabled
-		.alternate_reference        =  XMC_VADC_CHANNEL_REF_INTREF,            // Internal reference selected
-		.result_reg_number          =  result_reg,                             // GxRES[x] selected
-		.use_global_result          =  0, 				                       // Use Group result register
-		.result_alignment           =  XMC_VADC_RESULT_ALIGN_RIGHT,            // Result alignment - Right Aligned
-		.broken_wire_detect_channel =  XMC_VADC_CHANNEL_BWDCH_VAGND,           // No Broken wire mode select
-		.broken_wire_detect		    =  0,    		                           // No Broken wire detection
-		.bfl                        =  0,                                      // No Boundary flag
-		.channel_priority           =  0,                   		           // Lowest Priority 0 selected
-		.alias_channel              =  alias                                   // Channel is aliased
-	};
-
-	XMC_VADC_RESULT_CONFIG_t channel_result_config = {
-		.data_reduction_control = 0b11,                         // Accumulate 4 result values
-		.post_processing_mode   = XMC_VADC_DMM_REDUCTION_MODE,  // Use reduction mode
-		.wait_for_read_mode  	= 1,                            // Enabled
-		.part_of_fifo       	= 0,                            // No FIFO
-		.event_gen_enable   	= 1                             // Disable Result event
-	};
-
-	// Initialize for configured channels
-	XMC_VADC_GROUP_ChannelInit(vadc, channel, &channel_config);
-
-	// Initialize for configured result registers
-	XMC_VADC_GROUP_ResultInit(vadc, result_reg, &channel_result_config);
-
-	XMC_VADC_GLOBAL_BackgroundAddChannelToSequence(VADC, group_index, channel);
-	NVIC_SetPriority(irq, VOLTAGE_ADC_IRQ_PRIORITY);
-
-	XMC_VADC_GLOBAL_BackgroundSetReqSrcEventInterruptNode(VADC, sr);
-	XMC_VADC_GROUP_SetResultInterruptNode(vadc, result_reg, sr);
-
-	NVIC_EnableIRQ(irq); 
-}
-
-void voltage_adc_init(void) {
 	// This structure contains the Global related Configuration.
 	const XMC_VADC_GLOBAL_CONFIG_t adc_global_config = {
-		.boundary0 = 0, // Lower boundary value for Normal comparison mode
-		.boundary1 = 0, // Upper boundary value for Normal comparison mode
+		.boundary0 = (uint32_t) 0, // Lower boundary value for Normal comparison mode
+		.boundary1 = (uint32_t) 0, // Upper boundary value for Normal comparison mode
 
 		.class0 = {
 			.sample_time_std_conv     = 31,                      // The Sample time is (2*tadci)
 			.conversion_mode_standard = XMC_VADC_CONVMODE_12BIT, // 12bit conversion Selected
+
 		},
 		.class1 = {
 			.sample_time_std_conv     = 31,                      // The Sample time is (2*tadci)
+			.conversion_mode_standard = XMC_VADC_CONVMODE_12BIT, // 12bit conversion Selected
+
 		},
 
-		.data_reduction_control       = 0b11, // Accumulate 4 result values
-		.wait_for_read_mode           = 0, // GLOBRES Register will not be overwritten until the previous value is read
-		.event_gen_enable             = 0, // Result Event from GLOBRES is disabled
-		.disable_sleep_mode_control   = 0  // Sleep mode is enabled
+		.data_reduction_control         = 0b11, // Accumulate 4 result values
+		.wait_for_read_mode             = 0, // GLOBRES Register will not be overwritten until the previous value is read
+		.event_gen_enable               = 1, // Result Event from GLOBRES is enabled
+		.disable_sleep_mode_control     = 0  // Sleep mode is enabled
 	};
+
 
 	// Global iclass0 configuration
 	const XMC_VADC_GLOBAL_CLASS_t adc_global_iclass_config = {
@@ -129,11 +88,11 @@ void voltage_adc_init(void) {
 
 	// Global Result Register configuration structure
 	XMC_VADC_RESULT_CONFIG_t adc_global_result_config = {
-		.data_reduction_control = 0b11,  // Accumulate 4 result values
+		.data_reduction_control = 0, //0b11, // Accumulate 4 result values
 		.post_processing_mode   = XMC_VADC_DMM_REDUCTION_MODE,
 		.wait_for_read_mode  	= 1, // Enabled
 		.part_of_fifo       	= 0, // No FIFO
-		.event_gen_enable   	= 1  // Disable Result event
+		.event_gen_enable   	= 1  // Enable Result event
 	};
 
 	// LLD Background Scan Init Structure
@@ -145,103 +104,56 @@ void voltage_adc_init(void) {
 		.gate_signal       = XMC_VADC_REQ_GT_A,			   // If Gating needed then this denotes the Gating signal
 		.timer_mode        = 0,							   // Timer Mode Disabled
 		.external_trigger  = 0,                            // Trigger is Disabled
-		.req_src_interrupt = 0,                            // Background Request source interrupt Enabled 
+		.req_src_interrupt = 0,                            // Background Request source interrupt Disabled
 		.enable_auto_scan  = 1,
 		.load_mode         = XMC_VADC_SCAN_LOAD_OVERWRITE
 	};
 
-	const XMC_VADC_GROUP_CONFIG_t group_init_handle0 = {
-		.emux_config = {
-			.stce_usage                  = 0, 					           // Use STCE when the setting changes
-			.emux_mode                   = XMC_VADC_GROUP_EMUXMODE_SWCTRL, // Mode for Emux conversion
-			.emux_coding                 = XMC_VADC_GROUP_EMUXCODE_BINARY, // Channel progression - binary format
-			.starting_external_channel   = 0,                              // Channel starts at 0 for EMUX
-			.connected_channel           = 0                               // Channel connected to EMUX
-		},
-		.class0 = {
-			.sample_time_std_conv        = 31,                             // The Sample time is (2*tadci)
-			.conversion_mode_standard    = XMC_VADC_CONVMODE_12BIT,        // 12bit conversion Selected
-			.sampling_phase_emux_channel = 0,                              // The Sample time is (2*tadci)
-			.conversion_mode_emux        = XMC_VADC_CONVMODE_12BIT         // 12bit conversion Selected
-		},
-		.class1 = {
-			.sample_time_std_conv        = 31,                             // The Sample time is (2*tadci)
-			.conversion_mode_standard    = XMC_VADC_CONVMODE_12BIT,        // 12bit conversion Selected
-			.sampling_phase_emux_channel = 0,                              // The Sample time is (2*tadci)
-			.conversion_mode_emux        = XMC_VADC_CONVMODE_12BIT         // 12bit conversion Selected
-		},
-
-		.boundary0                       = 0,                              // Lower boundary value for Normal comparison mode
-		.boundary1	                     = 0,                              // Upper boundary value for Normal comparison mode
-		.arbitration_round_length        = 0,                              // 4 arbitration slots per round selected (tarb = 4*tadcd) */
-		.arbiter_mode                    = XMC_VADC_GROUP_ARBMODE_ALWAYS,  // Determines when the arbiter should run.
-	};
 
 	XMC_VADC_GLOBAL_Init(VADC, &adc_global_config);
-
-	XMC_VADC_GROUP_Init(VADC_G0, &group_init_handle0);
-	XMC_VADC_GROUP_Init(VADC_G1, &group_init_handle0);
-	XMC_VADC_GROUP_SetPowerMode(VADC_G0, XMC_VADC_GROUP_POWERMODE_NORMAL);
-	XMC_VADC_GROUP_SetPowerMode(VADC_G1, XMC_VADC_GROUP_POWERMODE_NORMAL);
-	XMC_VADC_GLOBAL_DisablePostCalibration(VADC, 0);
-	XMC_VADC_GLOBAL_DisablePostCalibration(VADC, 1);
-	XMC_VADC_GLOBAL_SHS_EnableAcceleratedMode(SHS0, XMC_VADC_GROUP_INDEX_0);
-	XMC_VADC_GLOBAL_SHS_EnableAcceleratedMode(SHS0, XMC_VADC_GROUP_INDEX_1);
-	XMC_VADC_GLOBAL_SHS_SetClockDivider(SHS0, 0);
-	XMC_VADC_GLOBAL_SHS_SetAnalogReference(SHS0, XMC_VADC_GLOBAL_SHS_AREF_EXTERNAL_VDD_UPPER_RANGE);
-
 	XMC_VADC_GLOBAL_StartupCalibration(VADC);
 
 	// Initialize the Global Conversion class 0
 	XMC_VADC_GLOBAL_InputClassInit(VADC, adc_global_iclass_config, XMC_VADC_GROUP_CONV_STD, 0);
+	// Initialize the Global Conversion class 1
+	XMC_VADC_GLOBAL_InputClassInit(VADC, adc_global_iclass_config, XMC_VADC_GROUP_CONV_STD, 1);
 
 	// Initialize the Background Scan hardware
 	XMC_VADC_GLOBAL_BackgroundInit(VADC, &adc_background_config);
 
-	voltage_adc_channel_init(VOLTAGE_USB_ADC_RESULT_REG, VOLTAGE_USB_ADC_CHANNEL, VOLTAGE_USB_ADC_ALIAS, XMC_VADC_SR_SHARED_SR0, VOLTAGE_USB_ADC_IRQ, VOLTAGE_USB_ADC_GROUP, VOLTAGE_USB_ADC_GROUP_INDEX);
-	voltage_adc_channel_init(VOLTAGE_DC_ADC_RESULT_REG,  VOLTAGE_DC_ADC_CHANNEL,  VOLTAGE_DC_ADC_ALIAS,  XMC_VADC_SR_SHARED_SR1, VOLTAGE_DC_ADC_IRQ,  VOLTAGE_DC_ADC_GROUP,  VOLTAGE_DC_ADC_GROUP_INDEX);
+	// Initialize the global result register
+	XMC_VADC_GLOBAL_ResultInit(VADC, &adc_global_result_config);
+
+	XMC_VADC_GLOBAL_BackgroundAddChannelToSequence(VADC, 0, VOLTAGE_ADC_USB_CHANNEL);
+	XMC_VADC_GLOBAL_BackgroundAddChannelToSequence(VADC, 0, VOLTAGE_ADC_DC_CHANNEL);
+	XMC_VADC_GLOBAL_SetResultEventInterruptNode(VADC, XMC_VADC_SR_SHARED_SR0);
 
 	XMC_VADC_GLOBAL_BackgroundTriggerConversion(VADC);
+
+    NVIC_SetPriority(VOLTAGE_ADC_IRQ, VOLTAGE_ADC_IRQ_PRIORITY);
+    NVIC_EnableIRQ(VOLTAGE_ADC_IRQ);
 }
 
-void voltage_disable(void) {
-	NVIC_DisableIRQ(VOLTAGE_USB_ADC_IRQ);
-	NVIC_DisableIRQ(VOLTAGE_DC_ADC_IRQ);
-}
+void voltage_tick(void) {
+	if(system_timer_is_time_elapsed_ms(voltage.last_measurement, 100)) {
+		voltage.last_measurement = system_timer_get_ms();
 
-void voltage_enable(void) {
-	NVIC_EnableIRQ(VOLTAGE_USB_ADC_IRQ);
-	NVIC_EnableIRQ(VOLTAGE_DC_ADC_IRQ);
-}
+		NVIC_DisableIRQ(VOLTAGE_ADC_IRQ);
 
-void voltage_init(void) {
-	const XMC_GPIO_CONFIG_t voltage_pin_config = {
-		.mode             = XMC_GPIO_MODE_INPUT_TRISTATE,
-		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE,
-	};
+		// resistor divider 1k/10k,  12 bit -> mV => 3300*11/4095 = 2420/273 ~ 44/5
+		//voltage.voltage_dc        = ((uint64_t)voltage_adc_value_dc_sum)*2420 / (voltage_adc_value_dc_num * 273);
+		voltage.voltage_dc        = (voltage_adc_value_dc_sum * 44) / (voltage_adc_value_dc_num * 5);
+		// resistor divider 10k/10k, 12 bit -> mV => 3300*2/4095 = 440/273 ~ 29/18
+		//voltage.voltage_usb       = ((uint64_t)voltage_adc_value_usb_sum)*440 / (voltage_adc_value_usb_num * 273);
+		voltage.voltage_usb       = (voltage_adc_value_usb_sum * 29) / (voltage_adc_value_usb_num * 18);
 
-	XMC_GPIO_Init(VOLTAGE_USB_ADC_PIN, &voltage_pin_config);
-	XMC_GPIO_Init(VOLTAGE_DC_ADC_PIN, &voltage_pin_config);
+		voltage_adc_value_dc_sum  = 0;
+		voltage_adc_value_dc_num  = 0;
+		voltage_adc_value_usb_sum = 0;
+		voltage_adc_value_usb_num = 0;
 
-	voltage_adc_init();
-}
+//		uartbb_printf("Vol: %d %d\n\r", voltage.voltage_dc, voltage.voltage_usb);
 
-// resistor divider 10k/10, 4x reduction, 12 bit -> mV
-uint32_t voltage_get_usb_voltage(void) {
-	uint32_t v = (((uint64_t)voltage_usb)*3300*2)/(VOLTAGE_MAX_LENGTH*4*4095);
-	return v < 2500 ? 0 : v;
-}
-
-// resistor divider 1k/10k, 4x reduction, 12 bit -> mV
-uint32_t voltage_get_dc_voltage(void) {
-	uint32_t v = (((uint64_t)voltage_dc)*3300*11)/(VOLTAGE_MAX_LENGTH*4*4095);
-	return v < 2500 ? 0 : v;
-}
-
-uint32_t voltage_get_usb_voltage_raw(void) {
-	return voltage_usb;
-}
-
-uint32_t voltage_get_dc_voltage_raw(void) {
-	return voltage_dc;
+    	NVIC_EnableIRQ(VOLTAGE_ADC_IRQ);
+	}
 }

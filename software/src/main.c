@@ -29,10 +29,7 @@
 #include "bricklib2/logging/logging.h"
 #include "communication.h"
 
-#include "max17260.h"
-#include "bq24195.h"
 #include "rpi.h"
-#include "rtc.h"
 #include "eeprom.h"
 #include "voltage.h"
 
@@ -41,20 +38,15 @@ int main(void) {
 	logging_init();
 	logd("Start HAT Bricklet\n\r");
 
-	communication_init();
+//	communication_init();
 	rpi_init();
-	max17260_init();
-	bq24195_init();
-	rtc_init();
 	eeprom_init();
 	voltage_init();
 
 	while(true) {
 		bootloader_tick();
-		communication_tick();
-		max17260_tick();
-		bq24195_tick();
+//		communication_tick();
 		rpi_tick();
-		rtc_tick();
+		voltage_tick();
 	}
 }

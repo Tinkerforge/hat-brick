@@ -22,10 +22,10 @@
 #include "rpi.h"
 
 #include "eeprom.h"
-#include "max17260.h"
 #include "voltage.h"
 
 #include "configs/config_rpi.h"
+#include "configs/config_custom_bootloader.h"
 
 #include "bricklib2/logging/logging.h"
 #include "bricklib2/hal/system_timer/system_timer.h"
@@ -33,95 +33,65 @@
 
 #include "xmc_wdt.h"
 #include "xmc_rtc.h"
+#include "xmc_scu.h"
 
-// Use a define for the switch high check, to be sure that the compiler does not forget to inline a function or similar
-// this query is used durin the sleep polling, so it needs to be as performant as possible.
-#define RPI_BATTERY_SWITCH_HIGH() (RPI_BATTERY_EN_PORT->IN & (1 << RPI_BATTERY_EN_PIN))
+#define RTC_DIVIDERVALUE 0x7FFF
 
-#define RPI_LED_POWER_LOW_FLICKER_TIME 500
-#define rpi_sleep_rtc_interrupt IRQ1_Handler
+#define rpi_sleep_rtc_interrupt SCU_1_IRQHandler
 RPI rpi;
 
 volatile int32_t rpi_sleep_seconds_counter = 0;
 volatile bool rpi_sleep_enable_indicator = false;
 
-const uint8_t rpi_led_pins[RPI_NUM_LEDS] = {RPI_LED_LOW_PIN, RPI_LED_MID_PIN, RPI_LED_HIGH_PIN};
-XMC_GPIO_PORT_t *rpi_led_ports[RPI_NUM_LEDS] = {RPI_LED_LOW_PORT, RPI_LED_MID_PORT, RPI_LED_HIGH_PORT};
+
+// This is called once per second by RTC when in deep sleep mode. The amount of
+// current that is drawn by the wakeup with a 1-second interval is negligible.
+void __attribute__ ((section (".ram_code"))) rpi_sleep_rtc_interrupt(void) {
+	// Toggle LED if configured by user
+	if(rpi_sleep_enable_indicator) {
+		XMC_GPIO_PORT1->OMR = 0x10001U << 1;
+	}
+	rpi_sleep_seconds_counter--;
+}
 
 void rpi_init(void) {
-	logd("RPi init\n\r");
 	memset(&rpi, 0, sizeof(RPI));
 	XMC_GPIO_CONFIG_t output_high = {
 		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
 		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH
 	};
 
-	XMC_GPIO_CONFIG_t output_low = {
-		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
-		.output_level = XMC_GPIO_OUTPUT_LEVEL_LOW
-	};
-
-	XMC_GPIO_CONFIG_t input = {
-		.mode = XMC_GPIO_MODE_INPUT_TRISTATE,
-		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_LARGE
-	};
-
-	XMC_GPIO_Init(RPI_BOOST_EN_PIN,    &output_high);
 	XMC_GPIO_Init(RPI_BRICKLET_EN_PIN, &output_high);
 	XMC_GPIO_Init(RPI_RPI_EN_PIN,      &output_high);
-	XMC_GPIO_Init(RPI_BATTERY_EN_PORT, RPI_BATTERY_EN_PIN, &input);
 
-	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
-		XMC_GPIO_Init(rpi_led_ports[i], rpi_led_pins[i],  &output_low);
-		rpi.leds[i].config = LED_FLICKER_CONFIG_EXTERNAL;
-	}
+	rpi.bricklet_power = true;
+
+	const XMC_RTC_CONFIG_t config = {
+		{
+			.seconds = 0,
+  			.minutes = 0,
+  			.hours = 0,
+  			.days = 0,
+  			.daysofweek = XMC_RTC_WEEKDAY_THURSDAY,
+			.month = XMC_RTC_MONTH_JANUARY,
+  			.year = 1970
+		}, {
+  			.seconds = 0,
+  			.minutes = 0,
+  			.hours = 0,
+  			.days = 0,
+  			.month = XMC_RTC_MONTH_JANUARY,
+  			.year = 1970
+		},
+		.prescaler = RTC_DIVIDERVALUE
+	};
+
+	XMC_RTC_Init(&config);
+	XMC_RTC_Start();
 
 	// Configure RTC interrupt
+	NVIC_EnableIRQ(RPI_SLEEP_RTC_IRQ);
 	NVIC_SetPriority(RPI_SLEEP_RTC_IRQ, 3);
-	XMC_SCU_SetInterruptControl(RPI_SLEEP_RTC_IRQ, XMC_SCU_IRQCTRL_SCU_SR1_IRQ1);
-
-	rpi.rpi_en_before_undervoltage = XMC_GPIO_GetInput(RPI_RPI_EN_PIN);
-	rpi.bricklet_en_before_undervoltage = XMC_GPIO_GetInput(RPI_BRICKLET_EN_PIN);
-}
-
-void rpi_handle_battery_leds(void) {
-	uint8_t led[3];
-	switch(max17260.percentage_charge/1600) {
-		default:
-		case 6:
-		case 5: led[2] = 1; led[1] = 0; led[0] = 0; break;
-		case 4: led[2] = 2; led[1] = 1; led[0] = 0; break;
-		case 3: led[2] = 0; led[1] = 1; led[0] = 0; break;
-		case 2: led[2] = 0; led[1] = 2; led[0] = 1; break;
-		case 1: led[2] = 0; led[1] = 0; led[0] = 1; break;
-		case 0: led[2] = 0; led[1] = 0; led[0] = 2; break;
-	}
-
-	// If no battery is connected we overwrite with all LEDs off.
-	if(!max17260.battery_connected) {
-		led[2] = 0; led[1] = 0; led[0] = 0;
-	}
-
-	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
-		if(rpi.leds[i].config == LED_FLICKER_CONFIG_EXTERNAL) {
-			switch(led[i]) {
-				case 0: XMC_GPIO_SetOutputHigh(rpi_led_ports[i], rpi_led_pins[i]); break;
-				case 1: XMC_GPIO_SetOutputLow(rpi_led_ports[i], rpi_led_pins[i]); break;
-				case 2: 
-				default: {
-					if(system_timer_is_time_elapsed_ms(rpi.last_flicker_time, RPI_LED_POWER_LOW_FLICKER_TIME)) {
-						rpi.last_flicker_time = system_timer_get_ms();
-						XMC_GPIO_ToggleOutput(rpi_led_ports[i], rpi_led_pins[i]);
-					}
-					break;
-				}
-			}
-		} else {
-			LEDFlickerState *state = &rpi.leds[i];
-			uint32_t ms = system_timer_get_ms();
-			led_flicker_tick(state, ms, rpi_led_ports[i], rpi_led_pins[i]);
-		}
-	}
 }
 
 void rpi_sleep_leave(void) {
@@ -136,23 +106,13 @@ void rpi_sleep_leave(void) {
 	XMC_RTC_DisableEvent(XMC_RTC_EVENT_PERIODIC_SECONDS);
 	NVIC_DisableIRQ(RPI_SLEEP_RTC_IRQ);
 
-	// Enable FTHRM again
-	max17260_set_config1(true);
-
-	// Enable Bricklets, RPi and boost converter again
-	XMC_GPIO_SetOutputHigh(RPI_BRICKLET_EN_PIN);
-	XMC_GPIO_SetOutputHigh(RPI_RPI_EN_PIN);
-	XMC_GPIO_SetOutputHigh(RPI_BOOST_EN_PIN);
-
-	// Restore LED state from before sleep
-	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
-		if(rpi.led_state_before_turned_off[i]) {
-			XMC_GPIO_SetOutputLow(rpi_led_ports[i], rpi_led_pins[i]);
-		} else {
-			XMC_GPIO_SetOutputHigh(rpi_led_ports[i], rpi_led_pins[i]);
-		}
+	// Enable Bricklets and RPi again
+	if(rpi.bricklet_power) {
+		XMC_GPIO_SetOutputHigh(RPI_BRICKLET_EN_PIN);
 	}
-	if(rpi.led_state_before_turned_off[3]) {
+	XMC_GPIO_SetOutputHigh(RPI_RPI_EN_PIN);
+
+	if(rpi.led_state_before_turned_off) {
 		XMC_GPIO_SetOutputLow(BOOTLOADER_STATUS_LED_PIN);
 	} else {
 		XMC_GPIO_SetOutputHigh(BOOTLOADER_STATUS_LED_PIN);
@@ -160,7 +120,7 @@ void rpi_sleep_leave(void) {
 
 	// Restore IRQ state from before sleep
 	for(uint8_t i = 0; i < 32; i++) {
-		if(rpi.irq_state_before_turned_off[i]) {
+		if(rpi.irq_state_before_turned_off & (1 << i)) {
 			NVIC_EnableIRQ(i);
 		}
 	}
@@ -177,20 +137,16 @@ void rpi_sleep_enter(void) {
 	// in the sleep interrupt.
 	rpi_sleep_enable_indicator = rpi.enable_sleep_indicator;
 
-	// Turn all LEDs off and save current state
-	for(uint8_t i = 0; i < RPI_NUM_LEDS; i++) {
-		rpi.led_state_before_turned_off[i] = XMC_GPIO_GetInput(rpi_led_ports[i], rpi_led_pins[i]);
-		XMC_GPIO_SetOutputHigh(rpi_led_ports[i], rpi_led_pins[i]);
-	}
-
 	// Turn all IRQs off and save current state
+	rpi.irq_state_before_turned_off = 0;
 	for(uint8_t i = 0; i < 32; i++) {
-		rpi.irq_state_before_turned_off[i] = NVIC_GetEnableIRQ(i);
-		if(rpi.irq_state_before_turned_off[i]) {
+		const bool enabled = NVIC_GetEnableIRQ(i);
+		rpi.irq_state_before_turned_off |= enabled << i;
+		if(enabled) {
 			NVIC_DisableIRQ(i);
 		}
 	}
-	rpi.led_state_before_turned_off[3] = XMC_GPIO_GetInput(BOOTLOADER_STATUS_LED_PIN);
+	rpi.led_state_before_turned_off = XMC_GPIO_GetInput(BOOTLOADER_STATUS_LED_PIN);
 	XMC_GPIO_SetOutputHigh(BOOTLOADER_STATUS_LED_PIN);
 
 	// Turn SysTick off
@@ -205,16 +161,6 @@ void rpi_sleep_enter(void) {
 
 	// Turn MCLK down to lowest possible frequency
 	XMC_SCU_CLOCK_ScaleMCLKFrequency(255, 0);
-}
-
-// This is called once per second by RTC when in deep sleep mode. The amount of
-// current that is drawn by the wakeup with a 1-second interval is negligible.
-void __attribute__ ((section (".ram_code"))) rpi_sleep_rtc_interrupt(void) {
-	// Toggle LED if configured by user
-	if(rpi_sleep_enable_indicator) {
-		XMC_GPIO_PORT4->OMR = 0x10001U << 4;
-	}
-	rpi_sleep_seconds_counter--;
 }
 
 void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t power_off_duration) {
@@ -239,9 +185,7 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t pow
 	// Use ARM wfi command to actually enter sleep state.
 	// We keep going into sleep state until the seconds counter reaches zero.
 	// The seconds counter is decremented once per second by the RTC (see above).
-
-	// We also sleep as long as the user turns the switch off.
-	while((rpi_sleep_seconds_counter > 0) || (!RPI_BATTERY_SWITCH_HIGH())) { __WFI(); }
+	while(rpi_sleep_seconds_counter > 0) { __WFI(); }
 
 	// Turn flash on again
 	NVM->NVMCONF |= NVM_NVMCONF_NVM_ON_Msk;
@@ -254,7 +198,6 @@ void __attribute__ ((section (".ram_code"))) rpi_sleep_for_duration(uint32_t pow
 void rpi_handle_power_off(void) {
 	if(rpi.power_off_delay_start != 0) {
 		if(system_timer_is_time_elapsed_ms(rpi.power_off_delay_start, rpi.power_off_delay)) {
-			max17260_set_config1(false); // Disable FTHRM, saves 200uA.
 
 			rpi.power_off_delay = 0;
 			rpi.power_off_delay_start = 0;
@@ -265,7 +208,6 @@ void rpi_handle_power_off(void) {
 				if(rpi.raspberry_pi_off) {
 					XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
 				}
-				XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
 				rpi.power_off_duration_start = system_timer_get_ms();
 				rpi_sleep_for_duration(rpi.power_off_duration);
 			}
@@ -273,64 +215,6 @@ void rpi_handle_power_off(void) {
 	} 
 }
 
-void rpi_handle_undervoltage(void) {
-	static uint32_t last_time            = 0;
-	static uint32_t bricklet_enable_time = 0;
-
-	const uint32_t voltage_usb     = voltage_get_usb_voltage_raw();
-	const uint32_t voltage_dc      = voltage_get_dc_voltage_raw();
-	const uint32_t voltage_battery = max17260.voltage_battery;
-
-	if(bricklet_enable_time != 0) {
-		if(system_timer_is_time_elapsed_ms(bricklet_enable_time, 1000)) {
-			bricklet_enable_time = 0;
-			XMC_GPIO_SetOutputLevel(RPI_BRICKLET_EN_PIN, rpi.bricklet_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
-		}
-	}
-
-	if(!system_timer_is_time_elapsed_ms(last_time, 500)) {
-		return;
-	}
-
-	if((voltage_battery < RPI_VOLTAGE_BATTERY_UNDERVOLTAGE) &&
-	   (voltage_usb     < RPI_VOLTAGE_USB_UNDERVOLTAGE) &&
-	   (voltage_dc      < RPI_VOLTAGE_DC_UNDERVOLTAGE)) {
-		if(XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
-			rpi.rpi_en_before_undervoltage = XMC_GPIO_GetInput(RPI_RPI_EN_PIN);
-			rpi.bricklet_en_before_undervoltage = XMC_GPIO_GetInput(RPI_BRICKLET_EN_PIN);
-
-			XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
-			XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
-			XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
-			last_time = system_timer_get_ms();
-			bricklet_enable_time = 0;
-		}
-	} else {
-		if(!XMC_GPIO_GetInput(RPI_BOOST_EN_PIN)) {
-			XMC_GPIO_SetOutputHigh(RPI_BOOST_EN_PIN);
-			XMC_GPIO_SetOutputLevel(RPI_RPI_EN_PIN, rpi.rpi_en_before_undervoltage ? XMC_GPIO_OUTPUT_LEVEL_HIGH : XMC_GPIO_OUTPUT_LEVEL_LOW);
-			last_time = system_timer_get_ms();
-			// Wait 1s before we enable the Bricklets, so we don't turn everything on at the same time.
-			bricklet_enable_time = last_time;
-		}
-	}
-}
-
-void rpi_handle_switch(void) {
-	if(!RPI_BATTERY_SWITCH_HIGH()) {
-		rpi.power_off_delay = 0;
-		rpi.power_off_delay_start = 0;
-		XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
-		XMC_GPIO_SetOutputLow(RPI_RPI_EN_PIN);
-		XMC_GPIO_SetOutputLow(RPI_BOOST_EN_PIN);
-		rpi.power_off_duration_start = system_timer_get_ms();
-		rpi_sleep_for_duration(1); // sleep for minimum one second, otherwise until the user puts the switch back to on.
-	} 
-}
-
 void rpi_tick(void) {
-	rpi_handle_battery_leds();
 	rpi_handle_power_off();
-	rpi_handle_undervoltage();
-	rpi_handle_switch();
 }

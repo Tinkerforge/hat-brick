@@ -22,28 +22,23 @@ INCLUDE_DIRECTORIES(
 	"${PROJECT_SOURCE_DIR}/src/"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/XMCLib/inc/"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/CMSIS/Include/"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/CMSIS/Infineon/XMC1400_series/Include/"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/xmclib/CMSIS/Infineon/XMC1100_series/Include/"
 )
 
 # find source files
 SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/main.c"
 	"${PROJECT_SOURCE_DIR}/src/communication.c"
-	"${PROJECT_SOURCE_DIR}/src/max17260.c"
-	"${PROJECT_SOURCE_DIR}/src/bq24195.c"
 	"${PROJECT_SOURCE_DIR}/src/rpi.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom_data.c"
-	"${PROJECT_SOURCE_DIR}/src/rtc.c"
 	"${PROJECT_SOURCE_DIR}/src/voltage.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/startup/startup_xmc1.c"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/startup/startup_xmc1400.S"
+	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/startup/startup_xmc1100.S"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/i2c_fifo/i2c_fifo.c"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/os/coop_task.c"
-	"${PROJECT_SOURCE_DIR}/src/bricklib2/os/coop_task_pendsv_handler.S"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/bootloader/bootloader.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/bootloader/bootloader_xmc_irq.c"
@@ -76,7 +71,7 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/bricklib2/cmake/configs/config_comcu_add
 # define standard compile and linker flags
 SET(LINKER_SCRIPT_NAME xmc1_firmware_with_brickletboot.ld)
 SET(FLASH_ORIGIN 0x10003000) # Move flash origin above the bootloader
-SET(FLASH_EEPROM_LENGTH 1024) # Flash used for EEPROM emulation at end of flash (multiple of page size (256 byte))
+SET(FLASH_EEPROM_LENGTH 512) # Flash used for EEPROM emulation at end of flash (multiple of page size (256 byte))
 MATH(EXPR FLASH_LENGTH "${CHIP_FLASH_SIZE} - 8192 - ${FLASH_EEPROM_LENGTH}") # Remove bootloader size from flash size
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/bricklib2/cmake/configs/config_comcu_add_standard_flags.txt)
 

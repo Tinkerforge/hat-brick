@@ -25,20 +25,8 @@
 
 #include "xmc_gpio.h"
 
- // Switch pin, if high => on, low => off
-#define RPI_BATTERY_EN_PIN       2
-#define RPI_BATTERY_EN_PORT      XMC_GPIO_PORT1
-
-#define RPI_BOOST_EN_PIN         P1_6 // MIC2253, powers bricklet and rpi
-#define RPI_BRICKLET_EN_PIN      P2_11
-#define RPI_RPI_EN_PIN           P2_10
-
-#define RPI_LED_LOW_PIN          12
-#define RPI_LED_LOW_PORT         XMC_GPIO_PORT0
-#define RPI_LED_MID_PIN          5
-#define RPI_LED_MID_PORT         XMC_GPIO_PORT4
-#define RPI_LED_HIGH_PIN         1
-#define RPI_LED_HIGH_PORT        XMC_GPIO_PORT2
+#define RPI_BRICKLET_EN_PIN      P1_3
+#define RPI_RPI_EN_PIN           P1_2
 
 #define RPI_SLEEP_RTC_IRQ        1
 

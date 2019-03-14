@@ -28,17 +28,17 @@
 #define EEPROM_I2C_BAUDRATE         400000
 
 #define EEPROM_I2C_ADDRESS          (0x50 << 1)
-#define EEPROM_I2C                  XMC_I2C1_CH0
+#define EEPROM_I2C                  XMC_I2C0_CH1
 
-#define EEPROM_SCL_PIN              P0_2
-#define EEPROM_SCL_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT8
+#define EEPROM_SCL_PIN              P2_11
+#define EEPROM_SCL_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT6
 #define EEPROM_SCL_INPUT            XMC_USIC_CH_INPUT_DX1
-#define EEPROM_SCL_SOURCE           0 //DXA
+#define EEPROM_SCL_SOURCE           4 //DXE
 
-#define EEPROM_SDA_PIN              P0_3
-#define EEPROM_SDA_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT9
+#define EEPROM_SDA_PIN              P2_10
+#define EEPROM_SDA_PIN_MODE         XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT7
 #define EEPROM_SDA_INPUT            XMC_USIC_CH_INPUT_DX0
-#define EEPROM_SDA_SOURCE           1 //DXB
+#define EEPROM_SDA_SOURCE           5 //DXF
 
 #define EEPROM_TX_FIFO_SIZE         XMC_USIC_CH_FIFO_SIZE_16WORDS
 #define EEPROM_TX_FIFO_POINTER      16

@@ -28,15 +28,11 @@
 #define SYSTEM_TIMER_FREQUENCY 1000 // Use 1 kHz system timer
 #define SYSTEM_TIMER_IS_RAMFUNC
 
-#define UARTBB_TX_PIN P3_0
+#define UARTBB_TX_PIN P0_0
 
 #define FIRMWARE_VERSION_MAJOR 2
 #define FIRMWARE_VERSION_MINOR 0
 #define FIRMWARE_VERSION_REVISION 0
-
-#define I2C_FIFO_TIMEOUT 250
-#define I2C_FIFO_COOP_ENABLE
-#define I2C_FIFO_COOP_USE_MUTEX
 
 #include "config_custom_bootloader.h"
 

@@ -1,5 +1,5 @@
 /* hat-bricklet
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2019 Olaf Lüke <olaf@tinkerforge.com>
  *
  * communication.h: TFP protocol message handling
  *
@@ -34,14 +34,6 @@ void communication_tick(void);
 void communication_init(void);
 
 // Constants
-#define HAT_WEEKDAY_MONDAY 1
-#define HAT_WEEKDAY_TUESDAY 2
-#define HAT_WEEKDAY_WEDNESDAY 3
-#define HAT_WEEKDAY_THURSDAY 4
-#define HAT_WEEKDAY_FRIDAY 5
-#define HAT_WEEKDAY_SATURDAY 6
-#define HAT_WEEKDAY_SUNDAY 7
-
 #define HAT_BOOTLOADER_MODE_BOOTLOADER 0
 #define HAT_BOOTLOADER_MODE_FIRMWARE 1
 #define HAT_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -61,32 +53,12 @@ void communication_init(void);
 #define HAT_STATUS_LED_CONFIG_SHOW_STATUS 3
 
 // Function and callback IDs and structs
-#define FID_GET_BATTERY_STATISTICS 1
-#define FID_SET_POWER_OFF 2
-#define FID_GET_POWER_OFF 3
-#define FID_SET_TIME 4
-#define FID_GET_TIME 5
-#define FID_SET_BATTERY_PARAMETERS 6
-#define FID_GET_BATTERY_PARAMETERS 7
+#define FID_SET_SLEEP_MODE 1
+#define FID_GET_SLEEP_MODE 2
+#define FID_SET_BRICKLET_POWER 3
+#define FID_GET_BRICKLET_POWER 4
+#define FID_GET_VOLTAGES 5
 
-
-typedef struct {
-	TFPMessageHeader header;
-} __attribute__((__packed__)) GetBatteryStatistics;
-
-typedef struct {
-	TFPMessageHeader header;
-	bool battery_connected;
-	int32_t capacity_full;
-	int32_t capacity_nominal;
-	int32_t capacity_remaining;
-	int32_t percentage_charge;
-	int32_t voltage_battery;
-	int32_t voltage_usb;
-	int32_t voltage_dc;
-	int32_t current_flow;
-	int32_t temperature_battery;
-} __attribute__((__packed__)) GetBatteryStatistics_Response;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -95,11 +67,11 @@ typedef struct {
 	bool raspberry_pi_off;
 	bool bricklets_off;
 	bool enable_sleep_indicator;
-} __attribute__((__packed__)) SetPowerOff;
+} __attribute__((__packed__)) SetSleepMode;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetPowerOff;
+} __attribute__((__packed__)) GetSleepMode;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -108,63 +80,39 @@ typedef struct {
 	bool raspberry_pi_off;
 	bool bricklets_off;
 	bool enable_sleep_indicator;
-} __attribute__((__packed__)) GetPowerOff_Response;
+} __attribute__((__packed__)) GetSleepMode_Response;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint16_t year;
-	uint8_t month;
-	uint8_t day;
-	uint8_t hour;
-	uint8_t minute;
-	uint8_t second;
-	uint8_t weekday;
-} __attribute__((__packed__)) SetTime;
+	bool bricklet_power;
+} __attribute__((__packed__)) SetBrickletPower;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetTime;
+} __attribute__((__packed__)) GetBrickletPower;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint16_t year;
-	uint8_t month;
-	uint8_t day;
-	uint8_t hour;
-	uint8_t minute;
-	uint8_t second;
-	uint8_t weekday;
-} __attribute__((__packed__)) GetTime_Response;
+	bool bricklet_power;
+} __attribute__((__packed__)) GetBrickletPower_Response;
 
 typedef struct {
 	TFPMessageHeader header;
-	uint16_t nominal_capacity;
-	uint16_t charge_termination_current;
-	uint16_t empty_voltage;
-	uint16_t learned_parameters[5];
-} __attribute__((__packed__)) SetBatteryParameters;
+} __attribute__((__packed__)) GetVoltages;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetBatteryParameters;
-
-typedef struct {
-	TFPMessageHeader header;
-	uint16_t nominal_capacity;
-	uint16_t charge_termination_current;
-	uint16_t empty_voltage;
-	uint16_t learned_parameters[5];
-} __attribute__((__packed__)) GetBatteryParameters_Response;
+	uint16_t voltage_usb;
+	uint16_t voltage_dc;
+} __attribute__((__packed__)) GetVoltages_Response;
 
 
 // Function prototypes
-BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistics *data, GetBatteryStatistics_Response *response);
-BootloaderHandleMessageResponse set_power_off(const SetPowerOff *data);
-BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerOff_Response *response);
-BootloaderHandleMessageResponse set_time(const SetTime *data);
-BootloaderHandleMessageResponse get_time(const GetTime *data, GetTime_Response *response);
-BootloaderHandleMessageResponse set_battery_parameters(const SetBatteryParameters *data);
-BootloaderHandleMessageResponse get_battery_parameters(const GetBatteryParameters *data, GetBatteryParameters_Response *response);
+BootloaderHandleMessageResponse set_sleep_mode(const SetSleepMode *data);
+BootloaderHandleMessageResponse get_sleep_mode(const GetSleepMode *data, GetSleepMode_Response *response);
+BootloaderHandleMessageResponse set_bricklet_power(const SetBrickletPower *data);
+BootloaderHandleMessageResponse get_bricklet_power(const GetBrickletPower *data, GetBrickletPower_Response *response);
+BootloaderHandleMessageResponse get_voltages(const GetVoltages *data, GetVoltages_Response *response);
 
 // Callbacks
 

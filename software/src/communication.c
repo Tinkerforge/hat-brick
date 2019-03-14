@@ -1,5 +1,5 @@
 /* hat-bricklet
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2019 Olaf Lüke <olaf@tinkerforge.com>
  *
  * communication.c: TFP protocol message handling
  *
@@ -23,69 +23,39 @@
 
 #include "bricklib2/utility/communication_callback.h"
 #include "bricklib2/utility/util_definitions.h"
-#include "bricklib2/protocols/tfp/tfp.h"
 #include "bricklib2/hal/system_timer/system_timer.h"
+#include "bricklib2/protocols/tfp/tfp.h"
 
-#include "voltage.h"
-#include "max17260.h"
-#include "rtc.h"
+#include "configs/config_rpi.h"
 #include "rpi.h"
-
-#include "xmc_rtc.h"
+#include "voltage.h"
+#include "xmc_gpio.h"
 
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
 	switch(tfp_get_fid_from_message(message)) {
-		case FID_GET_BATTERY_STATISTICS: return get_battery_statistics(message, response);
-		case FID_SET_POWER_OFF:          return set_power_off(message);
-		case FID_GET_POWER_OFF:          return get_power_off(message, response);
-		case FID_SET_TIME:               return set_time(message);
-		case FID_GET_TIME:               return get_time(message, response);
-		case FID_SET_BATTERY_PARAMETERS: return set_battery_parameters(message);
-		case FID_GET_BATTERY_PARAMETERS: return get_battery_parameters(message, response);
-		default:                         return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
+		case FID_SET_SLEEP_MODE: return set_sleep_mode(message);
+		case FID_GET_SLEEP_MODE: return get_sleep_mode(message, response);
+		case FID_SET_BRICKLET_POWER: return set_bricklet_power(message);
+		case FID_GET_BRICKLET_POWER: return get_bricklet_power(message, response);
+		case FID_GET_VOLTAGES: return get_voltages(message, response);
+		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
 
 
-BootloaderHandleMessageResponse get_battery_statistics(const GetBatteryStatistics *data, GetBatteryStatistics_Response *response) {
-	response->header.length            = sizeof(GetBatteryStatistics_Response);
-	response->battery_connected        = max17260.battery_connected;
-	response->voltage_usb              = voltage_get_usb_voltage();
-	response->voltage_dc               = voltage_get_dc_voltage();
-
-	if(response->battery_connected) {
-		response->capacity_full        = max17260.capacity_full;
-		response->capacity_nominal     = max17260.capacity_nominal;
-		response->capacity_remaining   = max17260.capacity_remaining;
-		response->percentage_charge    = max17260.percentage_charge;
-		response->voltage_battery      = max17260.voltage_battery;
-		response->current_flow         = max17260.current_flow;
-		response->temperature_battery  = max17260.temperature_battery;
-	} else {
-		response->capacity_full        = 0;
-		response->capacity_nominal     = 0;
-		response->capacity_remaining   = 0;
-		response->percentage_charge    = 0;
-		response->voltage_battery      = 0;
-		response->current_flow         = 0;
-		response->temperature_battery  = 0;
-	}
-
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
-}
-
-BootloaderHandleMessageResponse set_power_off(const SetPowerOff *data) {
+BootloaderHandleMessageResponse set_sleep_mode(const SetSleepMode *data) {
 	rpi.power_off_delay_start  = system_timer_get_ms();
 	rpi.power_off_delay        = data->power_off_delay*1000;
 	rpi.power_off_duration     = data->power_off_duration*1000;
 	rpi.raspberry_pi_off       = data->raspberry_pi_off;
 	rpi.bricklets_off          = data->bricklets_off;
 	rpi.enable_sleep_indicator = data->enable_sleep_indicator;
+
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerOff_Response *response) {
-	response->header.length          = sizeof(GetPowerOff_Response);
+BootloaderHandleMessageResponse get_sleep_mode(const GetSleepMode *data, GetSleepMode_Response *response) {
+	response->header.length = sizeof(GetSleepMode_Response);
 	response->raspberry_pi_off       = rpi.raspberry_pi_off;
 	response->bricklets_off          = rpi.bricklets_off;
 	response->enable_sleep_indicator = rpi.enable_sleep_indicator;
@@ -105,77 +75,34 @@ BootloaderHandleMessageResponse get_power_off(const GetPowerOff *data, GetPowerO
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-BootloaderHandleMessageResponse set_time(const SetTime *data) {
-	if(data->year    < 2000 || data->year    > 2099 ||
-	   data->month   < 1    || data->month   > 12   ||
-	   data->day     < 1    || data->day     > 31   ||
-	                           data->hour    > 23   ||
-	                           data->minute  > 59   ||
-	                           data->second  > 59   ||
-	   data->weekday < 1    || data->weekday > 7) {
-		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+BootloaderHandleMessageResponse set_bricklet_power(const SetBrickletPower *data) {
+	rpi.bricklet_power = data->bricklet_power;
+
+	if(rpi.bricklet_power) {
+		XMC_GPIO_SetOutputHigh(RPI_BRICKLET_EN_PIN);
+	} else {
+		XMC_GPIO_SetOutputLow(RPI_BRICKLET_EN_PIN);
 	}
 
-	XMC_RTC_TIME_t t = {
-		.year       = data->year,
-		.month      = data->month,
-		.days       = data->day - 1,
-		.hours      = data->hour,
-		.minutes    = data->minute,
-		.seconds    = data->second,
-		.daysofweek = data->weekday
-	};
-	XMC_RTC_SetTime(&t);
-
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse get_time(const GetTime *data, GetTime_Response *response) {
-	response->header.length = sizeof(GetTime_Response);
-
-	XMC_RTC_TIME_t t;
-	XMC_RTC_GetTime(&t);
-	response->year    = t.year;
-	response->month   = t.month;
-	response->day     = t.days + 1;
-	response->hour    = t.hours;
-	response->minute  = t.minutes;
-	response->second  = t.seconds;
-	response->weekday = t.daysofweek;
+BootloaderHandleMessageResponse get_bricklet_power(const GetBrickletPower *data, GetBrickletPower_Response *response) {
+	response->header.length  = sizeof(GetBrickletPower_Response);
+	response->bricklet_power = rpi.bricklet_power;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-BootloaderHandleMessageResponse set_battery_parameters(const SetBatteryParameters *data) {
-	max17260.new_learned_parameters.rcomp0     = data->learned_parameters[0];
-	max17260.new_learned_parameters.tempco     = data->learned_parameters[1];
-	max17260.new_learned_parameters.fullcaprep = data->learned_parameters[2];
-	max17260.new_learned_parameters.cycles     = data->learned_parameters[3];
-	max17260.new_learned_parameters.fullcapnom = data->learned_parameters[4];
-	max17260.new_learned_parameters.designcap  = data->nominal_capacity;
-	max17260.new_learned_parameters.vempty     = data->empty_voltage;
-	max17260.new_learned_parameters.ichgterm   = data->charge_termination_current;
-
-	max17260.new_learned_parameters_valid      = true;
-
-	return HANDLE_MESSAGE_RESPONSE_EMPTY;
-}
-
-BootloaderHandleMessageResponse get_battery_parameters(const GetBatteryParameters *data, GetBatteryParameters_Response *response) {
-	response->header.length              = sizeof(GetBatteryParameters_Response);
-
-	response->learned_parameters[0]      = max17260.learned_parameters.rcomp0;
-	response->learned_parameters[1]      = max17260.learned_parameters.tempco;
-	response->learned_parameters[2]      = max17260.learned_parameters.fullcaprep;
-	response->learned_parameters[3]      = max17260.learned_parameters.cycles;
-	response->learned_parameters[4]      = max17260.learned_parameters.fullcapnom;
-	response->nominal_capacity           = max17260.learned_parameters.designcap;
-	response->empty_voltage              = max17260.learned_parameters.vempty;
-	response->charge_termination_current = max17260.learned_parameters.ichgterm;
+BootloaderHandleMessageResponse get_voltages(const GetVoltages *data, GetVoltages_Response *response) {
+	response->header.length = sizeof(GetVoltages_Response);
+	response->voltage_dc    = voltage.voltage_dc;
+	response->voltage_usb   = voltage.voltage_usb;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+#if 0
 
 void communication_tick(void) {
 	communication_callback_tick();
@@ -184,3 +111,5 @@ void communication_tick(void) {
 void communication_init(void) {
 	communication_callback_init();
 }
+
+#endif
