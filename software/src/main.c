@@ -1,7 +1,7 @@
-/* hat-bricklet
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+/* hat-brick
+ * Copyright (C) 2018-2019 Olaf Lüke <olaf@tinkerforge.com>
  *
- * main.c: Initialization for HAT Bricklet
+ * main.c: Initialization for HAT Brick
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,16 +36,14 @@
 
 int main(void) {
 	logging_init();
-	logd("Start HAT Bricklet\n\r");
+	logd("Start HAT Brick\n\r");
 
-//	communication_init();
 	rpi_init();
 	eeprom_init();
 	voltage_init();
 
 	while(true) {
 		bootloader_tick();
-//		communication_tick();
 		rpi_tick();
 		voltage_tick();
 	}

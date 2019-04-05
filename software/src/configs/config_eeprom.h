@@ -1,5 +1,5 @@
-/* hat-bricklet
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+/* hat-brick
+ * Copyright (C) 2018-2019 Olaf Lüke <olaf@tinkerforge.com>
  *
  * config_eeprom.c: Config for EEPROM Emulation
  *

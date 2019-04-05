@@ -1,4 +1,4 @@
-/* hat-bricklet
+/* hat-brick
  * Copyright (C) 2019 Olaf Lüke <olaf@tinkerforge.com>
  *
  * communication.c: TFP protocol message handling

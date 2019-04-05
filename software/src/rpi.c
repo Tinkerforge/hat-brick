@@ -1,4 +1,4 @@
-/* hat-bricklet
+/* hat-brick
  * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
  *
  * rpi.c: Driver for Raspberry PI eeprom simulation and IO

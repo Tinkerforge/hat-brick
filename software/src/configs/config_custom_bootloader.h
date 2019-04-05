@@ -1,8 +1,8 @@
-/* hat-bricklet
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+/* hat-brick
+ * Copyright (C) 2018-2019 Olaf Lüke <olaf@tinkerforge.com>
  *
  * config_custom_bootloader.h: Bootloader configurations for
- *                             HAT Bricklet
+ *                             HAT Brick
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
