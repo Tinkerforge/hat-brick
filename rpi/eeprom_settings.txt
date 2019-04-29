@@ -28,7 +28,7 @@ product_ver 0x001
 vendor "Tinkerforge GmbH"
 
 # ASCII product string (max 255 characters)
-product "HAT Bricklet"
+product "HAT Brick"
 
 
 ########################################################################
