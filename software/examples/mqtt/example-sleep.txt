@@ -1,0 +1,5 @@
+# Change XXYYZZ to the UID of your HAT Brick
+
+setup:
+	# Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
+	publish '{"power_off_delay": 2000, "power_off_duration": 1800000, "raspberry_pi_off": true, "bricklets_off": true, "enable_sleep_indicator": true}' to tinkerforge/request/hat_brick/XXYYZZ/set_sleep_mode 

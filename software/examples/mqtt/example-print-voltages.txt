@@ -1,0 +1,6 @@
+# Change XXYYZZ to the UID of your HAT Brick
+
+setup:
+	# Get current get voltages
+	subscribe to tinkerforge/response/hat_brick/XXYYZZ/get_voltages
+	publish '' to tinkerforge/request/hat_brick/XXYYZZ/get_voltages

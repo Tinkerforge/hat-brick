@@ -1,0 +1,19 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="XXYYZZ"(*Change XXYYZZ to the UID of your HAT Brick*)
+
+(*Create IPConnection and device object*)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+hat=NETNew["Tinkerforge.BrickHAT",uid,ipcon]
+ipcon@Connect[host,port]
+
+(*Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled*)
+hat@SetSleepMode[2000,1800000,True,True,True]
+
+(*Clean up*)
+ipcon@Disconnect[]
+ReleaseNETObject[hat]
+ReleaseNETObject[ipcon]
