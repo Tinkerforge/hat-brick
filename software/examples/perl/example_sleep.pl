@@ -15,7 +15,7 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Don't use device before ipcon is connected
 
 # Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-$hat->set_sleep_mode(2000, 1800000, 1, 1, 1);
+$hat->set_sleep_mode(2, 1800, 1, 1, 1);
 
 print "Press key to exit\n";
 <STDIN>;

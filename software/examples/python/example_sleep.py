@@ -16,7 +16,7 @@ if __name__ == "__main__":
     # Don't use device before ipcon is connected
 
     # Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-    hat.set_sleep_mode(2000, 1800000, True, True, True)
+    hat.set_sleep_mode(2, 1800, True, True, True)
 
     raw_input("Press key to exit\n") # Use input() in Python 3
     ipcon.disconnect()

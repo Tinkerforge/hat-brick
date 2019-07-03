@@ -13,7 +13,7 @@ function matlab_example_sleep()
     % Don't use device before ipcon is connected
 
     % Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-    hat.setSleepMode(2000, 1800000, true, true, true);
+    hat.setSleepMode(2, 1800, true, true, true);
 
     input('Press key to exit\n', 's');
     ipcon.disconnect();

@@ -16,7 +16,7 @@ class Example
 		// Don't use device before ipcon is connected
 
 		// Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-		hat.SetSleepMode(2000, 1800000, true, true, true);
+		hat.SetSleepMode(2, 1800, true, true, true);
 
 		Console.WriteLine("Press enter to exit");
 		Console.ReadLine();

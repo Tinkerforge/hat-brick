@@ -19,7 +19,7 @@ Notebook[{
    RowBox[{"
 "}],
    RowBox[{"(*", "Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled", "*)"}],
-   RowBox[{"hat", "@", RowBox[{"SetSleepMode", "[", RowBox[{"2000", ",", "1800000", ",", "True", ",", "True", ",", "True"}], "]"}]}],
+   RowBox[{"hat", "@", RowBox[{"SetSleepMode", "[", RowBox[{"2", ",", "1800", ",", "True", ",", "True", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"(*", "Clean up", "*)"}],

@@ -13,8 +13,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
                                           // Don't use device before ipcon is connected.
 
-    // Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-    hat.set_sleep_mode(2, 1800, true, true, true);
+    // Get current get voltages.
+    let voltages = hat.get_voltages().recv()?;
+
+    println!("Voltage USB: {} V", voltages.voltage_usb as f32 / 1000.0);
+    println!("Voltage DC: {} V", voltages.voltage_dc as f32 / 1000.0);
 
     println!("Press enter to exit.");
     let mut _input = String::new();

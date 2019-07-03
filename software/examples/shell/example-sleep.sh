@@ -4,4 +4,4 @@
 uid=XXYYZZ # Change XXYYZZ to the UID of your HAT Brick
 
 # Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-tinkerforge call hat-brick $uid set-sleep-mode 2000 1800000 true true true
+tinkerforge call hat-brick $uid set-sleep-mode 2 1800 true true true

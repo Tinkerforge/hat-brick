@@ -24,7 +24,7 @@ int main(void) {
 	// Don't use device before ipcon is connected
 
 	// Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-	hat_set_sleep_mode(&hat, 2000, 1800000, true, true, true);
+	hat_set_sleep_mode(&hat, 2, 1800, true, true, true);
 
 	printf("Press key to exit\n");
 	getchar();

@@ -17,7 +17,7 @@ ipcon.connect(HOST, PORT,
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function (connectReason) {
         // Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-        hat.setSleepMode(2000, 1800000, true, true, true);
+        hat.setSleepMode(2, 1800, true, true, true);
     }
 );
 
