@@ -38,6 +38,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_BRICKLET_POWER: return set_bricklet_power(message);
 		case FID_GET_BRICKLET_POWER: return get_bricklet_power(message, response);
 		case FID_GET_VOLTAGES: return get_voltages(message, response);
+		case FID_SET_VOLTAGES_CALLBACK_CONFIGURATION: return set_voltages_callback_configuration(message);
+		case FID_GET_VOLTAGES_CALLBACK_CONFIGURATION: return get_voltages_callback_configuration(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -102,7 +104,60 @@ BootloaderHandleMessageResponse get_voltages(const GetVoltages *data, GetVoltage
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-#if 0
+BootloaderHandleMessageResponse set_voltages_callback_configuration(const SetVoltagesCallbackConfiguration *data) {
+	voltage.period              = data->period;
+	voltage.value_has_to_change = data->value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_voltages_callback_configuration(const GetVoltagesCallbackConfiguration *data, GetVoltagesCallbackConfiguration_Response *response) {
+	response->header.length       = sizeof(GetVoltagesCallbackConfiguration_Response);
+	response->period              = voltage.period;
+	response->value_has_to_change = voltage.value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+
+
+bool handle_voltages_callback(void) {
+	static bool is_buffered = false;
+	static Voltages_Callback cb;
+
+	static uint32_t last_time = 0;
+	static uint16_t last_voltage_usb = 0;
+	static uint16_t last_voltage_dc  = 0;
+
+	if(!is_buffered) {
+		if(voltage.period == 0 || !system_timer_is_time_elapsed_ms(last_time, voltage.period)) {
+			return false;
+		}
+
+		if(voltage.value_has_to_change && last_voltage_dc == voltage.voltage_dc && last_voltage_usb == voltage.voltage_usb) {
+			return false;
+		}
+
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(Voltages_Callback), FID_CALLBACK_VOLTAGES);
+		cb.voltage_dc    = voltage.voltage_dc;
+		cb.voltage_usb   = voltage.voltage_usb;
+
+		last_voltage_dc  = cb.voltage_dc;
+		last_voltage_usb = cb.voltage_usb;
+
+		last_time = system_timer_get_ms();
+	}
+
+	if(bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
+		bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t*)&cb, sizeof(Voltages_Callback));
+		is_buffered = false;
+		return true;
+	} else {
+		is_buffered = true;
+	}
+
+	return false;
+}
 
 void communication_tick(void) {
 	communication_callback_tick();
@@ -111,5 +166,3 @@ void communication_tick(void) {
 void communication_init(void) {
 	communication_callback_init();
 }
-
-#endif

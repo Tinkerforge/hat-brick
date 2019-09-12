@@ -58,7 +58,10 @@ void communication_init(void);
 #define FID_SET_BRICKLET_POWER 3
 #define FID_GET_BRICKLET_POWER 4
 #define FID_GET_VOLTAGES 5
+#define FID_SET_VOLTAGES_CALLBACK_CONFIGURATION 6
+#define FID_GET_VOLTAGES_CALLBACK_CONFIGURATION 7
 
+#define FID_CALLBACK_VOLTAGES 8
 
 typedef struct {
 	TFPMessageHeader header;
@@ -106,6 +109,27 @@ typedef struct {
 	uint16_t voltage_dc;
 } __attribute__((__packed__)) GetVoltages_Response;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) SetVoltagesCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetVoltagesCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) GetVoltagesCallbackConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t voltage_usb;
+	uint16_t voltage_dc;
+} __attribute__((__packed__)) Voltages_Callback;
 
 // Function prototypes
 BootloaderHandleMessageResponse set_sleep_mode(const SetSleepMode *data);
@@ -113,13 +137,16 @@ BootloaderHandleMessageResponse get_sleep_mode(const GetSleepMode *data, GetSlee
 BootloaderHandleMessageResponse set_bricklet_power(const SetBrickletPower *data);
 BootloaderHandleMessageResponse get_bricklet_power(const GetBrickletPower *data, GetBrickletPower_Response *response);
 BootloaderHandleMessageResponse get_voltages(const GetVoltages *data, GetVoltages_Response *response);
+BootloaderHandleMessageResponse set_voltages_callback_configuration(const SetVoltagesCallbackConfiguration *data);
+BootloaderHandleMessageResponse get_voltages_callback_configuration(const GetVoltagesCallbackConfiguration *data, GetVoltagesCallbackConfiguration_Response *response);
 
 // Callbacks
-
+bool handle_voltages_callback(void);
 
 #define COMMUNICATION_CALLBACK_TICK_WAIT_MS 1
-#define COMMUNICATION_CALLBACK_HANDLER_NUM 0
+#define COMMUNICATION_CALLBACK_HANDLER_NUM 1
 #define COMMUNICATION_CALLBACK_LIST_INIT \
+	handle_voltages_callback, \
 
 
 #endif

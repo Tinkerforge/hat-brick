@@ -23,12 +23,16 @@
 #define VOLTAGE_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct {
-    uint32_t voltage_dc;
-    uint32_t voltage_usb;
+	uint32_t voltage_dc;
+	uint32_t voltage_usb;
 
-    uint32_t last_measurement;
+	uint32_t last_measurement;
+
+	uint32_t period;
+	bool value_has_to_change;
 } Voltage;
 
 extern Voltage voltage;

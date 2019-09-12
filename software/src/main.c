@@ -41,10 +41,12 @@ int main(void) {
 	rpi_init();
 	eeprom_init();
 	voltage_init();
+	communication_init();
 
 	while(true) {
 		bootloader_tick();
 		rpi_tick();
 		voltage_tick();
+		communication_tick();
 	}
 }

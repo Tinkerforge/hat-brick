@@ -1,2 +1,5 @@
 2019-07-02: 2.0.0 (0ac231b)
 - Initial version
+
+2019-09-12: 2.0.1 (TBD)
+- Add DC/USB voltage callback
