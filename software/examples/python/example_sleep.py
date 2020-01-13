@@ -18,5 +18,5 @@ if __name__ == "__main__":
     # Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
     hat.set_sleep_mode(2, 1800, True, True, True)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()
