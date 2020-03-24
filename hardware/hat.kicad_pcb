@@ -1,4 +1,4 @@
-(kicad_pcb (version 20171130) (host pcbnew 5.0.2-bee76a0~70~ubuntu18.04.1)
+(kicad_pcb (version 20171130) (host pcbnew 5.1.5-52549c5~84~ubuntu18.04.1)
 
   (general
     (thickness 1.6)
@@ -20,7 +20,7 @@
   )
 
   (layers
-    (0 F.Cu signal)
+    (0 F.Cu signal hide)
     (1 GND signal hide)
     (2 VCC signal hide)
     (31 B.Cu signal hide)
@@ -58,8 +58,6 @@
     (zone_clearance 0.2)
     (zone_45_only no)
     (trace_min 0.15)
-    (segment_width 0.2)
-    (edge_width 0.09906)
     (via_size 0.55)
     (via_drill 0.25)
     (via_min_size 0.5)
@@ -71,6 +69,8 @@
     (uvias_allowed no)
     (uvia_min_size 0.2)
     (uvia_min_drill 0.1)
+    (edge_width 0.09906)
+    (segment_width 0.2)
     (pcb_text_width 0.3048)
     (pcb_text_size 1.524 2.032)
     (mod_edge_width 0.381)
@@ -82,7 +82,7 @@
     (solder_mask_min_width 0.25)
     (aux_axis_origin 166.2 25.4)
     (grid_origin 166.2 25.4)
-    (visible_elements FFFEDFFF)
+    (visible_elements FFFF5FFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions true)
@@ -3392,7 +3392,7 @@
     (fp_text reference R201 (at 0.05 -0.225 90) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
-    (fp_text value 27 (at 0.05 0.375 90) (layer B.Fab)
+    (fp_text value 27k (at 0.05 0.375 90) (layer B.Fab)
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
     (fp_line (start -1.45034 -0.65024) (end -1.45034 0.65024) (layer B.Fab) (width 0.001))
