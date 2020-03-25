@@ -1448,7 +1448,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 1050 2400 1050
 Wire Wire Line
-	2400 750  2400 1050
+	2400 750  2400 900 
 Wire Wire Line
 	2400 2350 2200 2350
 Wire Wire Line
@@ -1484,7 +1484,7 @@ Connection ~ 7750 3850
 Wire Wire Line
 	7600 5350 7800 5350
 Wire Wire Line
-	7800 5350 7800 4050
+	7800 5350 7800 5200
 Wire Wire Line
 	7800 4050 7600 4050
 Wire Wire Line
@@ -1650,9 +1650,9 @@ Wire Wire Line
 Wire Wire Line
 	4850 4350 5000 4350
 Wire Wire Line
-	2400 2350 2400 4050
+	2400 2350 2400 3900
 Wire Wire Line
-	2400 4050 2400 5350
+	2400 4050 2400 5200
 Wire Wire Line
 	2350 3850 2350 5150
 Wire Wire Line
@@ -1662,21 +1662,165 @@ Wire Wire Line
 Wire Wire Line
 	7750 3850 7750 5150
 Wire Wire Line
-	7800 4050 7800 2350
+	7800 4050 7800 3900
 Wire Wire Line
-	7800 2350 7800 1050
+	7800 2350 7800 2200
 Wire Wire Line
 	2300 850  2200 850 
 Wire Wire Line
-	2400 1050 2400 2350
+	2400 1050 2400 2200
 Wire Wire Line
 	7700 850  7750 850 
 Wire Wire Line
-	7800 1050 7800 800 
+	7800 1050 7800 900 
 Connection ~ 2900 1950
 Wire Wire Line
 	2800 1950 2900 1950
 Wire Wire Line
 	3100 1950 3000 1950
 Connection ~ 3000 1950
+$Comp
+L tinkerforge:Rs R303
+U 1 1 5E9B2D70
+P 2900 4000
+F 0 "R303" H 2953 4031 31  0000 L CNN
+F 1 "DNP" H 2953 3969 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 2900 4000 60  0001 C CNN
+F 3 "" H 2900 4000 60  0000 C CNN
+	1    2900 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 4250 2900 4100
+$Comp
+L tinkerforge:Rs R304
+U 1 1 5E9E1B16
+P 2900 5300
+F 0 "R304" H 2953 5331 31  0000 L CNN
+F 1 "DNP" H 2953 5269 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 2900 5300 60  0001 C CNN
+F 3 "" H 2900 5300 60  0000 C CNN
+	1    2900 5300
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R302
+U 1 1 5E9E3A8B
+P 2900 2300
+F 0 "R302" H 2953 2331 31  0000 L CNN
+F 1 "DNP" H 2953 2269 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 2900 2300 60  0001 C CNN
+F 3 "" H 2900 2300 60  0000 C CNN
+	1    2900 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R301
+U 1 1 5E9E5F26
+P 2900 1000
+F 0 "R301" H 2953 1031 31  0000 L CNN
+F 1 "DNP" H 2953 969 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 2900 1000 60  0001 C CNN
+F 3 "" H 2900 1000 60  0000 C CNN
+	1    2900 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R305
+U 1 1 5E9E6BCA
+P 8300 1000
+F 0 "R305" H 8353 1031 31  0000 L CNN
+F 1 "DNP" H 8353 969 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 8300 1000 60  0001 C CNN
+F 3 "" H 8300 1000 60  0000 C CNN
+	1    8300 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R306
+U 1 1 5E9E995F
+P 8300 2300
+F 0 "R306" H 8353 2331 31  0000 L CNN
+F 1 "DNP" H 8353 2269 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 8300 2300 60  0001 C CNN
+F 3 "" H 8300 2300 60  0000 C CNN
+	1    8300 2300
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R307
+U 1 1 5E9EA781
+P 8300 4000
+F 0 "R307" H 8353 4031 31  0000 L CNN
+F 1 "DNP" H 8353 3969 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 8300 4000 60  0001 C CNN
+F 3 "" H 8300 4000 60  0000 C CNN
+	1    8300 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:Rs R308
+U 1 1 5E9EBD21
+P 8300 5300
+F 0 "R308" H 8353 5331 31  0000 L CNN
+F 1 "DNP" H 8353 5269 31  0000 L CNN
+F 2 "kicad-libraries:R0402F" H 8300 5300 60  0001 C CNN
+F 3 "" H 8300 5300 60  0000 C CNN
+	1    8300 5300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8300 5550 8300 5400
+Wire Wire Line
+	8300 5200 7800 5200
+Connection ~ 7800 5200
+Wire Wire Line
+	7800 5200 7800 4050
+Wire Wire Line
+	8300 3900 7800 3900
+Connection ~ 7800 3900
+Wire Wire Line
+	7800 3900 7800 2350
+Wire Wire Line
+	8300 4250 8300 4100
+Wire Wire Line
+	8300 2550 8300 2400
+Wire Wire Line
+	8300 2200 7800 2200
+Connection ~ 7800 2200
+Wire Wire Line
+	7800 2200 7800 1050
+Wire Wire Line
+	8300 1250 8300 1100
+Wire Wire Line
+	8300 900  7800 900 
+Connection ~ 7800 900 
+Wire Wire Line
+	7800 900  7800 800 
+Wire Wire Line
+	2900 900  2400 900 
+Connection ~ 2400 900 
+Wire Wire Line
+	2400 900  2400 1050
+Wire Wire Line
+	2900 1100 2900 1250
+Wire Wire Line
+	2900 2200 2400 2200
+Connection ~ 2400 2200
+Wire Wire Line
+	2400 2200 2400 2350
+Wire Wire Line
+	2900 2400 2900 2550
+Wire Wire Line
+	2900 3900 2400 3900
+Connection ~ 2400 3900
+Wire Wire Line
+	2400 3900 2400 4050
+Wire Wire Line
+	2900 5200 2400 5200
+Connection ~ 2400 5200
+Wire Wire Line
+	2400 5200 2400 5350
+Wire Wire Line
+	2900 5400 2900 5550
 $EndSCHEMATC
