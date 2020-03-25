@@ -20,10 +20,10 @@
   )
 
   (layers
-    (0 F.Cu signal hide)
+    (0 F.Cu signal)
     (1 GND signal hide)
-    (2 VCC signal)
-    (31 B.Cu signal)
+    (2 VCC signal hide)
+    (31 B.Cu signal hide)
     (32 B.Adhes user)
     (33 F.Adhes user)
     (34 B.Paste user)
@@ -45,7 +45,7 @@
   )
 
   (setup
-    (last_trace_width 0.7)
+    (last_trace_width 0.15)
     (user_trace_width 0.15)
     (user_trace_width 0.2)
     (user_trace_width 0.25)
@@ -79,10 +79,9 @@
     (pad_size 2.55016 2.70002)
     (pad_drill 0.6)
     (pad_to_mask_clearance 0)
-    (solder_mask_min_width 0.25)
     (aux_axis_origin 166.2 25.4)
     (grid_origin 166.2 25.4)
-    (visible_elements FFFC5FFF)
+    (visible_elements FFFCDFFF)
     (pcbplotparams
       (layerselection 0x010fc_ffffffff)
       (usegerberextensions true)
@@ -4991,8 +4990,6 @@
   (segment (start 228.2 57.05) (end 228.2 57.7) (width 0.25) (layer F.Cu) (net 1) (status 400000))
   (segment (start 228.2 57.7) (end 228 57.9) (width 0.25) (layer F.Cu) (net 1) (tstamp 5C7071CE))
   (via (at 228 57.9) (size 0.7) (drill 0.25) (layers F.Cu B.Cu) (net 1))
-  (segment (start 227.40246 43.68234) (end 227.40246 41.75246) (width 0.3) (layer B.Cu) (net 124) (status C00000))
-  (segment (start 227.40246 41.75246) (end 227.35 41.7) (width 0.3) (layer B.Cu) (net 124) (tstamp 5C74CB9D) (status C00000))
   (segment (start 223.375 35.55108) (end 223.80108 35.55108) (width 0.15) (layer B.Cu) (net 1) (status 400000))
   (segment (start 223.80108 35.55108) (end 224 35.75) (width 0.15) (layer B.Cu) (net 1) (tstamp 5C751070))
   (segment (start 223.375 35.0507) (end 223.8507 35.0507) (width 0.15) (layer B.Cu) (net 1) (status 400000))
@@ -7609,6 +7606,8 @@
   (segment (start 177.98 74.8) (end 177.35 74.8) (width 0.3) (layer F.Cu) (net 123))
   (segment (start 178.15 75.845) (end 178.15 74.97) (width 0.3) (layer F.Cu) (net 123))
   (segment (start 178.15 74.97) (end 177.98 74.8) (width 0.3) (layer F.Cu) (net 123))
+  (segment (start 227.40246 43.68234) (end 227.40246 41.75246) (width 0.3) (layer B.Cu) (net 124) (status C00000))
+  (segment (start 227.40246 41.75246) (end 227.35 41.7) (width 0.3) (layer B.Cu) (net 124) (tstamp 5C74CB9D) (status C00000))
   (segment (start 228.8 41.75) (end 227.45 41.75) (width 0.3) (layer B.Cu) (net 124))
   (segment (start 227.45 41.75) (end 227.4 41.7) (width 0.3) (layer B.Cu) (net 124))
 
