@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected.
 
     // Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
-    hat.set_sleep_mode(2, 1800, true, true, true);
+    hat.set_sleep_mode(2, 1800, true, true, true).recv()?;
 
     println!("Press enter to exit.");
     let mut _input = String::new();
