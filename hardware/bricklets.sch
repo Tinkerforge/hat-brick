@@ -5,11 +5,11 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 3
 Title "HAT Brick"
-Date "2019-07-01"
-Rev "1.4"
+Date "2020-05-15"
+Rev "1.5"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
-Comment2 "Copyright (©) 2019, B.Nordmeyer <bastian@tinkerforge.com>"
+Comment2 "Copyright (©) 2020, B.Nordmeyer <bastian@tinkerforge.com>"
 Comment3 ""
 Comment4 ""
 $EndDescr

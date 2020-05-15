@@ -5,11 +5,11 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 3
 Title "HAT Brick"
-Date "2019-07-01"
-Rev "1.4"
+Date "2020-05-15"
+Rev "1.5"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
-Comment2 "Copyright (©) 2019, B.Nordmeyer <bastian@tinkerforge.com>"
+Comment2 "Copyright (©) 2020, B.Nordmeyer <bastian@tinkerforge.com>"
 Comment3 ""
 Comment4 ""
 $EndDescr
@@ -436,7 +436,7 @@ RASP-GP
 Text GLabel 10550 5200 2    39   Output ~ 0
 RASP-GP
 Text Notes 600  7700 0    39   ~ 0
-Copyright Tinkerforge GmbH 2019.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions
+Copyright Tinkerforge GmbH 2020.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions
 $Comp
 L tinkerforge:C C103
 U 1 1 5B38A2DF
