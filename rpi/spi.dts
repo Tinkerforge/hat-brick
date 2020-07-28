@@ -4,26 +4,27 @@
 / {
 	compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709";
 
-    fragment@0
-    {
-        target = <&spi0>;
-        __overlay__
-        {
-            status = "okay";
-            pinctrl-0 = <&spi0_pins>;
+	fragment@0
+	{
+		target = <&spi0>;
+		__overlay__
+		{
+			status = "okay";
+			pinctrl-0 = <&spi0_pins>;
+			cs-gpios = <&gpio 8 1>;
   
-            spidev@0
-            {
-                status = "okay";
-                compatible = "spidev";
-                spi-max-frequency = <1400000>;
-            };
+			spidev@0
+			{
+				status = "okay";
+				compatible = "spidev";
+				spi-max-frequency = <1400000>;
+			};
 
-            spidev@1
-            {
-                status = "disabled";
-            };
-        };
+			spidev@1
+			{
+				status = "disabled";
+			};
+		};
 	};
 
 	fragment@1
@@ -42,6 +43,16 @@
 				compatible = "nxp,pcf8523";
 				reg = <0x68>;
 				status = "okay";
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&gpio>;
+		frag1: __overlay__ {
+			spi0_cs_pins: spi0_cs_pins {
+				brcm,pins = <8>;
+				brcm,function = <1>;
 			};
 		};
 	};
