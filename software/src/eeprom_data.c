@@ -79,7 +79,7 @@
 //   dtc -@ -I dts -O dtb -o spi.dtb spi.dts
 //   eepmake eeprom_settings.txt hat_bricklet.eep spi.dtb
 
-// and the eepom_data array is created with:
+// and the eeprom_data array is created with:
 //   #!/usr/bin/env python
 //   print('const uint8_t eeprom_data[] = ' + str(map(ord, open('hat_bricklet.eep').read())).replace('[', '{').replace(']', '}') + ';')
 
