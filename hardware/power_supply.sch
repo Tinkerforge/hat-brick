@@ -5,8 +5,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 3
 Title "HAT Brick"
-Date "2020-05-15"
-Rev "1.5"
+Date "2020-08-25"
+Rev "1.6"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
 Comment2 "Copyright (©) 2020, B.Nordmeyer <bastian@tinkerforge.com>"
@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Text Notes 8650 6350 0    40   ~ 0
-Copyright Tinkerforge GmbH 2018.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions\n
+Copyright Tinkerforge GmbH 2020.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions\n
 $Comp
 L tinkerforge:GND #PWR025
 U 1 1 4D776A2F
@@ -1099,45 +1099,61 @@ Wire Wire Line
 $Comp
 L tinkerforge:Rs R212
 U 1 1 5E82B186
-P 7650 3650
-F 0 "R212" V 7700 3650 31  0000 C CNN
-F 1 "56k" V 7650 3650 31  0000 C CNN
-F 2 "kicad-libraries:R0603F" H 7650 3650 60  0001 C CNN
-F 3 "" H 7650 3650 60  0000 C CNN
-	1    7650 3650
+P 7650 4200
+F 0 "R212" V 7700 4200 31  0000 C CNN
+F 1 "5k1" V 7650 4200 31  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 7650 4200 60  0001 C CNN
+F 3 "" H 7650 4200 60  0000 C CNN
+	1    7650 4200
 	1    0    0    -1  
 $EndComp
 $Comp
 L tinkerforge:Rs R213
 U 1 1 5E832CF1
-P 7750 3650
-F 0 "R213" V 7800 3650 31  0000 C CNN
-F 1 "56k" V 7750 3650 31  0000 C CNN
-F 2 "kicad-libraries:R0603F" H 7750 3650 60  0001 C CNN
-F 3 "" H 7750 3650 60  0000 C CNN
-	1    7750 3650
+P 7750 4200
+F 0 "R213" V 7800 4200 31  0000 C CNN
+F 1 "5k1" V 7750 4200 31  0000 C CNN
+F 2 "kicad-libraries:R0603F" H 7750 4200 60  0001 C CNN
+F 3 "" H 7750 4200 60  0000 C CNN
+	1    7750 4200
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	7550 3800 7650 3800
 Wire Wire Line
-	7650 3800 7650 3750
-Wire Wire Line
 	7550 3900 7750 3900
-Wire Wire Line
-	7750 3900 7750 3750
 Wire Wire Line
 	7550 4000 8100 4000
 Wire Wire Line
-	7550 3500 7650 3500
+	7550 3500 8100 3500
+$Comp
+L tinkerforge:GND #PWR?
+U 1 1 5F47E2AF
+P 7650 4350
+F 0 "#PWR?" H 7650 4350 30  0001 C CNN
+F 1 "GND" H 7650 4280 30  0001 C CNN
+F 2 "" H 7650 4350 60  0001 C CNN
+F 3 "" H 7650 4350 60  0001 C CNN
+	1    7650 4350
+	1    0    0    -1  
+$EndComp
+$Comp
+L tinkerforge:GND #PWR?
+U 1 1 5F47E5AF
+P 7750 4350
+F 0 "#PWR?" H 7750 4350 30  0001 C CNN
+F 1 "GND" H 7750 4280 30  0001 C CNN
+F 2 "" H 7750 4350 60  0001 C CNN
+F 3 "" H 7750 4350 60  0001 C CNN
+	1    7750 4350
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	7750 3550 7750 3500
-Connection ~ 7750 3500
+	7650 4350 7650 4300
 Wire Wire Line
-	7750 3500 8100 3500
+	7750 4350 7750 4300
 Wire Wire Line
-	7650 3550 7650 3500
-Connection ~ 7650 3500
+	7650 4100 7650 3800
 Wire Wire Line
-	7650 3500 7750 3500
+	7750 3900 7750 4100
 $EndSCHEMATC
