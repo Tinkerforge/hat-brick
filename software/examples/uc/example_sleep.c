@@ -11,10 +11,8 @@ void example_setup(TF_HalContext *hal) {
 	// Create device object
 	check(tf_hat_create(&hat, UID, hal), "create device object");
 
-
 	// Turn Raspberry Pi and Bricklets off in 2 seconds for 30 minutes with sleep indicator enabled
 	check(tf_hat_set_sleep_mode(&hat, 2, 1800, true, true, true), "call set_sleep_mode");
-
 }
 
 void example_loop(TF_HalContext *hal) {
