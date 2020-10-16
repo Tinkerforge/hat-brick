@@ -23,8 +23,8 @@ void example_setup(TF_HalContext *hal) {
 	uint16_t voltage_usb, voltage_dc;
 	check(tf_hat_get_voltages(&hat, &voltage_usb, &voltage_dc), "get get voltages");
 
-	tf_hal_printf("Voltage USB: %d 1/%d V\n", voltage_usb, 1000.0);
-	tf_hal_printf("Voltage DC: %d 1/%d V\n", voltage_dc, 1000.0);
+	tf_hal_printf("Voltage USB: %d 1/%d V\n", voltage_usb, 1000);
+	tf_hal_printf("Voltage DC: %d 1/%d V\n", voltage_dc, 1000);
 }
 
 void example_loop(TF_HalContext *hal) {
