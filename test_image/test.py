@@ -10,6 +10,7 @@ PORT = 4223
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.brick_hat import BrickHAT
 from tinkerforge.brick_hat_zero import BrickHATZero
+from tinkerforge.bricklet_unknown import BrickletUnknown
 
 import subprocess
 import time
@@ -27,7 +28,8 @@ def fail(s):
     print(colored(s, 'red'))
     print(colored('--> TEST FAILED <--', 'red', attrs=['bold', 'blink']))
     sys.exit(1)
-        
+
+ipcon = None
 hat_type = None
 enum_done = False
 enum_count = 0
@@ -40,6 +42,7 @@ enums_hat_zero = ['a', 'b', 'c', 'd', 'e']
 
 def cb_enumerate(uid, connected_uid, position, hardware_version, firmware_version, device_identifier, enumeration_type):
 #    print(uid, connected_uid, position, hardware_version, firmware_version, device_identifier, enumeration_type)
+    global ipcon
     global enum_done
     global hat_type
     global enum_count
@@ -60,7 +63,13 @@ def cb_enumerate(uid, connected_uid, position, hardware_version, firmware_versio
                 hat_uid = uid
                 ok('Found HAT Brick')
             else:
-                ok('Found Bricklet at port {0}'.format(position))
+                unknown = BrickletUnknown(uid, ipcon)
+                try:
+                    uid = unknown.get_identity().uid
+                except:
+                    fail('Bricklet at port {0} did not respond'.format(position))
+
+                ok('Found Bricklet {0} at port {1}'.format(uid, position))
             if enum_count == 9:
                 enum_done = True
     elif hat_type == 1:
@@ -76,11 +85,19 @@ def cb_enumerate(uid, connected_uid, position, hardware_version, firmware_versio
                 hat_uid = uid
                 ok('Found HAT Zero Brick')
             else:
-                ok('Found Bricklet at port {0}'.format(position))
+                unknown = BrickletUnknown(uid, ipcon)
+                try:
+                    uid = unknown.get_identity().uid
+                except:
+                    fail('Bricklet at port {0} did not respond'.format(position))
+
+                ok('Found Bricklet {0} at port {1}'.format(uid, position))
             if enum_count == 5:
                 enum_done = True
 
 if __name__ == "__main__":
+    print('v2')
+
     try:
         product_id =  open('/proc/device-tree/hat/product_id').read().replace('\0', '')
     except:
@@ -97,7 +114,7 @@ if __name__ == "__main__":
         fail('Unknown product id: {0}'.format(product_id))
 
     ipcon = IPConnection()
-    ipcon.connect(HOST, PORT) 
+    ipcon.connect(HOST, PORT)
 
     ipcon.register_callback(IPConnection.CALLBACK_ENUMERATE, cb_enumerate)
     ipcon.enumerate()
