@@ -39,8 +39,8 @@
 			clock-frequency = <100000>;
 			status = "okay";
 
-			pcf8523@68 {
-				compatible = "nxp,pcf8523";
+			ds1307@68 {
+				compatible = "dallas,ds1307";
 				reg = <0x68>;
 				status = "okay";
 			};

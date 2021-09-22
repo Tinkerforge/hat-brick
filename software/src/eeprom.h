@@ -1,5 +1,5 @@
 /* hat-brick
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2018, 2021 Olaf Lüke <olaf@tinkerforge.com>
  *
  * eeprom.h: EEPROM Emulation
  *
@@ -22,6 +22,22 @@
 #ifndef EEPROM_H
 #define EEPROM_H
 
+#include <stdint.h>
+
+
+#define CALIBRATION_PAGE 1
+#define CALIBRATION_MAGIC 0x12345678
+#define CALIBRATION_MAGIC_POS 0
+#define CALIBRATION_RTC_POS 1
+
+typedef struct {
+    uint8_t rtc_driver;
+} EEPROM;
+
+extern EEPROM eeprom;
+
+void eeprom_settings_write(void);
+void eeprom_settings_read(void);
 void eeprom_init(void);
 
 #endif

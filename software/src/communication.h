@@ -1,5 +1,5 @@
-/* hat-brick
- * Copyright (C) 2019 Olaf Lüke <olaf@tinkerforge.com>
+/* hat-bricklet
+ * Copyright (C) 2019, 2021 Olaf Lüke <olaf@tinkerforge.com>
  *
  * communication.h: TFP protocol message handling
  *
@@ -34,6 +34,10 @@ void communication_tick(void);
 void communication_init(void);
 
 // Constants
+
+#define HAT_RTC_DRIVER_PCF8523T 0
+#define HAT_RTC_DRIVER_DS1338Z 1
+
 #define HAT_BOOTLOADER_MODE_BOOTLOADER 0
 #define HAT_BOOTLOADER_MODE_FIRMWARE 1
 #define HAT_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -60,6 +64,8 @@ void communication_init(void);
 #define FID_GET_VOLTAGES 5
 #define FID_SET_VOLTAGES_CALLBACK_CONFIGURATION 6
 #define FID_GET_VOLTAGES_CALLBACK_CONFIGURATION 7
+#define FID_SET_RTC_DRIVER 9
+#define FID_GET_RTC_DRIVER 10
 
 #define FID_CALLBACK_VOLTAGES 8
 
@@ -131,6 +137,21 @@ typedef struct {
 	uint16_t voltage_dc;
 } __attribute__((__packed__)) Voltages_Callback;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t rtc_driver;
+} __attribute__((__packed__)) SetRTCDriver;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetRTCDriver;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t rtc_driver;
+} __attribute__((__packed__)) GetRTCDriver_Response;
+
+
 // Function prototypes
 BootloaderHandleMessageResponse set_sleep_mode(const SetSleepMode *data);
 BootloaderHandleMessageResponse get_sleep_mode(const GetSleepMode *data, GetSleepMode_Response *response);
@@ -139,6 +160,8 @@ BootloaderHandleMessageResponse get_bricklet_power(const GetBrickletPower *data,
 BootloaderHandleMessageResponse get_voltages(const GetVoltages *data, GetVoltages_Response *response);
 BootloaderHandleMessageResponse set_voltages_callback_configuration(const SetVoltagesCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_voltages_callback_configuration(const GetVoltagesCallbackConfiguration *data, GetVoltagesCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse set_rtc_driver(const SetRTCDriver *data);
+BootloaderHandleMessageResponse get_rtc_driver(const GetRTCDriver *data, GetRTCDriver_Response *response);
 
 // Callbacks
 bool handle_voltages_callback(void);

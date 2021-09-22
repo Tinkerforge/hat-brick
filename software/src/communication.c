@@ -1,5 +1,5 @@
 /* hat-brick
- * Copyright (C) 2019 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2019, 2021 Olaf Lüke <olaf@tinkerforge.com>
  *
  * communication.c: TFP protocol message handling
  *
@@ -29,6 +29,7 @@
 #include "configs/config_rpi.h"
 #include "rpi.h"
 #include "voltage.h"
+#include "eeprom.h"
 #include "xmc_gpio.h"
 
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
@@ -40,6 +41,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_VOLTAGES: return get_voltages(message, response);
 		case FID_SET_VOLTAGES_CALLBACK_CONFIGURATION: return set_voltages_callback_configuration(message);
 		case FID_GET_VOLTAGES_CALLBACK_CONFIGURATION: return get_voltages_callback_configuration(message, response);
+		case FID_SET_RTC_DRIVER: return set_rtc_driver(message);
+		case FID_GET_RTC_DRIVER: return get_rtc_driver(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -57,7 +60,7 @@ BootloaderHandleMessageResponse set_sleep_mode(const SetSleepMode *data) {
 }
 
 BootloaderHandleMessageResponse get_sleep_mode(const GetSleepMode *data, GetSleepMode_Response *response) {
-	response->header.length = sizeof(GetSleepMode_Response);
+	response->header.length          = sizeof(GetSleepMode_Response);
 	response->raspberry_pi_off       = rpi.raspberry_pi_off;
 	response->bricklets_off          = rpi.bricklets_off;
 	response->enable_sleep_indicator = rpi.enable_sleep_indicator;
@@ -119,7 +122,23 @@ BootloaderHandleMessageResponse get_voltages_callback_configuration(const GetVol
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+BootloaderHandleMessageResponse set_rtc_driver(const SetRTCDriver *data) {
+	if(data->rtc_driver > HAT_RTC_DRIVER_DS1338Z) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
 
+	eeprom.rtc_driver = data->rtc_driver;
+	eeprom_settings_write();
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_rtc_driver(const GetRTCDriver *data, GetRTCDriver_Response *response) {
+	response->header.length = sizeof(GetRTCDriver_Response);
+	response->rtc_driver    = eeprom.rtc_driver;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
 
 bool handle_voltages_callback(void) {
 	static bool is_buffered = false;

@@ -12,7 +12,7 @@ PROJECT(${PROJECT_NAME})
 #SET(OPTIMIZATION_LEVEL 0)
 SET(DEBUG "-g -ggdb")
 
-SET(OPTIMIZATION_LEVEL 2)
+SET(OPTIMIZATION_LEVEL s)
 #SET(DEBUG "")
 
 SET(CMAKE_BUILD_TYPE None)
@@ -32,6 +32,8 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/rpi.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom.c"
 	"${PROJECT_SOURCE_DIR}/src/eeprom_data.c"
+#	"${PROJECT_SOURCE_DIR}/src/eeprom_data_ds1307.c"
+#	"${PROJECT_SOURCE_DIR}/src/eeprom_data_pcf8523.c"
 	"${PROJECT_SOURCE_DIR}/src/voltage.c"
 
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"

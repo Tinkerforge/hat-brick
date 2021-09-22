@@ -1,5 +1,5 @@
 /* hat-brick
- * Copyright (C) 2018 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2018, 2021 Olaf Lüke <olaf@tinkerforge.com>
  *
  * eeprom.c: EEPROM Emulation
  *
@@ -23,6 +23,7 @@
 
 #include "bricklib2/logging/logging.h"
 #include "configs/config_eeprom.h"
+#include "communication.h"
 
 #include "xmc_scu.h"
 
@@ -41,15 +42,89 @@ typedef enum XMC_I2C_CH_TDF {
 #define eeprom_tx_handler       IRQ_Hdlr_12
 #define eeprom_protocol_handler IRQ_Hdlr_11
 
-#define EEPROM_DATA_LENGTH sizeof(eeprom_data)
-extern const uint8_t eeprom_data[];
+// We use DS1307 and change it to PCF8523 if necessary by
+// just changes the necessary bytes.
+// We don't have enough space to save both EEPROM entries.
+#if 0
+#define EEPROM_DATA_PCF8523_LENGTH sizeof(eeprom_data_pcf8523)
+extern const uint8_t eeprom_data_pcf8523[];
+#define EEPROM_DATA_DS1307_LENGTH sizeof(eeprom_data_ds1307)
+extern const uint8_t eeprom_data_ds1307[];
+#endif
 
+extern uint8_t eeprom_data[];
 static volatile uint32_t eeprom_register = 0;
 
 static uint8_t eeprom_register_high_byte = 0;
 static bool eeprom_register_high_byte_received = false;
 
+EEPROM eeprom;
+
+void eeprom_settings_write(void) {
+	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
+
+	page[CALIBRATION_MAGIC_POS] = CALIBRATION_MAGIC;
+	page[CALIBRATION_RTC_POS]   = eeprom.rtc_driver;
+
+	if(!bootloader_write_eeprom_page(CALIBRATION_PAGE, page)) {
+		// TODO: Error handling?
+		return;
+	}
+}
+
+void eeprom_settings_read(void) {
+	uint32_t page[EEPROM_PAGE_SIZE/sizeof(uint32_t)];
+
+	bootloader_read_eeprom_page(CALIBRATION_PAGE, page);
+
+	// The magic number is not where it is supposed to be.
+	// This is either our first startup or something went wrong.
+	// We initialize the calibration data with sane default values.
+	if(page[CALIBRATION_MAGIC_POS] != CALIBRATION_MAGIC) {
+		eeprom.rtc_driver = HAT_RTC_DRIVER_PCF8523T; // PCF8523 is default
+
+		return;
+	}
+
+	eeprom.rtc_driver = page[CALIBRATION_RTC_POS];
+}
+
 void eeprom_init(void) {
+	memset(&eeprom, 0, sizeof(EEPROM));
+
+	eeprom_settings_read();
+
+	// Manual "binary diff" between PCF8523 and DS1307
+	if(eeprom.rtc_driver == HAT_RTC_DRIVER_PCF8523T) {
+		eeprom_data[0x27D] = 'p';
+		eeprom_data[0x27E] = 'c';
+		eeprom_data[0x27F] = 'f';
+		eeprom_data[0x280] = '8';
+		eeprom_data[0x281] = '5';
+		eeprom_data[0x282] = '2';
+		eeprom_data[0x283] = '3';
+		eeprom_data[0x284] = '@';
+		eeprom_data[0x285] = '6';
+		eeprom_data[0x286] = '8';
+
+		eeprom_data[0x295] = 'n';
+		eeprom_data[0x296] = 'x';
+		eeprom_data[0x297] = 'p';
+		eeprom_data[0x298] = ',';
+		eeprom_data[0x299] = 'p';
+		eeprom_data[0x29A] = 'c';
+		eeprom_data[0x29B] = 'f';
+		eeprom_data[0x29C] = '8';
+		eeprom_data[0x29D] = '5';
+		eeprom_data[0x29E] = '2';
+		eeprom_data[0x29F] = '3';
+		eeprom_data[0x2A0] = 0x00;
+		eeprom_data[0x2A1] = 0x00;
+
+		eeprom_data[0x5AA] = 0xFF;
+		eeprom_data[0x5AB] = 0xC3;
+	}
+
 	XMC_I2C_CH_Stop(EEPROM_I2C);
 	const XMC_GPIO_CONFIG_t input_config =  {
 		.mode         = XMC_GPIO_MODE_INPUT_TRISTATE,
