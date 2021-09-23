@@ -123,7 +123,7 @@ BootloaderHandleMessageResponse get_voltages_callback_configuration(const GetVol
 }
 
 BootloaderHandleMessageResponse set_rtc_driver(const SetRTCDriver *data) {
-	if(data->rtc_driver > HAT_RTC_DRIVER_DS1338Z) {
+	if(data->rtc_driver > HAT_RTC_DRIVER_DS1338) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 

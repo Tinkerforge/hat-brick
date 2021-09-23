@@ -81,7 +81,7 @@ void eeprom_settings_read(void) {
 	// This is either our first startup or something went wrong.
 	// We initialize the calibration data with sane default values.
 	if(page[CALIBRATION_MAGIC_POS] != CALIBRATION_MAGIC) {
-		eeprom.rtc_driver = HAT_RTC_DRIVER_PCF8523T; // PCF8523 is default
+		eeprom.rtc_driver = HAT_RTC_DRIVER_PCF8523; // PCF8523 is default
 
 		return;
 	}
@@ -95,7 +95,7 @@ void eeprom_init(void) {
 	eeprom_settings_read();
 
 	// Manual "binary diff" between PCF8523 and DS1307
-	if(eeprom.rtc_driver == HAT_RTC_DRIVER_PCF8523T) {
+	if(eeprom.rtc_driver == HAT_RTC_DRIVER_PCF8523) {
 		eeprom_data[0x27D] = 'p';
 		eeprom_data[0x27E] = 'c';
 		eeprom_data[0x27F] = 'f';

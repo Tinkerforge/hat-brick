@@ -35,8 +35,8 @@ void communication_init(void);
 
 // Constants
 
-#define HAT_RTC_DRIVER_PCF8523T 0
-#define HAT_RTC_DRIVER_DS1338Z 1
+#define HAT_RTC_DRIVER_PCF8523 0
+#define HAT_RTC_DRIVER_DS1338 1
 
 #define HAT_BOOTLOADER_MODE_BOOTLOADER 0
 #define HAT_BOOTLOADER_MODE_FIRMWARE 1
