@@ -7,5 +7,5 @@
 2020-07-28: 2.0.2 (4296808)
 - Update the device tree overlay to make sure that GPIO7 is not mounted as SPI hardware CS
 
-2021-09-22: 2.0.3 (TBD)
+2021-09-22: 2.0.3 (1932b28)
 - Add support for DS1338Z RTC
