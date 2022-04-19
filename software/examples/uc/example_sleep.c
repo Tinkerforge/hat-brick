@@ -9,13 +9,13 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 static TF_HAT hat;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_hat_create(&hat, UID, hal), "create device object");
 
@@ -23,7 +23,7 @@ void example_setup(TF_HalContext *hal) {
 	check(tf_hat_set_sleep_mode(&hat, 2, 1800, true, true, true), "call set_sleep_mode");
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }
