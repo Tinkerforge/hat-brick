@@ -1435,7 +1435,8 @@
   (no_connect (at 129.54 109.22) (uuid 0c3ce047-ccdb-4c4e-b0fb-ae4f0d39c1ed))
   (no_connect (at 204.47 114.3) (uuid 1b5950e1-7c00-44a7-85e6-76d3ac51116f))
   (no_connect (at 184.15 138.43) (uuid 21c052de-45c4-46a7-a328-a9f77a6b917d))
-  (no_connect (at 44.45 67.31) (uuid 360b035f-4c5f-40c3-b6e3-c3caf63599f8))
+  (no_connect (at 44.45 69.85) (uuid 319b36e7-df5e-4a20-99fd-6240f0fd2748))
+  (no_connect (at 44.45 80.01) (uuid 319b36e7-df5e-4a20-99fd-6240f0fd2749))
   (no_connect (at 33.02 129.54) (uuid 391c7002-0749-4067-b63c-b0534730349e))
   (no_connect (at 232.41 88.9) (uuid 5bee57a6-2de2-4adf-9257-bb7445f3008d))
   (no_connect (at 250.19 139.7) (uuid 7599738d-0ff3-47ff-abfd-fb0c25bafafe))
@@ -1443,19 +1444,17 @@
   (no_connect (at 44.45 74.93) (uuid 8ef08a3d-8229-4851-ab7e-6edcae04f654))
   (no_connect (at 250.19 134.62) (uuid 90cd068d-d36c-4033-b9ae-8dc0069fe8aa))
   (no_connect (at 204.47 116.84) (uuid 94b83b1f-0b4a-464f-a046-a3c48843a648))
-  (no_connect (at 44.45 80.01) (uuid 98d2e7b5-3499-4e4a-a7a2-b04aa4491d7e))
   (no_connect (at 181.61 138.43) (uuid a02c05d1-0a87-4896-9c6f-2a0f49f4a59f))
   (no_connect (at 204.47 109.22) (uuid a17191b0-e9da-4b2b-bb9d-94093522fc2c))
   (no_connect (at 250.19 104.14) (uuid a532241c-7b93-42f0-9536-cf3f62733628))
   (no_connect (at 204.47 104.14) (uuid bf4af5e4-c74a-4dee-8c4b-9391d75d8644))
-  (no_connect (at 33.02 139.7) (uuid c69cb1aa-6deb-4db3-8f50-3c7ada1b2dc8))
   (no_connect (at 250.19 142.24) (uuid d23bb011-22d2-4b2e-873c-2aa8adcf46fc))
-  (no_connect (at 44.45 69.85) (uuid d3a2d98f-008f-41aa-9564-8520a5666344))
   (no_connect (at 33.02 137.16) (uuid d5809780-797b-42e9-b936-8246709a44cb))
   (no_connect (at 229.87 88.9) (uuid dd0a743e-7349-4f7e-8222-51887501ee59))
   (no_connect (at 154.94 97.79) (uuid e34e40ac-986b-45d0-b5bb-b935d6621cca))
   (no_connect (at 250.19 119.38) (uuid e4ab91bf-be5e-4cd8-b612-ea0a0d696a9b))
   (no_connect (at 204.47 106.68) (uuid eed21983-fb58-4e2f-b702-1b6a62fd7826))
+  (no_connect (at 44.45 77.47) (uuid f10217a7-df11-4028-8305-438f5527b7b6))
   (no_connect (at 152.4 97.79) (uuid f3ec9eb4-19e5-42ce-9ee9-66315de2e3d1))
 
   (wire (pts (xy 44.45 72.39) (xy 48.26 72.39))
@@ -1886,6 +1885,10 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 80840d32-6f06-4c16-a838-d1865ee1d147)
   )
+  (wire (pts (xy 64.135 67.31) (xy 64.135 70.485))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid 822a0a68-adc5-4975-a8ba-93d6b86f7b07)
+  )
   (wire (pts (xy 232.41 157.48) (xy 234.95 157.48))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid 822bb016-8890-49cb-a8ef-83ef62aa9076)
@@ -1958,9 +1961,9 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid a11c6403-3d1d-47b5-aad8-758e4edebf4f)
   )
-  (wire (pts (xy 44.45 77.47) (xy 48.26 77.47))
+  (wire (pts (xy 33.02 139.7) (xy 36.83 139.7))
     (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid a4d15bf5-aab2-4d89-badf-7995084a74fd)
+    (uuid a4eabda5-1492-49d0-b591-d2627b5c8c16)
   )
   (wire (pts (xy 33.02 132.08) (xy 35.56 132.08))
     (stroke (width 0) (type default) (color 0 0 0 0))
@@ -2186,6 +2189,10 @@
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid dd02cb8c-910f-4629-92eb-65fc4b02b5b7)
   )
+  (wire (pts (xy 44.45 67.31) (xy 64.135 67.31))
+    (stroke (width 0) (type default) (color 0 0 0 0))
+    (uuid de4f81ec-810a-4e3d-88a4-5367087cd980)
+  )
   (wire (pts (xy 213.36 68.58) (xy 210.82 68.58))
     (stroke (width 0) (type default) (color 0 0 0 0))
     (uuid df446594-ac8e-4c99-9bdb-6c881bc5cf8b)
@@ -2322,6 +2329,10 @@
   (text "USIC1_CH0" (at 46.99 144.78 0)
     (effects (font (size 0.9906 0.9906)) (justify left bottom))
     (uuid d7ed8c70-ff42-4594-a30b-b9c6bee7a613)
+  )
+  (text "Version Detect V1.8" (at 64.77 67.945 0)
+    (effects (font (size 0.9906 0.9906)) (justify left bottom))
+    (uuid eb4f01bc-09fd-4347-9909-747feae87169)
   )
   (text "Copyright Tinkerforge GmbH 2023.\nThis documentation describes Open Hardware and is licensed under the\nCERN OHL v. 1.1.\nYou may redistribute and modify this documentation under the terms of the\nCERN OHL v.1.1. (http://ohwr.org/cernohl). This documentation is distributed\nWITHOUT ANY EXPRESS OR IMPLIED WARRANTY, INCLUDING OF\nMERCHANTABILITY, SATISFACTORY QUALITY AND FITNESS FOR A\nPARTICULAR PURPOSE. Please see the CERN OHL v.1.1 for applicable\nconditions"
     (at 15.24 195.58 0)
@@ -2487,10 +2498,10 @@
       (effects (font (size 1.27 1.27)) hide)
     )
   )
-  (global_label "PowerGood" (shape input) (at 48.26 77.47 0) (fields_autoplaced)
+  (global_label "PowerGood" (shape input) (at 36.83 139.7 0) (fields_autoplaced)
     (effects (font (size 0.9906 0.9906)) (justify left))
     (uuid a999aede-6576-42fd-bcef-88df5fad6dba)
-    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 58.139 77.4081 0)
+    (property "Intersheet References" "${INTERSHEET_REFS}" (id 0) (at 46.709 139.6381 0)
       (effects (font (size 0.9906 0.9906)) (justify left) hide)
     )
   )
@@ -3071,8 +3082,8 @@
   (symbol (lib_id "tinkerforge:CONN_01X01") (at 52.07 64.77 0) (unit 1)
     (in_bom yes) (on_board yes)
     (uuid 00000000-0000-0000-0000-00005b38e84f)
-    (property "Reference" "P101" (id 0) (at 52.07 62.23 0))
-    (property "Value" "Debug" (id 1) (at 54.61 64.77 90))
+    (property "Reference" "P101" (id 0) (at 52.07 60.325 0))
+    (property "Value" "Debug" (id 1) (at 52.07 62.23 0))
     (property "Footprint" "kicad-libraries:DEBUG_PAD" (id 2) (at 52.07 64.77 0)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -4374,6 +4385,24 @@
     (pin "1" (uuid 61dcd2c3-4013-4c7b-b5cd-2ece6680f8a3))
   )
 
+  (symbol (lib_id "tinkerforge:GND") (at 64.135 70.485 0) (unit 1)
+    (in_bom yes) (on_board yes)
+    (uuid 3930949c-fbf1-48f0-bead-00ea9cf94c43)
+    (property "Reference" "#PWR0114" (id 0) (at 64.135 70.485 0)
+      (effects (font (size 0.762 0.762)) hide)
+    )
+    (property "Value" "GND" (id 1) (at 64.135 72.263 0)
+      (effects (font (size 0.762 0.762)) hide)
+    )
+    (property "Footprint" "" (id 2) (at 64.135 70.485 0)
+      (effects (font (size 1.524 1.524)))
+    )
+    (property "Datasheet" "" (id 3) (at 64.135 70.485 0)
+      (effects (font (size 1.524 1.524)))
+    )
+    (pin "1" (uuid 3265374c-dab5-41d8-b6c9-6c11dfc5429c))
+  )
+
   (sheet (at 146.05 168.91) (size 25.4 25.4) (fields_autoplaced)
     (stroke (width 0) (type solid) (color 0 0 0 0))
     (fill (color 0 0 0 0.0000))
@@ -4411,6 +4440,9 @@
     (path "/00000000-0000-0000-0000-00005b375da1"
       (reference "#PWR02") (unit 1) (value "GND") (footprint "")
     )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/6ff42ef3-9fd5-4e7d-8848-71325caedad3"
+      (reference "#PWR03") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005b37e484"
       (reference "#PWR04") (unit 1) (value "3V3") (footprint "")
     )
@@ -4432,11 +4464,32 @@
     (path "/00000000-0000-0000-0000-00005b37fe55"
       (reference "#PWR010") (unit 1) (value "GND") (footprint "")
     )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/2ea0b42a-d6da-42d4-b13c-5fe9c54129ea"
+      (reference "#PWR011") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005b3810df"
       (reference "#PWR012") (unit 1) (value "GND") (footprint "")
     )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/d62b19a6-3029-41b9-86cd-e18a7986d82d"
+      (reference "#PWR013") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005b383655"
       (reference "#PWR014") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/1d5dafb1-ff73-4252-8d03-6832b7d92dbd"
+      (reference "#PWR015") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/53a706f0-31fe-4e61-b3d8-2348fa3e989e"
+      (reference "#PWR016") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/199ca567-c9e0-4002-b515-23b3fdf841dc"
+      (reference "#PWR017") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/e841ab78-99f7-453e-915c-55f087dc895b"
+      (reference "#PWR018") (unit 1) (value "GND") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/47786b8c-beb8-4b02-993a-4c44db75f374"
+      (reference "#PWR019") (unit 1) (value "GND") (footprint "")
     )
     (path "/00000000-0000-0000-0000-00005b47747f"
       (reference "#PWR022") (unit 1) (value "3V3") (footprint "")
@@ -4582,6 +4635,9 @@
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005b35b7df"
       (reference "#PWR0113") (unit 1) (value "GND") (footprint "")
     )
+    (path "/3930949c-fbf1-48f0-bead-00ea9cf94c43"
+      (reference "#PWR0114") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005c685556"
       (reference "#PWR0115") (unit 1) (value "+5V") (footprint "")
     )
@@ -4597,14 +4653,17 @@
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c67a7ed"
       (reference "#PWR0119") (unit 1) (value "+5V") (footprint "")
     )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/3803efa9-6f41-48f1-9002-51cde42213af"
+      (reference "#PWR0120") (unit 1) (value "3V3") (footprint "")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/1445213b-553b-4e28-91c9-d33bf558b3f3"
+      (reference "#PWR0121") (unit 1) (value "GND") (footprint "")
+    )
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c67a8c6"
       (reference "#PWR0129") (unit 1) (value "GND") (footprint "")
     )
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c67a8cc"
       (reference "#PWR0130") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c67a906"
-      (reference "#PWR0132") (unit 1) (value "GND") (footprint "")
     )
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c6c2cf8"
       (reference "#PWR0133") (unit 1) (value "GND") (footprint "")
@@ -4675,32 +4734,23 @@
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-0000615c1272"
       (reference "#PWR0157") (unit 1) (value "+5V") (footprint "")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-000061669d76"
-      (reference "#PWR0159") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/16d9db9b-8d80-48e8-baab-a8e721175355"
+      (reference "C1") (unit 1) (value "47uF") (footprint "kicad-libraries:C1210")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-000061669fbf"
-      (reference "#PWR0160") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/9db2a229-632a-46f6-b06f-aa3729fc6538"
+      (reference "C2") (unit 1) (value "47uF") (footprint "kicad-libraries:C1210")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/199ca567-c9e0-4002-b515-23b3fdf841dc"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/bf15ed2a-6894-4850-9e4e-25c8f903ff63"
+      (reference "C3") (unit 1) (value "10uF") (footprint "kicad-libraries:C0805E")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/1d5dafb1-ff73-4252-8d03-6832b7d92dbd"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/f77d2584-331e-48b2-9475-44c781d4f58c"
+      (reference "C4") (unit 1) (value "10uF") (footprint "kicad-libraries:C0805E")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/2ea0b42a-d6da-42d4-b13c-5fe9c54129ea"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/0325dd91-e20b-4276-a78b-54e5cdefe977"
+      (reference "C5") (unit 1) (value "100nF") (footprint "kicad-libraries:C0603F")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/53a706f0-31fe-4e61-b3d8-2348fa3e989e"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/6ff42ef3-9fd5-4e7d-8848-71325caedad3"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/d62b19a6-3029-41b9-86cd-e18a7986d82d"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/e841ab78-99f7-453e-915c-55f087dc895b"
-      (reference "#PWR?") (unit 1) (value "GND") (footprint "")
+    (path "/00000000-0000-0000-0000-00005b31e6a8/63c4056c-412a-4544-94d8-fa24b12dd4d9"
+      (reference "C6") (unit 1) (value "10uF/50V") (footprint "kicad-libraries:C1210")
     )
     (path "/00000000-0000-0000-0000-00005c8cd98b"
       (reference "C101") (unit 1) (value "DSK-3R3H334T-HL") (footprint "kicad-libraries:DSK")
@@ -4762,12 +4812,6 @@
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-0000615fe313"
       (reference "C214") (unit 1) (value "10uF/50V") (footprint "kicad-libraries:C1210")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-000061668549"
-      (reference "C215") (unit 1) (value "10uF") (footprint "C1206")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-0000616698bf"
-      (reference "C216") (unit 1) (value "10uF") (footprint "C1206")
-    )
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005b323d27"
       (reference "C224") (unit 1) (value "470µF/16V") (footprint "kicad-libraries:ELKO_83")
     )
@@ -4788,21 +4832,6 @@
     )
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005b35acad"
       (reference "C304") (unit 1) (value "100nF") (footprint "kicad-libraries:C0603F")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/0325dd91-e20b-4276-a78b-54e5cdefe977"
-      (reference "C?") (unit 1) (value "100nF") (footprint "kicad-libraries:C0603F")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/16d9db9b-8d80-48e8-baab-a8e721175355"
-      (reference "C?") (unit 1) (value "47uF") (footprint "kicad-libraries:C1210")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/9db2a229-632a-46f6-b06f-aa3729fc6538"
-      (reference "C?") (unit 1) (value "47uF") (footprint "kicad-libraries:C1210")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/bf15ed2a-6894-4850-9e4e-25c8f903ff63"
-      (reference "C?") (unit 1) (value "10uF") (footprint "kicad-libraries:C0805E")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/f77d2584-331e-48b2-9475-44c781d4f58c"
-      (reference "C?") (unit 1) (value "10uF") (footprint "kicad-libraries:C0805E")
     )
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005b35b698"
       (reference "CP301") (unit 1) (value "220pF") (footprint "kicad-libraries:4X0402")
@@ -4858,9 +4887,6 @@
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-0000615b4036"
       (reference "L202") (unit 1) (value "2.2uH 0530CDMCCDS-2R2MC") (footprint "kicad-libraries:NRS5030")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-000061664585"
-      (reference "L203") (unit 1) (value "2.2uH 0530CDMCCDS-2R2MC") (footprint "kicad-libraries:NRS5030")
-    )
     (path "/00000000-0000-0000-0000-00005b38e84f"
       (reference "P101") (unit 1) (value "Debug") (footprint "kicad-libraries:DEBUG_PAD")
     )
@@ -4896,6 +4922,15 @@
     )
     (path "/00000000-0000-0000-0000-00005b31e6a8/00000000-0000-0000-0000-00005c6babbe"
       (reference "Q202") (unit 1) (value "Si4447ADY") (footprint "kicad-libraries:SOIC-8-MOSFET")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/1ba20688-b0b2-4f78-a1b3-e81fc365c9f8"
+      (reference "R1") (unit 1) (value "10k") (footprint "kicad-libraries:R0603F")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/c8940a19-5a3e-4a30-a514-12598a6279b2"
+      (reference "R2") (unit 1) (value "10k") (footprint "kicad-libraries:R0603F")
+    )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/a155c95f-0865-4743-8ab5-07fdac34ae19"
+      (reference "R3") (unit 1) (value "2k4") (footprint "kicad-libraries:R0603F")
     )
     (path "/00000000-0000-0000-0000-00005c72014f"
       (reference "R101") (unit 1) (value "1k") (footprint "kicad-libraries:R0603F")
@@ -4969,15 +5004,6 @@
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005e9ebd21"
       (reference "R308") (unit 1) (value "100k") (footprint "kicad-libraries:R0402F")
     )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/1ba20688-b0b2-4f78-a1b3-e81fc365c9f8"
-      (reference "R?") (unit 1) (value "10k") (footprint "kicad-libraries:R0603F")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/a155c95f-0865-4743-8ab5-07fdac34ae19"
-      (reference "R?") (unit 1) (value "2k4") (footprint "kicad-libraries:R0603F")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/c8940a19-5a3e-4a30-a514-12598a6279b2"
-      (reference "R?") (unit 1) (value "10k") (footprint "kicad-libraries:R0603F")
-    )
     (path "/00000000-0000-0000-0000-00005b363af1"
       (reference "RP101") (unit 1) (value "3.9k") (footprint "kicad-libraries:4X0402")
     )
@@ -5044,6 +5070,9 @@
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005b35acbf"
       (reference "RP308") (unit 1) (value "82") (footprint "kicad-libraries:4X0402")
     )
+    (path "/00000000-0000-0000-0000-00005b31e6a8/3f3d72c9-e9ab-4072-a4f7-84a58401bdda"
+      (reference "U1") (unit 1) (value "RPX-4.0") (footprint "kicad-libraries:RPX-4.0")
+    )
     (path "/00000000-0000-0000-0000-00005c6f644e"
       (reference "U101") (unit 1) (value "XMC1100") (footprint "QFN24-4x4mm-0.5mm")
     )
@@ -5085,9 +5114,6 @@
     )
     (path "/00000000-0000-0000-0000-00005b352770/00000000-0000-0000-0000-00005b35ac8f"
       (reference "U304") (unit 1) (value "74AHC244") (footprint "kicad-libraries:TSSOP20")
-    )
-    (path "/00000000-0000-0000-0000-00005b31e6a8/3f3d72c9-e9ab-4072-a4f7-84a58401bdda"
-      (reference "U?") (unit 1) (value "RPX-4.0") (footprint "kicad-libraries:RPX-4.0")
     )
     (path "/00000000-0000-0000-0000-00005c878c0b"
       (reference "X101") (unit 1) (value "32.768kHz") (footprint "kicad-libraries:AB26TRQ")
