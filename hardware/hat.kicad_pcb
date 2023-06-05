@@ -74,7 +74,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory "pcb/")
+      (outputdirectory "HAT_1V8_Gerber/")
     )
   )
 
@@ -2096,7 +2096,7 @@
       (effects (font (size 0.29972 0.29972) (thickness 0.07493)))
       (tstamp ce6efb8b-9015-48b7-ac65-6cffa3deefab)
     )
-    (fp_text value "BAQ33-GS08" (at 0.23 -0.24 90) (layer "F.Fab")
+    (fp_text value "FDLL3595" (at 0.23 -0.24 90) (layer "F.Fab")
       (effects (font (size 0.29972 0.29972) (thickness 0.07493)))
       (tstamp e39b5311-e8f0-451c-887a-a9d98019f3f3)
     )

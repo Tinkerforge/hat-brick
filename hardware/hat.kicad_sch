@@ -4210,7 +4210,7 @@
     (property "Reference" "D101" (id 0) (at 94.7166 59.9948 90)
       (effects (font (size 1.016 1.016)) (justify left))
     )
-    (property "Value" "BAQ33-GS08" (id 1) (at 94.7166 61.9252 90)
+    (property "Value" "FDLL3595" (id 1) (at 94.7166 61.9252 90)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Footprint" "kicad-libraries:MiniMelf" (id 2) (at 92.71 60.96 0)
@@ -4858,7 +4858,7 @@
       (reference "CP308") (unit 1) (value "220pF") (footprint "kicad-libraries:4X0402")
     )
     (path "/00000000-0000-0000-0000-00005c8db5e2"
-      (reference "D101") (unit 1) (value "BAQ33-GS08") (footprint "kicad-libraries:MiniMelf")
+      (reference "D101") (unit 1) (value "FDLL3595") (footprint "kicad-libraries:MiniMelf")
     )
     (path "/00000000-0000-0000-0000-00005b476059"
       (reference "D102") (unit 1) (value "blue") (footprint "kicad-libraries:D0603F")
