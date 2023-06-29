@@ -6,8 +6,8 @@
 
   (title_block
     (title "HAT Brick")
-    (date "2023-05-10")
-    (rev "1.8")
+    (date "2023-06-29")
+    (rev "1.9")
     (company "Tinkerforge GmbH")
     (comment 1 "Licensed under CERN OHL v.1.1")
     (comment 2 "Copyright (©) 2023, T.Schneidermann <tim@tinkerforge.com>")
