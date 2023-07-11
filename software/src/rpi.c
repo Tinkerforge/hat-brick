@@ -60,10 +60,19 @@ void rpi_init(void) {
 		.mode = XMC_GPIO_MODE_OUTPUT_PUSH_PULL,
 		.output_level = XMC_GPIO_OUTPUT_LEVEL_HIGH
 	};
-
 	XMC_GPIO_Init(RPI_BRICKLET_EN_PIN, &output_high);
 	XMC_GPIO_Init(RPI_RPI_EN_PIN,      &output_high);
 
+	const XMC_GPIO_CONFIG_t input_pullup = {
+		.mode             = XMC_GPIO_MODE_INPUT_PULL_UP,
+		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD
+	};
+	XMC_GPIO_Init(RPI_VERSION18, &input_pullup);
+
+	// POWER_GOOD_PIN is high if output voltage is between 92% and 107% of desired voltage and low otherwise
+	XMC_GPIO_Init(RPI_POWER_GOOD, &input_pullup);
+
+	rpi.version18 = !XMC_GPIO_GetInput(RPI_VERSION18);
 	rpi.bricklet_power = true;
 
 	const XMC_RTC_CONFIG_t config = {

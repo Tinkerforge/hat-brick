@@ -39,6 +39,8 @@ typedef struct {
     uint32_t irq_state_before_turned_off;
 
     bool bricklet_power;
+
+    bool version18;
 } RPI;
 
 extern RPI rpi;

@@ -9,3 +9,6 @@
 
 2021-09-22: 2.0.3 (1932b28)
 - Add support for DS1338Z RTC
+
+XXXX-XX-XX: 2.0.4 (TBD)
+- Add support for hardware version 1.8

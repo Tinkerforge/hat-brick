@@ -30,4 +30,7 @@
 
 #define RPI_SLEEP_RTC_IRQ        1
 
+#define RPI_VERSION18            P0_5
+#define RPI_POWER_GOOD           P2_9
+
 #endif
