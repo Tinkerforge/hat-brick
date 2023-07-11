@@ -5542,7 +5542,7 @@
   (gr_text "-" (at 207 71.4) (layer "F.SilkS") (tstamp 67f41b19-d493-4579-adc4-567ba6e2a21d)
     (effects (font (size 1.5 1.524) (thickness 0.3)))
   )
-  (gr_text "Input\n5V - 36V" (at 212.9 80.3) (layer "F.SilkS") (tstamp 9108518b-5cb6-439a-8eb2-6d923f954773)
+  (gr_text "Input\n6V - 36V" (at 212.9 80.3) (layer "F.SilkS") (tstamp 9108518b-5cb6-439a-8eb2-6d923f954773)
     (effects (font (size 0.8 0.8) (thickness 0.15)))
   )
   (gr_text "B" (at 191.7 29) (layer "F.SilkS") (tstamp ad57c323-6412-4653-9b7e-df3d8f9365b8)
