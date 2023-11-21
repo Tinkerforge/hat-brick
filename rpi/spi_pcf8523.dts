@@ -2,40 +2,47 @@
 /plugin/;
 
 / {
-	compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709";
+	/*
+	This is spi0-0cs-overlay.dts (from here: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/overlays/spi0-0cs-overlay.dts )
+	merged with the overlay for the PCF8523 RTC (based on https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/overlays/i2c-rtc-common.dtsi ).
+	Also the file is marked as compatible with any Raspberry Pi.
+	*/
+	compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709", "brcm,bcm2712";
 
-	fragment@0
-	{
-		target = <&spi0>;
-		__overlay__
-		{
-			status = "okay";
-			pinctrl-0 = <&spi0_pins>;
-			cs-gpios = <&gpio 8 1>;
-  
-			spidev@0
-			{
-				status = "okay";
-				compatible = "spidev";
-				spi-max-frequency = <1400000>;
-			};
-
-			spidev@1
-			{
-				status = "disabled";
-			};
+	fragment@0 {
+		target = <&spi0_cs_pins>;
+		frag0: __overlay__ {
+			brcm,pins;
 		};
 	};
 
-	fragment@1
-	{
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			cs-gpios;
+			status = "okay";
+		};
+	};
+
+	fragment@2 {
+		target = <&spidev1>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	fragment@3 {
+		target = <&spi0_pins>;
+		__dormant__ {
+			brcm,pins = <10 11>;
+		};
+	};
+
+	fragment@4 {
 		target = <&i2c1>;
-		__overlay__
-		{
+		__overlay__ {
 			#address-cells = <1>; /* needed to avoid dtc warning */
 			#size-cells = <0>; /* needed to avoid dtc warning */
-			pinctrl-names = "default";
-			pinctrl-0 = <&i2c1_pins>;
 			clock-frequency = <100000>;
 			status = "okay";
 
@@ -47,13 +54,7 @@
 		};
 	};
 
-	fragment@2 {
-		target = <&gpio>;
-		frag1: __overlay__ {
-			spi0_cs_pins: spi0_cs_pins {
-				brcm,pins = <8>;
-				brcm,function = <1>;
-			};
-		};
+	__overrides__ {
+		no_miso = <0>,"=3";
 	};
 };
