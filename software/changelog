@@ -10,6 +10,6 @@
 2021-09-22: 2.0.3 (1932b28)
 - Add support for DS1338Z RTC
 
-XXXX-XX-XX: 2.0.4 (TBD)
+2023-11-27: 2.0.4 (e4480c7)
 - Add support for hardware version 1.8
 - Add support for Raspberry Pi 5
